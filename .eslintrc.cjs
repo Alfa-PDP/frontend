@@ -27,6 +27,10 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    "import/prefer-default-export": [
+      ("off"),
+      { "target": "single" }
+    ],
     "react/react-in-jsx-scope": "off",
   },
 }
