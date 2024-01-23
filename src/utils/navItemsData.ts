@@ -1,36 +1,44 @@
+import Users from '../assets/icons/Users.svg';
+import Briefcase from '../assets/icons/Briefcase.svg';
+import Student from '../assets/icons/Student.svg';
+import HourglassMedium from '../assets/icons/HourglassMedium.svg';
+import HandCoins from '../assets/icons/HandCoins.svg';
+import Wallet from '../assets/icons/Wallet.svg';
+import Gauge from '../assets/icons/Gauge.svg';
+
 export const navItemsLeaderData = [
   {
-    icon: '../../src/assets/icons/Users.svg',
+    icon: Users,
     text: 'Моя команда',
     path: '/my-team',
   },
   {
-    icon: '../../src/assets/icons/Briefcase.svg',
+    icon: Briefcase,
     text: 'Подбор',
     path: '/recruitment',
   },
   {
-    icon: '../../src/assets/icons/Student.svg',
+    icon: Student,
     text: 'Обучение',
     path: '/learning',
   },
   {
-    icon: '../../src/assets/icons/HourglassMedium.svg',
+    icon: HourglassMedium,
     text: 'Адаптация',
     path: '/adaptation',
   },
   {
-    icon: '../../src/assets/icons/HandCoins.svg',
+    icon: HandCoins,
     text: 'Премии и доход',
     path: '/rewards',
   },
   {
-    icon: '../../src/assets/icons/Wallet.svg',
+    icon: Wallet,
     text: 'Лимиты и ставки',
     path: '/limits',
   },
   {
-    icon: '../../src/assets/icons/Gauge.svg',
+    icon: Gauge,
     text: 'Дашборды',
     path: '/dashboards',
   },
@@ -38,12 +46,12 @@ export const navItemsLeaderData = [
 
 export const navItemsWorkerData = [
   {
-    icon: '../../src/assets/icons/Users.svg',
+    icon: Users,
     text: 'Моё развитие',
     path: '/progress',
   },
   {
-    icon: '../../src/assets/icons/Student.svg',
+    icon: Student,
     text: 'Обучение',
     path: '/learning',
   },
