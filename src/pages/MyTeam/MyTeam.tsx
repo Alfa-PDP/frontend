@@ -1,3 +1,3 @@
-export default function MyProgress() {
-  return <div>MyProgress</div>;
+export default function MyTeam() {
+  return <div>Моя команда</div>;
 }

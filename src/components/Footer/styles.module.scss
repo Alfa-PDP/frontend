@@ -1,0 +1,49 @@
+@import '../../scss/mixins.scss';
+@import '../../scss/variables.scss';
+
+.footer {
+  display: flex;
+  padding: 40px 20px;
+  align-items: center;
+  justify-content: space-between;
+  max-height: 256px;
+  margin: 40px 0;
+
+  &__list {
+    @include mp-null;
+    width: 100%;
+    display: grid;
+    list-style: none;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: $Primary-black;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 209px;
+  }
+
+  &__info {
+    display: flex;
+    gap: 12px;
+
+    &Container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+
+  &__socials {
+    display: flex;
+    gap: 14px;
+  }
+}

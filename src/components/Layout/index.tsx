@@ -8,8 +8,8 @@ export default function Layout() {
   return (
     <div className={styles.app}>
       <Header />
-      <NavBar />
       <main className={styles.main}>
+        <NavBar />
         <Outlet />
       </main>
       <Footer />

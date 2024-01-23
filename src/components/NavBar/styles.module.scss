@@ -1,0 +1,32 @@
+@import '../../scss/variables.scss';
+
+.nav {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+
+  &__list {
+    list-style: none;
+
+    &Item {
+      display: flex;
+      color: $Primary-black;
+      text-decoration: none;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &_active {
+        background-color: $Grey-card;
+      }
+    }
+  }
+}

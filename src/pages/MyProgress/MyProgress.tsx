@@ -1,3 +1,7 @@
+import { useParams } from 'react-router-dom';
+
 export default function MyProgress() {
-  return <div>MyProgress</div>;
+  const { userId } = useParams();
+
+  return <div>Индивидуальный план развития {userId}</div>;
 }
