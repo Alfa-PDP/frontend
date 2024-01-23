@@ -1,0 +1,13 @@
+@import './variables.scss';
+// Миксины
+
+//  -------------- BASIC -----------------
+@mixin mp-null {
+  margin: 0;
+  padding: 0;
+}
+// ------------LIST------------
+@mixin mp-null-list {
+  @include mp-null;
+  list-style-type: none;
+}

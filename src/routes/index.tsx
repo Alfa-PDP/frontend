@@ -12,7 +12,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<Layout />}>
       <Route index element={<page.MyTeam />} />
       <Route
-        path="progress/:id"
+        path="progress/"
         element={<page.MyProgress />}
         // loader={page.eventLoader}
         // errorElement={<page.NotFoundPage />}
