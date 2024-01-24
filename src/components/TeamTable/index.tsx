@@ -6,7 +6,7 @@ import { CircularProgressBar } from '@alfalab/core-components/circular-progress-
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
-import SuccessIcon from '../../assets/icons/successIcon';
+import SuccessIcon from '../../assets/icons/SuccessIcon';
 import cat from '../../assets/icons/cat.png';
 
 const data = [
