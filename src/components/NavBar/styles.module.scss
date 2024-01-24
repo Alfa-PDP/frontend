@@ -1,14 +1,16 @@
 @import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
 
 .nav {
-  width: 100%;
-  max-width: 1280px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-grow: 1;
+  flex-direction: column;
+  gap: 40px;
+  position: sticky;
+  top: 0;
+  min-width: 190px;
 
   &__list {
+    @include mp-null;
     list-style: none;
 
     &Item {

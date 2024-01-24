@@ -1,0 +1,38 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.header {
+  display: flex;
+  padding: 16px 20px;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 42px;
+  }
+
+  &__logoContainer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    text-decoration: none;
+    color: $Primary-black;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: $Primary-black;
+  }
+
+  &__link:hover {
+    opacity: 0.8;
+  }
+
+  &__list {
+    @include mp-null;
+    display: flex;
+    list-style: none;
+    gap: 32px;
+  }
+}

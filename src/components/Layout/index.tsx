@@ -6,12 +6,14 @@ import NavBar from '../NavBar';
 
 export default function Layout() {
   return (
-    <div className={styles.app}>
+    <div className={styles.layout}>
       <Header />
-      <main className={styles.main}>
+      <div className={styles.layout__container}>
         <NavBar />
-        <Outlet />
-      </main>
+        <main className={styles.main}>
+          <Outlet />
+        </main>
+      </div>
       <Footer />
     </div>
   );

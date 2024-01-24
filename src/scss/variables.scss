@@ -16,7 +16,14 @@ $Green-light: #d1f1d7;
 $Accent-Green: #0cc44d;
 
 // Шрифты
-$font-family: Roboto, system-ui, Arial, sans-serif;
+$font-family:
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Helvetica,
+  sans-serif;
 $font-family-title:
   Styrene UI,
   system-ui,

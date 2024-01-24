@@ -1,11 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
 import { navItemsLeaderData } from '../../utils/navItemsData';
+
 import styles from './styles.module.scss';
+import { BackButton } from '../BackButton';
 
 export default function NavBar() {
   return (
-    <nav>
+    <nav className={styles.nav}>
+      <BackButton />
       <ul className={styles.nav__list}>
         {navItemsLeaderData.map((el, index) => (
           // eslint-disable-next-line react/no-array-index-key
