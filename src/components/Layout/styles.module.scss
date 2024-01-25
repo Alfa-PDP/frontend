@@ -6,13 +6,13 @@
   &__container {
     display: flex;
     margin-top: 72px;
+    flex-grow: 1;
+    position: relative;
+    gap: 20px;
   }
-}
 
-.main {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
+  &__main {
+    width: 100%;
+    display: flex;
+  }
 }

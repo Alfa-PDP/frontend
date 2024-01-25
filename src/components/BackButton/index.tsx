@@ -23,7 +23,7 @@ export function BackButton() {
         tag="div"
         view="xsmall"
         weight="bold"
-        style={{ fontSize: '14px' }}
+        style={{ fontSize: '16px' }}
       >
         Назад
       </Typography.Title>

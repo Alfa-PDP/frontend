@@ -10,7 +10,7 @@ export default function Layout() {
       <Header />
       <div className={styles.layout__container}>
         <NavBar />
-        <main className={styles.main}>
+        <main className={styles.layout__main}>
           <Outlet />
         </main>
       </div>
