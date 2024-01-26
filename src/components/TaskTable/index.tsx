@@ -3,7 +3,24 @@ import { Collapse } from '@alfalab/core-components/collapse';
 import { Status } from '@alfalab/core-components/status';
 import styles from './styles.module.scss';
 
-const data = [
+interface Comment {
+  author: string;
+  time: string;
+  text: string;
+}
+
+interface TaskData {
+  id: number;
+  task: string;
+  date: string;
+  type: string;
+  significance: string;
+  status: StatusType;
+  description: string;
+  comments: Comment[];
+}
+
+const data: TaskData[] = [
   {
     id: 1,
     task: 'Принять участие в проекте в роли тимлида',
@@ -11,6 +28,15 @@ const data = [
     type: 'Hard skills',
     significance: 'Низкая',
     status: 'inWork',
+    description:
+      'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
+    comments: [
+      {
+        author: 'Алабамов Сергей Викторович',
+        time: '25 янв, 11:13',
+        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
+      },
+    ],
   },
   {
     id: 2,
@@ -19,6 +45,15 @@ const data = [
     type: 'Hard skills',
     significance: 'Низкая',
     status: 'completed',
+    description:
+      'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
+    comments: [
+      {
+        author: 'Алабамов Сергей Викторович',
+        time: '25 янв, 11:13',
+        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
+      },
+    ],
   },
   {
     id: 3,
@@ -27,8 +62,54 @@ const data = [
     type: 'Hard skills',
     significance: 'Низкая',
     status: 'new',
+    description:
+      'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
+    comments: [
+      {
+        author: 'Алабамов Сергей Викторович',
+        time: '25 янв, 11:13',
+        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
+      },
+      {
+        author: 'Вы',
+        time: '24 янв, 11:13',
+        text: 'Прохожу обучение на платформе Стратоплан. Обучение выходит за рамки оговороенного срока, поскольку начинается во втором квартале 2024 г.',
+      },
+    ],
   },
 ];
+
+type StatusType = 'inWork' | 'completed' | 'new' | 'notComplited' | 'canceled';
+
+interface StatusInfo {
+  text: string;
+  className: string;
+}
+
+type StatusMap = Record<StatusType, StatusInfo>;
+
+const statusMap: StatusMap = {
+  inWork: {
+    text: 'В работе',
+    className: styles.status_type_inWork,
+  },
+  completed: {
+    text: 'Выполнена',
+    className: styles.status_type_completed,
+  },
+  new: {
+    text: 'Новая',
+    className: styles.status_type_new,
+  },
+  notComplited: {
+    text: 'Не выполнена',
+    className: styles.status_type_notComplited,
+  },
+  canceled: {
+    text: 'Отменена',
+    className: styles.status_type_canceled,
+  },
+};
 export default function TaskTable() {
   return (
     <div style={{ width: '100%' }}>
@@ -57,7 +138,16 @@ export default function TaskTable() {
               renderContent={(expanded) => (
                 <Table.TCell colSpan={5}>
                   <Collapse expanded={expanded}>
-                    <h1 style={{ height: '100px' }}>{row.id}</h1>
+                    <div>
+                      {row.description}
+                      {row.comments.map((comment) => (
+                        <>
+                          <p>{comment.author}</p>
+                          <p>{comment.time}</p>
+                          <p>{comment.text}</p>
+                        </>
+                      ))}
+                    </div>
                   </Collapse>
                 </Table.TCell>
               )}
@@ -75,25 +165,11 @@ export default function TaskTable() {
                 {row.significance}
               </Table.TCell>
               <Table.TCell>
-                {row.status === 'inWork' && (
+                {statusMap[row.status] && (
                   <Status
-                    className={`${styles.status} ${styles.status_type_inWork}`}
+                    className={`${styles.status} ${statusMap[row.status].className}`}
                   >
-                    В работе
-                  </Status>
-                )}
-                {row.status === 'completed' && (
-                  <Status
-                    className={`${styles.status} ${styles.status_type_completed}`}
-                  >
-                    Выполнена
-                  </Status>
-                )}
-                {row.status === 'new' && (
-                  <Status
-                    className={`${styles.status} ${styles.status_type_new}`}
-                  >
-                    Новая
+                    {statusMap[row.status].text}
                   </Status>
                 )}
               </Table.TCell>
