@@ -1,0 +1,77 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.professionalAttributes {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-height: 138px;
+  border: 1px solid #e7e8eb;
+  border-radius: 20px;
+  width: 100%;
+  transition: max-height 0.3s ease-in-out;
+
+  &_open {
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  &_void {
+    max-height: 88px;
+  }
+
+  &_void2 {
+    max-height: 88px;
+  }
+
+  &__edit {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 12px;
+    top: 16px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    background-image: url(../../assets/icons/editButton.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &__title {
+    margin: 10px 10px 0;
+  }
+
+  &__textarea {
+    border: none;
+    border-radius: 12px;
+    margin: 10px 6px 0;
+    padding: 6px 6px 10px;
+    background-color: transparent;
+    color: $Primary-black;
+    resize: none;
+    overflow: hidden;
+
+    &:focus {
+      outline: none;
+      border: none;
+    }
+  }
+
+  &__button {
+    width: 100px;
+    background-color: #fff;
+    color: #b3b3b3;
+    text-decoration: underline;
+    border: none;
+    margin: 10px 10px;
+    text-align: start;
+  }
+
+  &__textButton {
+    cursor: pointer;
+  }
+}
+
+.expanded {
+  height: auto;
+}

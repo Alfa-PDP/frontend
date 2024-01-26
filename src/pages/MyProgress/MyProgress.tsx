@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
 import EmployeeCard from '../../components/EmployeeCard';
 import styles from './styles.module.scss';
+import ProfessionalAttributes from '../../components/ProfessionalAttributes';
 
 export default function MyProgress() {
   const { userId } = useParams();
@@ -17,6 +18,7 @@ export default function MyProgress() {
         Индивидуальный план развития {userId}
       </Typography.Title>
       <EmployeeCard />
+      <ProfessionalAttributes />
     </div>
   );
 }
