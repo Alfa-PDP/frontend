@@ -19,7 +19,21 @@
     background: $Green-light;
     color: $Green-text;
   }
+  &_type_new.status_type_new {
+    background: $Purple-light;
+    color: $Purple-text;
+  }
+  &_type_notСompleted.status_type_notСompleted {
+    background: $Red-light;
+    color: $Red-text;
+  }
+  &_type_canceled.status_type_canceled {
+    background: $Secondary-grey;
+    color: $Dark-grey;
+  }
 }
+
+/* Временные стили таблицы, нужно будет вынести в отдельный файл, т.к. они повторяют стили таблицы сотрудников */
 
 .table {
   &__row {
