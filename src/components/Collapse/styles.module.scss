@@ -24,7 +24,7 @@
   }
 
   &__textarea.professionalAttributes__textarea {
-    color: rgba(5, 8, 29, 1) !important;
+    color: rgba(5, 8, 29, 1);
     width: 97.5%;
     border: none;
     border-radius: 12px;
@@ -39,9 +39,10 @@
     --form-control-hover-bg-color: transparent;
     --color-light-border-underline: none;
     --form-control-focus-shadow: none;
+    --form-control-focus-bg-color: none;
 
-    &:hover {
-      color: rgba(5, 8, 29, 1) !important;
+    &_active {
+      color: #b3b3b3;
     }
   }
 

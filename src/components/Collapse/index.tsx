@@ -55,9 +55,9 @@ export default function Collapse({
         {attributeName}
       </Typography.Text>
       <Textarea
-        className={styles.professionalAttributes__textarea}
-        fieldClassName={styles.professionalAttributes__textarea}
-        textareaClassName={styles.professionalAttributes__textarea}
+        className={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
+        fieldClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
+        textareaClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
         ref={textareaRef}
         value={textAttributesValue}
         onChange={handleChange}
