@@ -26,7 +26,7 @@ export default function Collapse({
     if (textareaRef.current) {
       setLineHeight(textareaRef.current.scrollHeight);
     }
-  }, []);
+  }, [textAttributesValue]);
 
   const handlerToggleMoreButton = () => {
     setMoreButton(!moreButton);
@@ -55,21 +55,19 @@ export default function Collapse({
         {attributeName}
       </Typography.Text>
       <Textarea
+        className={styles.professionalAttributes__textarea}
+        fieldClassName={styles.professionalAttributes__textarea}
+        textareaClassName={styles.professionalAttributes__textarea}
         ref={textareaRef}
-        block
         value={textAttributesValue}
         onChange={handleChange}
-        style={{
-          backgroundColor: '#FFF',
-          fontSize: '14px',
-          overflow: 'hidden',
-        }}
         placeholder="Не заполнено"
         autosize
         maxRows={moreButton ? 999 : 3}
-        disabled={stateTextarea}
+        minRows={1}
+        readOnly={stateTextarea}
       />
-      {lineHeight > 60 && (
+      {lineHeight > 70 && (
         <Button
           className={styles.professionalAttributes__button}
           type="button"
@@ -77,7 +75,7 @@ export default function Collapse({
           size="s"
           onClick={handlerToggleMoreButton}
         >
-          Подробнее
+          {!moreButton ? 'Подробнее' : 'Скрыть'}
         </Button>
       )}
     </div>

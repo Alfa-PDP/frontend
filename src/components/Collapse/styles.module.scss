@@ -11,45 +11,37 @@
   width: 100%;
   transition: max-height 0.3s ease-in-out;
 
-  &_open {
-    transition: max-height 0.3s ease-in-out;
-  }
-
-  &_full {
-    max-height: 138px;
-  }
-
   &__edit {
-    width: 24px;
-    height: 24px;
+    width: 12px;
+    height: 12px;
     position: absolute;
     right: 12px;
     top: 16px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    background-image: url(../../assets/icons/editButton.svg);
-    background-repeat: no-repeat;
-    background-position: center;
   }
 
   &__title {
     margin: 10px 10px 0;
   }
 
-  &__textarea {
+  &__textarea.professionalAttributes__textarea {
+    color: rgba(5, 8, 29, 1) !important;
+    width: 97.5%;
     border: none;
     border-radius: 12px;
-    margin: 10px 6px 0;
-    padding: 6px 6px 10px;
     background-color: transparent;
-    color: $Primary-black;
-    resize: none;
     overflow: hidden;
+    font-size: 14px;
+    margin: 2px;
+    padding: 2px;
+    opacity: 1;
+    cursor: auto;
+    min-height: 30px;
+    --form-control-hover-bg-color: transparent;
+    --color-light-border-underline: none;
+    --form-control-focus-shadow: none;
 
-    &:focus {
-      outline: none;
-      border: none;
+    &:hover {
+      color: rgba(5, 8, 29, 1) !important;
     }
   }
 
@@ -59,21 +51,9 @@
     color: #b3b3b3;
     text-decoration: underline;
     border: none;
-    margin: 10px 10px;
+    margin: 0 10px 10px;
     text-align: start;
     font-size: 12px;
     background-color: none;
-
-    &:hover {
-      background-color: none;
-    }
   }
-
-  &__textButton {
-    cursor: pointer;
-  }
-}
-
-.expanded {
-  height: auto;
 }
