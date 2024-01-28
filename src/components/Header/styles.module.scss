@@ -4,6 +4,7 @@
 .header {
   display: flex;
   padding: 16px 20px;
+  justify-content: space-between;
 
   &__container {
     display: flex;
@@ -34,5 +35,15 @@
     display: flex;
     list-style: none;
     gap: 32px;
+  }
+
+  &__profileContainer {
+    display: flex;
+    gap: 20px;
+  }
+
+  &__searchInput.header__searchInput {
+    border-radius: 20px;
+    max-width: 190px;
   }
 }
