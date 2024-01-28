@@ -1,0 +1,57 @@
+@import '../../scss/variables.scss';
+
+.status {
+  box-sizing: border-box;
+  width: 110px;
+  height: 32px;
+  padding: 0 0 0 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  text-transform: inherit;
+  justify-content: left;
+  &_type_inWork.status_type_inWork {
+    background: $Orange-light;
+    color: $Orange;
+  }
+  &_type_completed.status_type_completed {
+    background: $Green-light;
+    color: $Green-text;
+  }
+  &_type_new.status_type_new {
+    background: $Purple-light;
+    color: $Purple-text;
+  }
+  &_type_notСompleted.status_type_notСompleted {
+    background: $Red-light;
+    color: $Red-text;
+  }
+  &_type_canceled.status_type_canceled {
+    background: $Secondary-grey;
+    color: $Dark-grey;
+  }
+}
+
+/* Временные стили таблицы, нужно будет вынести в отдельный файл, т.к. они повторяют стили таблицы сотрудников */
+
+.table {
+  &__row {
+    vertical-align: middle;
+  }
+
+  &__headCell {
+    font-family: $font-family;
+    font-weight: 600;
+    font-size: 14px;
+    color: $Primary-black;
+    letter-spacing: 0;
+  }
+
+  &__workerInfoContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    align-items: center;
+  }
+}
