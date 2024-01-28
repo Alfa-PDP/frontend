@@ -1,5 +1,9 @@
 import { Typography } from '@alfalab/core-components/typography';
-import { useState, useRef, useEffect } from 'react';
+import { IconButton } from '@alfalab/core-components/icon-button';
+import { Textarea } from '@alfalab/core-components/textarea';
+import { Button } from '@alfalab/core-components/button';
+import { useEffect, useRef, useState } from 'react';
+import editIcon from '../../assets/icons/editButton.svg';
 import styles from './styles.module.scss';
 
 interface TextAttributesProps {
@@ -11,115 +15,70 @@ export default function Collapse({
   textAttributes,
   attributeName,
 }: TextAttributesProps) {
-  const [stateButtonMore, setStateButtonMore] = useState(false); // Состояние кнопки "Подробнее", если true - textarea открыта, если false - закрыта.
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [disabledTextarea, setDisabledTextarea] = useState(true); // Состояние кнопки "Редактировать", если true - textarea открыта и редактируется, если false - закрыта.
-  const [textareaValue, setTextareaValue] = useState(false);
-  const employee = true; // Роль руководитель/сотрудник
-  const [textareaHeight, setTextareaHeight] = useState<number>(88);
+  const [lineHeight, setLineHeight] = useState(0);
+  const [stateTextarea, setStateTextarea] = useState(true);
+  const [moreButton, setMoreButton] = useState(false);
   const [textAttributesValue, setTextAttributesValue] =
     useState(textAttributes);
 
-  // Определяем, сколько строк в textarea для отключения кнопки "Подробнее"
   useEffect(() => {
     if (textareaRef.current) {
-      const lineHeight = parseFloat(
-        window.getComputedStyle(textareaRef.current).lineHeight || '0'
-      );
-      const paddingTop = parseFloat(
-        window.getComputedStyle(textareaRef.current).paddingTop || '0'
-      );
-      const paddingBottom = parseFloat(
-        window.getComputedStyle(textareaRef.current).paddingBottom || '0'
-      );
-      const totalPadding = paddingTop + paddingBottom;
-      const lines = Math.ceil(
-        (textareaRef.current.scrollHeight - totalPadding) / lineHeight
-      );
-      if (lines > 4) {
-        setTextareaValue(true);
-      } else {
-        setTextareaValue(false);
-      }
-      setTextareaHeight(textareaRef.current.scrollHeight);
+      setLineHeight(textareaRef.current.scrollHeight);
     }
-  }, [textAttributes]);
+  }, []);
 
-  // Изменение размера textarea в зависимости от состояния кнопки "Подробнее"
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
-    }
-  }, [stateButtonMore]);
-
-  // Изменение состояния кнопки "Подробнее"
-  const handlerButton = () => {
-    setStateButtonMore(!stateButtonMore);
+  const handlerToggleMoreButton = () => {
+    setMoreButton(!moreButton);
   };
 
-  // Изменение состояния кнопки "Редактировать" и изменение активности textarea
-  const onClickEdit = () => {
-    setStateButtonMore(!stateButtonMore);
-    setDisabledTextarea(!disabledTextarea);
+  const handlerEditTextarea = () => {
+    setMoreButton(true);
+    setStateTextarea(!stateTextarea);
   };
 
-  // высота div'a в зависимости от textarea
-  let styleContainer = {};
-
-  if (
-    !textareaValue &&
-    textareaRef.current &&
-    textAttributes &&
-    disabledTextarea
-  ) {
-    styleContainer = { maxHeight: `${textareaHeight + 45}px` };
-  } else if (stateButtonMore && textareaRef.current) {
-    styleContainer = { maxHeight: `${textareaHeight + 75}px` };
-  } else {
-    styleContainer = {};
-  }
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextAttributesValue(event.target.value);
+  };
 
   return (
-    <div
-      className={`${styles.professionalAttributes} ${!textAttributes ? styles.professionalAttributes_void : styles.professionalAttributes_full} ${stateButtonMore ? styles.professionalAttributes_open : ''}`}
-      style={styleContainer}
-    >
-      {employee && (
-        <button
-          className={styles.professionalAttributes__edit}
-          type="button"
-          aria-label="Редактировать"
-          onClick={onClickEdit}
-        />
-      )}
+    <div className={styles.professionalAttributes}>
+      <IconButton
+        icon={<img src={editIcon} alt="Edit" />}
+        onClick={handlerEditTextarea}
+        className={styles.professionalAttributes__edit}
+      />
       <Typography.Text
         weight="bold"
         className={styles.professionalAttributes__title}
       >
         {attributeName}
       </Typography.Text>
-      <textarea
+      <Textarea
         ref={textareaRef}
-        className={styles.professionalAttributes__textarea}
-        disabled={disabledTextarea}
+        block
         value={textAttributesValue}
-        placeholder="Не заполнено"
-        onChange={(e) => setTextAttributesValue(e.target.value)}
+        onChange={handleChange}
         style={{
-          border: disabledTextarea ? 'none' : '1px solid #E7E8EB',
-          backgroundColor: disabledTextarea ? '#fff' : '#F3F4F6',
+          backgroundColor: '#FFF',
+          fontSize: '14px',
+          overflow: 'hidden',
         }}
+        placeholder="Не заполнено"
+        autosize
+        maxRows={moreButton ? 999 : 3}
+        disabled={stateTextarea}
       />
-      {textareaValue && (
-        <button
+      {lineHeight > 60 && (
+        <Button
           className={styles.professionalAttributes__button}
           type="button"
-          onClick={handlerButton}
+          view="ghost"
+          size="s"
+          onClick={handlerToggleMoreButton}
         >
-          <span className={styles.professionalAttributes__textButton}>
-            {!stateButtonMore ? 'Подробнее' : 'Скрыть'}
-          </span>
-        </button>
+          Подробнее
+        </Button>
       )}
     </div>
   );
