@@ -2,11 +2,9 @@
 import { useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Typography } from '@alfalab/core-components/typography';
-import { CircularProgressBar } from '@alfalab/core-components/circular-progress-bar';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
-import SuccessIcon from '../../assets/icons/SuccessIcon';
 import cat from '../../assets/icons/cat.png';
 
 const data = [
@@ -84,7 +82,7 @@ export default function TeamTable() {
           width={190}
           className={styles.table__headCell}
         >
-          ПРОГРЕСС, %
+          ПРОГРЕСС
         </Table.TSortableHeadCell>
       </Table.THead>
       <Table.TBody>
@@ -111,12 +109,9 @@ export default function TeamTable() {
             </Table.TCell>
 
             <Table.TCell className={styles.table__row}>
-              <CircularProgressBar
-                value={row.progress}
-                size="m"
-                height={32}
-                iconComplete={SuccessIcon}
-              />
+              <Typography.Text view="primary-medium" tag="div">
+                {row.progress}%
+              </Typography.Text>
             </Table.TCell>
           </Table.TRow>
         ))}
