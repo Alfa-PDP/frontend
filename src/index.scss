@@ -1,0 +1,22 @@
+@import './assets/fonts/fonts.css';
+@import './scss/variables.scss';
+@import './scss/mixins.scss';
+
+@import './assets/fonts/normalize.css';
+
+:root {
+  font-family: $font-family;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 400;
+  font-style: normal;
+
+  color-scheme: light dark;
+  color: $Primary-black;
+  background-color: $White;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

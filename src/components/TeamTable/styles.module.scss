@@ -1,0 +1,22 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.table {
+  &__row {
+    vertical-align: middle;
+  }
+
+  &__headCell {
+    font-family: $font-family;
+    font-weight: 600;
+    font-size: 14px;
+    color: $Primary-black;
+  }
+
+  &__workerInfoContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    align-items: center;
+  }
+}

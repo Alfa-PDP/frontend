@@ -1,0 +1,20 @@
+@font-face {
+  src:
+    local('Roboto'),
+    url('./Roboto-Regular.woff') format('woff'),
+    url('./Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-family: 'Roboto';
+}
+
+@font-face {
+  src:
+    url('https://alfabank.servicecdn.ru/media/fonts/styrene-ui/styrene-ui_bold.woff2')
+      format('woff2'),
+    url('https://alfabank.servicecdn.ru/media/fonts/styrene-ui/styrene-ui_bold.woff')
+      format('woff');
+  font-weight: 700;
+  font-display: swap;
+  font-family: 'Styrene UI';
+}
