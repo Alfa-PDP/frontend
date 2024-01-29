@@ -6,8 +6,9 @@
   flex-direction: column;
   gap: 40px;
   position: sticky;
-  top: 0;
+  top: 20px;
   min-width: 190px;
+  max-height: 400px;
 
   &__list {
     @include mp-null;
