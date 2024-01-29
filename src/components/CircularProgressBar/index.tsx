@@ -11,7 +11,7 @@ export default function CircularProgressBar({
 }: CircularProgressBarProps) {
   return (
     <div className={styles.progress}>
-      <Typography.Text weight="bold">Прогресс по ИПР</Typography.Text>
+      <Typography.Text weight="bold">Прогресс</Typography.Text>
       <ProgressBar
         value={percentage}
         size="l"

@@ -5,11 +5,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100%;
   border: 1px solid #e7e8eb;
+  height: max-content;
+  max-height: 138px;
   border-radius: 20px;
   width: 100%;
-  transition: max-height 0.3s ease-in-out;
+  transition: max-height 0.3s ease;
 
   &__edit {
     width: 12px;
@@ -42,17 +43,33 @@
     --form-control-focus-bg-color: none;
 
     &_active {
-      color: #b3b3b3;
+      width: 92%;
+      margin-left: 8px;
+      background-color: #f3f4f6;
+      color: #7c7c86;
+      --form-control-hover-bg-color: $Light-grey;
+      --form-control-focus-bg-color: $Light-grey;
+      border: 1px solid #e7e8eb;
+      border-radius: 12px;
+    }
+
+    // Это компонент бордера textarea
+    &_activeFieldClassName {
+    }
+
+    // Это компонент бэкграунда textarea
+    &_activeTextareaClassName {
+      color: #7c7c86;
     }
   }
 
   &__button {
-    width: 70px;
+    width: max-content;
     background-color: #fff;
     color: #b3b3b3;
     text-decoration: underline;
     border: none;
-    margin: 0 10px 10px;
+    margin: 0 12px 10px;
     text-align: start;
     font-size: 12px;
     background-color: none;
