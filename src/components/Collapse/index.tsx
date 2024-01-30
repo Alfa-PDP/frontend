@@ -3,7 +3,9 @@ import { IconButton } from '@alfalab/core-components/icon-button';
 import { Textarea } from '@alfalab/core-components/textarea';
 import { Button } from '@alfalab/core-components/button';
 import { useEffect, useRef, useState } from 'react';
-import editIcon from '../../assets/icons/editButton.svg';
+import editIcon from '../../assets/icons/EditButtonAttributes.svg';
+import saveAttributions from '../../assets/icons/SaveAttributes.svg';
+import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
 import styles from './styles.module.scss';
 
 interface TextAttributesProps {
@@ -55,14 +57,29 @@ export default function Collapse({
 
   // Позволяет открыть/закрыть textarea для возможности редактирования
   const handlerEditTextarea = () => {
-    handlerStateRows();
     setMoreButton(true);
+    setStateTextarea(!stateTextarea);
+    setStateRows(999);
+  };
+
+  // Позволяет отменить редактирование и вернуть значение value на начальное значение
+  const handlerTextareaCancel = () => {
+    setTextAttributesValue(textAttributes);
+    setStateTextarea(!stateTextarea);
+  };
+
+  // Позволяет сохранить изменения value
+  const handlerTextareaSave = () => {
     setStateTextarea(!stateTextarea);
   };
 
   // Позволяет отслеживать изменения value textarea
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextAttributesValue(event.target.value);
+  };
+
+  const getCounterText = (currentLength: number, maxLength = 500) => {
+    return `${currentLength}/${maxLength} символов`;
   };
 
   return (
@@ -74,11 +91,26 @@ export default function Collapse({
           : { maxHeight: `${lineHeight + 90}px` }
       }
     >
-      <IconButton
-        icon={<img src={editIcon} alt="Edit" />}
-        onClick={handlerEditTextarea}
-        className={styles.professionalAttributes__edit}
-      />
+      {stateTextarea ? (
+        <IconButton
+          icon={<img src={editIcon} alt="Edit" />}
+          onClick={handlerEditTextarea}
+          className={styles.professionalAttributes__edit}
+        />
+      ) : (
+        <>
+          <IconButton
+            icon={<img src={saveAttributions} alt="save" />}
+            onClick={handlerTextareaSave}
+            className={styles.professionalAttributes__edit_save}
+          />
+          <IconButton
+            icon={<img src={cancelAttribution} alt="cancel" />}
+            onClick={handlerTextareaCancel}
+            className={styles.professionalAttributes__edit}
+          />
+        </>
+      )}
       <Typography.Text
         weight="bold"
         className={styles.professionalAttributes__title}
@@ -97,8 +129,11 @@ export default function Collapse({
         maxRows={stateRows}
         minRows={1}
         readOnly={stateTextarea}
+        showCounter={!stateTextarea}
+        maxLength={500}
+        getCounterText={getCounterText}
       />
-      {lineHeight > 70 && (
+      {lineHeight > 70 && stateTextarea && (
         <Button
           className={styles.professionalAttributes__button}
           type="button"

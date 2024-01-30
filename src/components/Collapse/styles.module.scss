@@ -12,12 +12,24 @@
   width: 100%;
   transition: max-height 0.3s ease;
 
+  &_active {
+    padding-bottom: 20px;
+  }
+
   &__edit {
     width: 12px;
     height: 12px;
     position: absolute;
     right: 12px;
     top: 16px;
+
+    &_save {
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      right: 50px;
+      top: 16px;
+    }
   }
 
   &__title {
@@ -32,7 +44,7 @@
     background-color: transparent;
     overflow: hidden;
     font-size: 14px;
-    margin: 2px;
+    margin: 1px 2px;
     padding: 2px;
     opacity: 1;
     cursor: auto;
@@ -43,18 +55,21 @@
     --form-control-focus-bg-color: none;
 
     &_active {
-      width: 92%;
+      width: 93%;
+      margin-top: 10px;
       margin-left: 8px;
-      background-color: #f3f4f6;
+      padding-bottom: 10px;
       color: #7c7c86;
-      --form-control-hover-bg-color: $Light-grey;
-      --form-control-focus-bg-color: $Light-grey;
-      border: 1px solid #e7e8eb;
       border-radius: 12px;
+      --form-control-sub-paddings: 0 10px;
     }
 
     // Это компонент бордера textarea
     &_activeFieldClassName {
+      border: 1px solid #e7e8eb;
+      background-color: #f3f4f6;
+      --form-control-hover-bg-color: #f3f4f6;
+      --form-control-focus-bg-color: #f3f4f6;
     }
 
     // Это компонент бэкграунда textarea
