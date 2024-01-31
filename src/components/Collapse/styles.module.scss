@@ -5,11 +5,16 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100%;
   border: 1px solid #e7e8eb;
+  height: max-content;
+  max-height: 138px;
   border-radius: 20px;
   width: 100%;
-  transition: max-height 0.3s ease-in-out;
+  transition: max-height 0.3s ease;
+
+  &_active {
+    padding-bottom: 20px;
+  }
 
   &__edit {
     width: 12px;
@@ -17,6 +22,14 @@
     position: absolute;
     right: 12px;
     top: 16px;
+
+    &_save {
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      right: 50px;
+      top: 16px;
+    }
   }
 
   &__title {
@@ -31,7 +44,7 @@
     background-color: transparent;
     overflow: hidden;
     font-size: 14px;
-    margin: 2px;
+    margin: 1px 2px;
     padding: 2px;
     opacity: 1;
     cursor: auto;
@@ -42,17 +55,36 @@
     --form-control-focus-bg-color: none;
 
     &_active {
-      color: #b3b3b3;
+      width: 93%;
+      margin-top: 10px;
+      margin-left: 8px;
+      padding-bottom: 10px;
+      color: #7c7c86;
+      border-radius: 12px;
+      --form-control-sub-paddings: 0 10px;
+    }
+
+    // Это компонент бордера textarea
+    &_activeFieldClassName {
+      border: 1px solid #e7e8eb;
+      background-color: #f3f4f6;
+      --form-control-hover-bg-color: #f3f4f6;
+      --form-control-focus-bg-color: #f3f4f6;
+    }
+
+    // Это компонент бэкграунда textarea
+    &_activeTextareaClassName {
+      color: #7c7c86;
     }
   }
 
   &__button {
-    width: 70px;
+    width: max-content;
     background-color: #fff;
     color: #b3b3b3;
     text-decoration: underline;
     border: none;
-    margin: 0 10px 10px;
+    margin: 0 12px 10px;
     text-align: start;
     font-size: 12px;
     background-color: none;
