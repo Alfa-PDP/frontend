@@ -1,24 +1,12 @@
 import { Table } from '@alfalab/core-components/table';
 import { Collapse } from '@alfalab/core-components/collapse';
 import { Status } from '@alfalab/core-components/status';
+import { Typography } from '@alfalab/core-components/typography';
+import { ButtonDesktop } from '@alfalab/core-components/button/desktop';
 import styles from './styles.module.scss';
-
-interface Comment {
-  author: string;
-  time: string;
-  text: string;
-}
-
-interface TaskData {
-  id: number;
-  task: string;
-  date: string;
-  type: string;
-  significance: string;
-  status: StatusType;
-  description: string;
-  comments: Comment[];
-}
+import Comments from '../Comments';
+import { TaskData } from '../../types/Task';
+import { StatusMap } from '../../types/Status';
 
 const data: TaskData[] = [
   {
@@ -32,8 +20,15 @@ const data: TaskData[] = [
       'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
     comments: [
       {
+        id: 1,
         author: 'Алабамов Сергей Викторович',
         time: '25 янв, 11:13',
+        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
+      },
+      {
+        id: 2,
+        author: 'Алабамов Сергей Викторович',
+        time: '25 янв, 11:14',
         text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
       },
     ],
@@ -49,6 +44,7 @@ const data: TaskData[] = [
       'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
     comments: [
       {
+        id: 1,
         author: 'Алабамов Сергей Викторович',
         time: '25 янв, 11:13',
         text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
@@ -66,11 +62,13 @@ const data: TaskData[] = [
       'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
     comments: [
       {
+        id: 1,
         author: 'Алабамов Сергей Викторович',
         time: '25 янв, 11:13',
         text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
       },
       {
+        id: 2,
         author: 'Вы',
         time: '24 янв, 11:13',
         text: 'Прохожу обучение на платформе Стратоплан. Обучение выходит за рамки оговороенного срока, поскольку начинается во втором квартале 2024 г.',
@@ -78,15 +76,6 @@ const data: TaskData[] = [
     ],
   },
 ];
-
-type StatusType = 'inWork' | 'completed' | 'new' | 'notComplited' | 'canceled';
-
-interface StatusInfo {
-  text: string;
-  className: string;
-}
-
-type StatusMap = Record<StatusType, StatusInfo>;
 
 const statusMap: StatusMap = {
   inWork: {
@@ -138,15 +127,40 @@ export default function TaskTable() {
               renderContent={(expanded) => (
                 <Table.TCell colSpan={5}>
                   <Collapse expanded={expanded}>
-                    <div>
-                      {row.description}
-                      {row.comments.map((comment) => (
-                        <>
-                          <p>{comment.author}</p>
-                          <p>{comment.time}</p>
-                          <p>{comment.text}</p>
-                        </>
-                      ))}
+                    <div className={styles.table__taskExpand}>
+                      <div className={styles.table__taskDescription}>
+                        <Typography.Text
+                          view="secondary-medium"
+                          color="secondary"
+                          tag="p"
+                          style={{ marginBottom: '4px' }}
+                        >
+                          Описание задачи
+                        </Typography.Text>
+                        <Typography.Text
+                          view="primary-medium"
+                          color="primary"
+                          tag="p"
+                        >
+                          {row.description}
+                        </Typography.Text>
+                      </div>
+                      <ButtonDesktop
+                        size="xxs"
+                        view="primary"
+                        className={styles.table__taskButton}
+                      >
+                        Взять в работу
+                      </ButtonDesktop>
+                      <Typography.Text
+                        view="primary-large"
+                        weight="medium"
+                        color="primary"
+                        tag="p"
+                      >
+                        Комментарии к задаче
+                      </Typography.Text>
+                      <Comments comments={row.comments} />
                     </div>
                   </Collapse>
                 </Table.TCell>
