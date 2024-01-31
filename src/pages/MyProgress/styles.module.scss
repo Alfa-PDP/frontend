@@ -1,7 +1,10 @@
-.myTeam {
+.progress {
   display: flex;
   flex-direction: column;
   width: 100%;
   position: relative;
-  gap: 40px;
+
+  &__title {
+    margin-bottom: 40px;
+  }
 }

@@ -1,0 +1,26 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.nav {
+  &__links {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px;
+    border-bottom: 1px solid rgba(124, 124, 134, 0.5);
+  }
+
+  &__link {
+    color: $Dark-grey;
+    text-decoration: none;
+    padding-bottom: 15px;
+
+    &_active {
+      color: $Primary-black;
+      border-bottom: 1px solid $Red;
+    }
+  }
+}
