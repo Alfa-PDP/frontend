@@ -15,7 +15,7 @@ export default function YearFilter() {
     <div style={{ width: 150, alignSelf: 'flex-end' }}>
       <SelectDesktop
         allowUnselect
-        size="m"
+        size="s"
         options={OPTIONS}
         label="Период"
         Option={BaseOption}

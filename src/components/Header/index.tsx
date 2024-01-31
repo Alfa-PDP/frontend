@@ -40,7 +40,6 @@ export default function Header() {
         <Input
           label="Поиск"
           size="s"
-          fieldClassName={styles.header__searchInput}
           leftAddons={<MagnifierMIcon color="#B3B3B3" />}
         />
         <Circle size={48}>
