@@ -1,0 +1,35 @@
+.comments {
+  display: flex;
+  gap: 32px;
+  flex-direction: column;
+  padding: 0 0 24px 0;
+}
+
+.comment {
+  &__container {
+    display: flex;
+  }
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    background: #b3b3b3;
+    display: block;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 20px;
+  }
+  &__author {
+    margin: 10px 20px 0 0;
+    padding: 0;
+    float: left;
+  }
+  &__time {
+    margin: 10px 0 0 0;
+    padding: 0;
+  }
+  &__text {
+    clear: both;
+    margin: 13px 0 0 0;
+    padding: 0;
+  }
+}

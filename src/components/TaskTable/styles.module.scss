@@ -54,4 +54,11 @@
     gap: 16px;
     align-items: center;
   }
+  &__taskExpand {
+    max-width: 556px;
+    padding: 0 0 24px 0;
+  }
+  &__taskButton {
+    margin: 4px 0 20px 0;
+  }
 }
