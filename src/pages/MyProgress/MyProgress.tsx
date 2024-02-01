@@ -5,10 +5,11 @@ import styles from './styles.module.scss';
 import ProfessionalAttributes from '../../components/ProfessionalAttributes';
 import TaskTable from '../../components/TaskTable/index';
 import YearFilter from '../../components/YearFilter';
+import MyCard from '../../components/MyCard';
 
 export default function MyProgress() {
-  const { userId } = useParams();
-
+  const { id } = useParams();
+  const role = 'employee';
   return (
     <div className={styles.progress}>
       <Typography.Title
@@ -17,10 +18,12 @@ export default function MyProgress() {
         view="large"
         className={styles.progress__title}
       >
-        Индивидуальный план развития {userId}
+        {role !== 'employee'
+          ? 'Мой прогресс'
+          : `Индивидуальный план развития ${id}`}
       </Typography.Title>
-      <EmployeeCard />
-      <ProfessionalAttributes />
+      {role !== 'employee' ? <MyCard /> : <EmployeeCard />}
+      <ProfessionalAttributes role={role} />
       <YearFilter />
       <TaskTable />
     </div>

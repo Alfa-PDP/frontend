@@ -16,6 +16,7 @@ const EmployeeData = {
   amountTasks: 12,
   photo:
     'https://img.freepik.com/free-photo/female-looking-directly-into-camera_273609-12389.jpg',
+  role: 'employee',
 };
 
 export default function EmployeeCard() {

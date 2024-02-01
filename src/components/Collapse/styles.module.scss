@@ -7,10 +7,9 @@
   position: relative;
   border: 1px solid #e7e8eb;
   height: max-content;
-  max-height: 138px;
   border-radius: 20px;
   width: 100%;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.4s ease;
 
   &_active {
     padding-bottom: 20px;
