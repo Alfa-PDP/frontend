@@ -4,11 +4,10 @@ import { Input } from '@alfalab/core-components/input';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 import { BellMIcon } from '@alfalab/icons-glyph/BellMIcon';
-import { SelectionMaskMIcon } from '@alfalab/icons-glyph/SelectionMaskMIcon';
 
 import styles from './styles.module.scss';
 import Logo from '../../assets/icons/Logo';
-import cat from '../../assets/icons/cat.png';
+import ProfileIcon from '../ProfileIcon/index';
 
 const listItems = ['Контакты', 'Все о работе', 'Подразделения'];
 
@@ -18,9 +17,9 @@ export default function Header() {
       <div className={styles.header__container}>
         <Link to="/" className={styles.header__logoContainer}>
           <Logo />
-          <Typography.Title weight="bold" tag="div" view="xsmall">
+          <Typography.Text weight="bold" tag="div" view="primary-large">
             Alfa People
-          </Typography.Title>
+          </Typography.Text>
         </Link>
 
         <ul className={styles.header__list}>
@@ -28,7 +27,10 @@ export default function Header() {
             // eslint-disable-next-line react/no-array-index-key
             <li key={index}>
               <Link to="/" className={styles.header__link}>
-                <Typography.Text tag="span" weight="bold">
+                <Typography.Text
+                  view="primary-medium"
+                  style={{ fontWeight: 600 }}
+                >
                   {el}
                 </Typography.Text>
               </Link>
@@ -45,12 +47,7 @@ export default function Header() {
         <Circle size={48}>
           <BellMIcon color="#0E0E0E" />
         </Circle>
-
-        <Circle
-          size={48}
-          imageUrl={cat}
-          bottomAddons={<SelectionMaskMIcon color="#0CC44D" />}
-        />
+        <ProfileIcon />
       </div>
     </header>
   );

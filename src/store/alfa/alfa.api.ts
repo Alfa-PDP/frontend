@@ -1,13 +1,24 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { WorkersList } from '../../types/types';
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'localhost:8000/' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://alfa-idp.ddns.net/api/v1/',
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (build) => ({
     // Список сотрудников команды
-    getWorkers: build.query<unknown, unknown>({
-      query: ({ team_id }: { team_id: number }) => ({
-        url: `user`,
+    getWorkers: build.query<WorkersList, { team_id: string }>({
+      query: ({ team_id }) => ({
+        url: `users`,
         params: {
           team_id,
         },
