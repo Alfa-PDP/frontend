@@ -1,16 +1,23 @@
 import { NavLink } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
-import { navItemsLeaderData } from '../../utils/navItemsData';
+import {
+  navItemsLeaderData,
+  navItemsWorkerData,
+} from '../../utils/navItemsData';
 
 import styles from './styles.module.scss';
 import { BackButton } from '../BackButton';
 
 export default function NavBar() {
+  const role = localStorage.getItem('role');
+
+  const data = role === 'leader' ? navItemsLeaderData : navItemsWorkerData;
+
   return (
     <nav className={styles.nav}>
       <BackButton />
       <ul className={styles.nav__list}>
-        {navItemsLeaderData.map((el, index) => (
+        {data.map((el, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <li key={index}>
             <NavLink

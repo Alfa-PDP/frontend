@@ -6,7 +6,12 @@ import { Tag } from '@alfalab/core-components/tag';
 import SelectionMaskMIcon from '@alfalab/icons-glyph/SelectionMaskMIcon';
 import cat from '../../assets/icons/cat.png';
 import styles from './styles.module.scss';
-import { LEADER_TOKEN, WORKER_TOKEN } from '../../utils/constants';
+import {
+  LEADER_ID,
+  LEADER_TOKEN,
+  WORKER_ID,
+  WORKER_TOKEN,
+} from '../../utils/constants';
 
 export default function ProfileIcon() {
   const [open, setOpen] = useState(false);
@@ -36,10 +41,12 @@ export default function ProfileIcon() {
       setValue('leader');
       localStorage.setItem('token', LEADER_TOKEN);
       localStorage.setItem('role', 'leader');
+      localStorage.setItem('user_id', LEADER_ID);
     } else {
       setValue('worker');
       localStorage.setItem('token', WORKER_TOKEN);
       localStorage.setItem('role', 'worker');
+      localStorage.setItem('user_id', WORKER_ID);
     }
   };
 
