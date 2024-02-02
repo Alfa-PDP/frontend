@@ -9,8 +9,8 @@ const initialState: YearState = {
   year: currentYear,
 };
 
-export const alfaSlice = createSlice({
-  name: 'alfa',
+export const yearSlice = createSlice({
+  name: 'year',
   initialState,
   reducers: {
     setYear(state, action: PayloadAction<YearState>) {
@@ -19,5 +19,5 @@ export const alfaSlice = createSlice({
   },
 });
 
-export const alfaActions = alfaSlice.actions;
-export const alfaReducer = alfaSlice.reducer;
+export const yearActions = yearSlice.actions;
+export const yearReducer = yearSlice.reducer;

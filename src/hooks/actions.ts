@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
-import { alfaActions } from '../store/alfa/alfa.slice';
+import { yearActions } from '../store/alfa/year.slice';
 
 const actions = {
-  ...alfaActions,
+  ...yearActions,
 };
 
 export const useActions = () => {
