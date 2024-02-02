@@ -1,0 +1,16 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.profileButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &__popover {
+    padding: 20px;
+  }
+}

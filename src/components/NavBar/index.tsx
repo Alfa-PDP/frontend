@@ -20,14 +20,9 @@ export default function NavBar() {
               }}
             >
               <img src={el.icon} alt="" />
-              <Typography.Title
-                tag="h2"
-                view="xsmall"
-                weight="bold"
-                style={{ fontSize: '12px' }}
-              >
+              <Typography.Text view="primary-small" weight="bold">
                 {el.text}
-              </Typography.Title>
+              </Typography.Text>
             </NavLink>
           </li>
         ))}
