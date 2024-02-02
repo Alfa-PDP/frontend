@@ -91,6 +91,7 @@ export default function Collapse({
   } else if (stateTextarea) {
     editButton = (
       <IconButton
+        size={24}
         icon={<img src={editIcon} alt="Edit" />}
         onClick={handlerEditTextarea}
         className={styles.professionalAttributes__edit}
@@ -100,11 +101,13 @@ export default function Collapse({
     editButton = (
       <>
         <IconButton
+          size={24}
           icon={<img src={saveAttributions} alt="save" />}
           onClick={handlerTextareaSave}
           className={styles.professionalAttributes__edit_save}
         />
         <IconButton
+          size={24}
           icon={<img src={cancelAttribution} alt="cancel" />}
           onClick={handlerTextareaCancel}
           className={styles.professionalAttributes__edit}
