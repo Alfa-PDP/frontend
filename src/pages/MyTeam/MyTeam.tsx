@@ -1,8 +1,10 @@
-import { Typography } from '@alfalab/core-components/typography';
 import { Outlet } from 'react-router-dom';
-import styles from './styles.module.scss';
+
+import { Typography } from '@alfalab/core-components/typography';
 
 import MyTeamNav from '../../components/MyTeamNav';
+
+import styles from './styles.module.scss';
 
 export default function MyTeam() {
   return (

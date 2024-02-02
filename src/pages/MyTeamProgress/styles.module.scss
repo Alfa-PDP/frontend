@@ -1,0 +1,11 @@
+.myTeamProgress {
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__input {
+    width: 65%;
+  }
+}
