@@ -3,8 +3,7 @@ import { Typography } from '@alfalab/core-components/typography';
 import EmployeeCard from '../../components/EmployeeCard';
 import styles from './styles.module.scss';
 import ProfessionalAttributes from '../../components/ProfessionalAttributes';
-import TaskTable from '../../components/TaskTable/index';
-import YearFilter from '../../components/YearFilter';
+import TaskList from '../../components/TaskList';
 
 export default function MyProgress() {
   const { userId } = useParams();
@@ -21,8 +20,7 @@ export default function MyProgress() {
       </Typography.Title>
       <EmployeeCard />
       <ProfessionalAttributes />
-      <YearFilter />
-      <TaskTable />
+      <TaskList />
     </div>
   );
 }

@@ -105,19 +105,54 @@ export default function TaskTable() {
       <Table wrapper={false}>
         <Table.THead>
           <Table.THeadCell className={styles.table__headCell}>
-            Задача (3)
+            <Typography.Text
+              view="primary-small"
+              color="primary"
+              tag="span"
+              weight="bold"
+            >
+              Задача (3)
+            </Typography.Text>
           </Table.THeadCell>
-          <Table.THeadCell className={styles.table__headCell} width={190}>
-            Даты
+          <Table.THeadCell className={styles.table__headCell} width={200}>
+            <Typography.Text
+              view="primary-small"
+              color="primary"
+              tag="span"
+              weight="bold"
+            >
+              Даты
+            </Typography.Text>
           </Table.THeadCell>
           <Table.THeadCell className={styles.table__headCell} width={144}>
-            Тип
+            <Typography.Text
+              view="primary-small"
+              color="primary"
+              tag="span"
+              weight="bold"
+            >
+              Тип
+            </Typography.Text>
           </Table.THeadCell>
           <Table.THeadCell className={styles.table__headCell} width={144}>
-            Значимость
+            <Typography.Text
+              view="primary-small"
+              color="primary"
+              tag="span"
+              weight="bold"
+            >
+              Значимость
+            </Typography.Text>
           </Table.THeadCell>
           <Table.THeadCell className={styles.table__headCell} width={136}>
-            Статус
+            <Typography.Text
+              view="primary-small"
+              color="primary"
+              tag="span"
+              weight="bold"
+            >
+              Статус
+            </Typography.Text>
           </Table.THeadCell>
         </Table.THead>
         <Table.TBody>
@@ -130,10 +165,10 @@ export default function TaskTable() {
                     <div className={styles.table__taskExpand}>
                       <div className={styles.table__taskDescription}>
                         <Typography.Text
-                          view="secondary-medium"
+                          className={styles.table__descriptionHeader}
+                          view="primary-small"
                           color="secondary"
                           tag="p"
-                          style={{ marginBottom: '4px' }}
                         >
                           Описание задачи
                         </Typography.Text>
@@ -141,6 +176,7 @@ export default function TaskTable() {
                           view="primary-medium"
                           color="primary"
                           tag="p"
+                          className={styles.table__descriptionText}
                         >
                           {row.description}
                         </Typography.Text>
@@ -152,31 +188,57 @@ export default function TaskTable() {
                       >
                         Взять в работу
                       </ButtonDesktop>
-                      <Typography.Text
-                        view="primary-large"
-                        weight="medium"
-                        color="primary"
-                        tag="p"
-                      >
-                        Комментарии к задаче
-                      </Typography.Text>
-                      <Comments comments={row.comments} />
+                      <div className={styles.table__taskComments}>
+                        <Typography.Text
+                          view="primary-large"
+                          weight="medium"
+                          color="primary"
+                          tag="p"
+                        >
+                          Комментарии к задаче
+                        </Typography.Text>
+                        <Comments comments={row.comments} />
+                      </div>
                     </div>
                   </Collapse>
                 </Table.TCell>
               )}
             >
               <Table.TCell className={styles.table__row}>
-                {row.task}
+                <Typography.Text
+                  view="primary-medium"
+                  color="primary"
+                  tag="span"
+                >
+                  {row.task}
+                </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
-                {row.date}
+                <Typography.Text
+                  view="primary-medium"
+                  color="primary"
+                  tag="span"
+                >
+                  {row.date}
+                </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
-                {row.type}
+                <Typography.Text
+                  view="primary-medium"
+                  color="primary"
+                  tag="span"
+                >
+                  {row.type}
+                </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
-                {row.significance}
+                <Typography.Text
+                  view="primary-medium"
+                  color="primary"
+                  tag="span"
+                >
+                  {row.significance}
+                </Typography.Text>
               </Table.TCell>
               <Table.TCell>
                 {statusMap[row.status] && (
