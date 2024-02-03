@@ -2,19 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const currentYear = new Date().getFullYear();
 interface YearState {
-  year: number;
+  filteredYear: string | undefined;
 }
 
 const initialState: YearState = {
-  year: currentYear,
+  filteredYear: currentYear.toString(),
 };
 
 export const yearSlice = createSlice({
-  name: 'year',
+  name: 'filteredYear',
   initialState,
   reducers: {
     setYear(state, action: PayloadAction<YearState>) {
-      return { ...state, year: action.payload.year };
+      return { ...state, filteredYear: action.payload.filteredYear };
     },
   },
 });

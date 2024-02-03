@@ -1,9 +1,12 @@
 import { useLayoutEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { Popover } from '@alfalab/core-components/popover';
 import { RadioGroupDesktop } from '@alfalab/core-components/radio-group/desktop';
 import { Tag } from '@alfalab/core-components/tag';
-import SelectionMaskMIcon from '@alfalab/icons-glyph/SelectionMaskMIcon';
+import { AScoresCircleSIcon } from '@alfalab/icons-glyph/AScoresCircleSIcon';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import cat from '../../assets/icons/cat.png';
 import styles from './styles.module.scss';
 import {
@@ -12,21 +15,39 @@ import {
   WORKER_ID,
   WORKER_TOKEN,
 } from '../../utils/constants';
+import { useActions } from '../../hooks/actions';
 
 export default function ProfileIcon() {
   const [open, setOpen] = useState(false);
   const [buttonElement, setButtonElement] = useState<HTMLElement | null>(null);
   const [value, setValue] = useState('');
+  const navigate = useNavigate();
+
+  const { setRole } = useActions();
+  const roleSelector = useSelector((state: RootState) => state.user);
+
+  const changeToWorker = () => {
+    localStorage.setItem('role', 'worker');
+    localStorage.setItem('token', WORKER_TOKEN);
+    localStorage.setItem('user_id', WORKER_ID);
+  };
+
+  const changeToLeader = () => {
+    localStorage.setItem('role', 'leader');
+    localStorage.setItem('token', LEADER_TOKEN);
+    localStorage.setItem('user_id', LEADER_ID);
+  };
 
   useLayoutEffect(() => {
     const role = localStorage.getItem('role');
     if (!role) {
+      changeToWorker();
       setValue('worker');
-      localStorage.setItem('role', 'worker');
-      localStorage.setItem('token', WORKER_TOKEN);
     } else {
       setValue(role);
     }
+    setRole({ role: role as 'worker' | 'leader' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggle = () => {
@@ -38,15 +59,9 @@ export default function ProfileIcon() {
 
   const switchRole = () => {
     if (value === 'worker') {
-      setValue('leader');
-      localStorage.setItem('token', LEADER_TOKEN);
-      localStorage.setItem('role', 'leader');
-      localStorage.setItem('user_id', LEADER_ID);
+      changeToLeader();
     } else {
-      setValue('worker');
-      localStorage.setItem('token', WORKER_TOKEN);
-      localStorage.setItem('role', 'worker');
-      localStorage.setItem('user_id', WORKER_ID);
+      changeToWorker();
     }
   };
 
@@ -55,8 +70,10 @@ export default function ProfileIcon() {
     payload: { value: string; name?: string | undefined }
   ) => {
     setValue(payload.value);
+    setRole({ role: payload.value });
     switchRole();
     toggle();
+    navigate('/');
   };
 
   return (
@@ -71,7 +88,11 @@ export default function ProfileIcon() {
         <Circle
           size={48}
           imageUrl={cat}
-          bottomAddons={<SelectionMaskMIcon color="#0CC44D" />}
+          bottomAddons={
+            <AScoresCircleSIcon
+              color={roleSelector.role === 'leader' ? '#ef3124' : '#0CC44D'}
+            />
+          }
         />
       </button>
       <Popover
