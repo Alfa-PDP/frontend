@@ -1,7 +1,5 @@
 import { Typography } from '@alfalab/core-components/typography';
-import { MailLineMIcon } from '@alfalab/icons-glyph/MailLineMIcon';
-import { PhoneLineMIcon } from '@alfalab/icons-glyph/PhoneLineMIcon';
-import TelegramIcon from '../../assets/icons/TelegramIdpCard.svg';
+import InitialCard from '../InitialCard';
 import styles from './styles.module.scss';
 import CircularProgressBar from '../CircularProgressBar';
 
@@ -16,6 +14,7 @@ const EmployeeData = {
   amountTasks: 12,
   photo:
     'https://img.freepik.com/free-photo/female-looking-directly-into-camera_273609-12389.jpg',
+  role: 'employee',
 };
 
 export default function EmployeeCard() {
@@ -30,37 +29,18 @@ export default function EmployeeCard() {
       </div>
       <div className={styles.employee__container_info}>
         <div className={styles.employee__container_initials}>
-          <Typography.Text weight="bold">
+          <Typography.Text weight="bold" style={{ margin: '0' }}>
             {EmployeeData.surname} {EmployeeData.name} {EmployeeData.patronymic}
           </Typography.Text>
-          <Typography.Text color="secondary" view="primary-small">
+          <Typography.Text
+            style={{ fontSize: '12px', margin: '0', lineHeight: '15px' }}
+            color="secondary"
+            view="primary-small"
+          >
             {EmployeeData.position}
           </Typography.Text>
         </div>
-        <ul className={styles.employee__container_contacts}>
-          <li className={styles.employee__contacts}>
-            <MailLineMIcon className={styles.employee__contacts_image} />
-            <Typography.Text color="primary" view="primary-small">
-              {EmployeeData.email}
-            </Typography.Text>
-          </li>
-          <li className={styles.employee__contacts}>
-            <PhoneLineMIcon className={styles.employee__contacts_image} />
-            <Typography.Text color="primary" view="primary-small">
-              {EmployeeData.phone}
-            </Typography.Text>
-          </li>
-          <li className={styles.employee__contacts}>
-            <img
-              src={TelegramIcon}
-              className={styles.employee__contacts_image}
-              alt="Логотип телеграма"
-            />
-            <Typography.Text color="primary" view="primary-small">
-              {EmployeeData.telegram}
-            </Typography.Text>
-          </li>
-        </ul>
+        <InitialCard EmployeeData={EmployeeData} />
       </div>
       <CircularProgressBar percentage={EmployeeData.amountTasks} />
     </section>

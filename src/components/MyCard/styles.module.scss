@@ -1,0 +1,25 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.employee {
+  @include mp-null;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 90px;
+
+  &__container {
+    @include mp-null;
+    display: flex;
+    flex-direction: column;
+    width: 304px;
+    gap: 20px;
+
+    &_progressBar {
+      @include mp-null;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+}

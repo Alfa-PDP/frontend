@@ -11,11 +11,13 @@ import styles from './styles.module.scss';
 interface TextAttributesProps {
   textAttributes: string;
   attributeName: string;
+  role: string;
 }
 
 export default function Collapse({
   textAttributes,
   attributeName,
+  role,
 }: TextAttributesProps) {
   // Позволяет получить ссылку на textarea
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -29,14 +31,15 @@ export default function Collapse({
   const [textAttributesValue, setTextAttributesValue] =
     useState(textAttributes);
   // Позволяет установить значение атрибута maxRows у textarea
-  const [stateRows, setStateRows] = useState(3);
+  const [stateRows, setStateRows] = useState(4);
+  // Имитация доступа
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
     if (moreButton) {
       setTimeout(() => {
-        setStateRows(3);
-      }, 200);
+        setStateRows(4);
+      }, 330);
     } else {
       setStateRows(999);
     }
@@ -82,35 +85,47 @@ export default function Collapse({
     return `${currentLength}/${maxLength} символов`;
   };
 
+  let editButton = null;
+  if (role !== 'worker') {
+    editButton = null;
+  } else if (stateTextarea) {
+    editButton = (
+      <IconButton
+        size={24}
+        icon={<img src={editIcon} alt="Edit" />}
+        onClick={handlerEditTextarea}
+        className={styles.professionalAttributes__edit}
+      />
+    );
+  } else {
+    editButton = (
+      <>
+        <IconButton
+          size={24}
+          icon={<img src={saveAttributions} alt="save" />}
+          onClick={handlerTextareaSave}
+          className={styles.professionalAttributes__edit_save}
+        />
+        <IconButton
+          size={24}
+          icon={<img src={cancelAttribution} alt="cancel" />}
+          onClick={handlerTextareaCancel}
+          className={styles.professionalAttributes__edit}
+        />
+      </>
+    );
+  }
+
   return (
     <div
       className={styles.professionalAttributes}
       style={
         !moreButton
-          ? { maxHeight: `138px` }
-          : { maxHeight: `${lineHeight + 90}px` }
+          ? { maxHeight: `158px` }
+          : { maxHeight: `${lineHeight + 104}px` }
       }
     >
-      {stateTextarea ? (
-        <IconButton
-          icon={<img src={editIcon} alt="Edit" />}
-          onClick={handlerEditTextarea}
-          className={styles.professionalAttributes__edit}
-        />
-      ) : (
-        <>
-          <IconButton
-            icon={<img src={saveAttributions} alt="save" />}
-            onClick={handlerTextareaSave}
-            className={styles.professionalAttributes__edit_save}
-          />
-          <IconButton
-            icon={<img src={cancelAttribution} alt="cancel" />}
-            onClick={handlerTextareaCancel}
-            className={styles.professionalAttributes__edit}
-          />
-        </>
-      )}
+      {editButton}
       <Typography.Text
         weight="bold"
         className={styles.professionalAttributes__title}
@@ -133,7 +148,7 @@ export default function Collapse({
         maxLength={500}
         getCounterText={getCounterText}
       />
-      {lineHeight > 70 && stateTextarea && (
+      {lineHeight > 87 && stateTextarea && (
         <Button
           className={styles.professionalAttributes__button}
           type="button"
