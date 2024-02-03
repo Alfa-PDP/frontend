@@ -1,0 +1,31 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.professionalAttributes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 60px;
+  width: 100%;
+
+  &__container {
+    border: 1px solid #e7e8eb;
+    border-radius: 20px;
+    width: 100%;
+    padding: 16px 12px;
+    height: max-content;
+  }
+
+  &__textarea {
+    background-color: #fff;
+    opacity: 1;
+    overflow: hidden;
+  }
+  &__textarea2 {
+    background-color: #fff;
+    opacity: 1;
+    overflow: hidden;
+    z-index: 3;
+  }
+}

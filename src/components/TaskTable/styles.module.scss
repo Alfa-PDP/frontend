@@ -47,11 +47,30 @@
     color: $Primary-black;
     letter-spacing: 0;
   }
+  &__headCell.table__headCell:not(:last-child):not(:empty):after {
+    width: 0;
+  }
 
   &__workerInfoContainer {
     display: flex;
     flex-wrap: nowrap;
     gap: 16px;
     align-items: center;
+  }
+  &__taskExpand {
+    max-width: 556px;
+    padding: 0 0 24px 0;
+  }
+  &__taskButton {
+    margin: 0;
+  }
+  &__descriptionHeader {
+    margin: 0 0 4px 0;
+  }
+  &__descriptionText {
+    margin: 0 0 16px 0;
+  }
+  &__taskComments {
+    padding: 40px 0 0 0;
   }
 }

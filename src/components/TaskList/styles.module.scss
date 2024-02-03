@@ -1,0 +1,11 @@
+.taskList {
+  padding: 64px 0 0 0;
+  &__headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__addTask {
+    margin: 24px 0 0 0;
+  }
+}

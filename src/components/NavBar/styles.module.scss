@@ -6,12 +6,15 @@
   flex-direction: column;
   gap: 40px;
   position: sticky;
-  top: 0;
+  top: 20px;
   min-width: 190px;
 
   &__list {
     @include mp-null;
+    display: flex;
+    flex-direction: column;
     list-style: none;
+    gap: 8px;
 
     &Item {
       display: flex;

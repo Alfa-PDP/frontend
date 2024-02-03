@@ -1,0 +1,98 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.professionalAttributes {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid #e7e8eb;
+  height: max-content;
+  border-radius: 20px;
+  width: 100%;
+  transition: max-height 0.4s ease;
+
+  &_active {
+    padding-bottom: 20px;
+  }
+
+  &__edit {
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    right: 12px;
+    top: 16px;
+
+    &:hover {
+      opacity: 0.6;
+    }
+
+    &_save {
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      right: 50px;
+      top: 16px;
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  &__title {
+    margin: 10px 10px 0;
+  }
+
+  &__textarea.professionalAttributes__textarea {
+    color: rgba(5, 8, 29, 1);
+    width: 97.5%;
+    border: none;
+    border-radius: 12px;
+    background-color: transparent;
+    overflow: hidden;
+    font-size: 14px;
+    margin: 1px 2px;
+    padding: 2px;
+    opacity: 1;
+    cursor: auto;
+    min-height: 30px;
+    --form-control-hover-bg-color: transparent;
+    --color-light-border-underline: none;
+    --form-control-focus-shadow: none;
+    --form-control-focus-bg-color: none;
+
+    &_active {
+      width: 93%;
+      margin-top: 10px;
+      margin-left: 8px;
+      padding-bottom: 10px;
+      color: #7c7c86;
+      border-radius: 12px;
+      --form-control-sub-paddings: 0 10px;
+    }
+
+    // Это компонент бордера textarea
+    &_activeFieldClassName {
+      border: 1px solid #e7e8eb;
+      background-color: #f3f4f6;
+      --form-control-hover-bg-color: #f3f4f6;
+      --form-control-focus-bg-color: #f3f4f6;
+    }
+
+    // Это компонент бэкграунда textarea
+    &_activeTextareaClassName {
+      color: #7c7c86;
+    }
+  }
+
+  &__button {
+    width: max-content;
+    background-color: #fff;
+    color: #b3b3b3;
+    text-decoration: underline;
+    border: none;
+    margin: 0 12px 10px;
+    text-align: start;
+    font-size: 12px;
+    background-color: none;
+  }
+}

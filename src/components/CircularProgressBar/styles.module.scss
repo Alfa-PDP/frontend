@@ -1,0 +1,10 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-left: 40px;
+}

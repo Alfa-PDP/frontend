@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
+import { Input } from '@alfalab/core-components/input';
+import { Circle } from '@alfalab/core-components/icon-view/circle';
+import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
+import { BellMIcon } from '@alfalab/icons-glyph/BellMIcon';
 
 import styles from './styles.module.scss';
 import Logo from '../../assets/icons/Logo';
+import ProfileIcon from '../ProfileIcon/index';
 
 const listItems = ['Контакты', 'Все о работе', 'Подразделения'];
 
@@ -12,9 +17,9 @@ export default function Header() {
       <div className={styles.header__container}>
         <Link to="/" className={styles.header__logoContainer}>
           <Logo />
-          <Typography.Title weight="bold" tag="div" view="xsmall">
+          <Typography.Text weight="bold" tag="div" view="primary-large">
             Alfa People
-          </Typography.Title>
+          </Typography.Text>
         </Link>
 
         <ul className={styles.header__list}>
@@ -23,9 +28,8 @@ export default function Header() {
             <li key={index}>
               <Link to="/" className={styles.header__link}>
                 <Typography.Text
-                  tag="span"
-                  weight="bold"
-                  style={{ fontSize: '14px', fontWeight: '600' }}
+                  view="primary-medium"
+                  style={{ fontWeight: 600 }}
                 >
                   {el}
                 </Typography.Text>
@@ -33,6 +37,17 @@ export default function Header() {
             </li>
           ))}
         </ul>
+      </div>
+      <div className={styles.header__profileContainer}>
+        <Input
+          label="Поиск"
+          size="s"
+          leftAddons={<MagnifierMIcon color="#B3B3B3" />}
+        />
+        <Circle size={48}>
+          <BellMIcon color="#0E0E0E" />
+        </Circle>
+        <ProfileIcon />
       </div>
     </header>
   );

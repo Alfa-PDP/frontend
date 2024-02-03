@@ -1,0 +1,15 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.progressBar {
+  @include mp-null;
+  display: flex;
+  flex-direction: column;
+
+  &__container {
+    @include mp-null;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

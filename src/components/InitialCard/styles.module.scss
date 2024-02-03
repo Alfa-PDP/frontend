@@ -1,0 +1,22 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.employeeInitials {
+  @include mp-null-list;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-right: 91px;
+  margin-left: 5px;
+
+  &__contacts {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    &_image {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
