@@ -1,18 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Typography } from '@alfalab/core-components/typography';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 // import cat from '../../assets/icons/cat.png';
-import { useGetWorkersQuery } from '../../store/alfa/alfa.api';
+import {
+  useGetWorkersQuery,
+  useLazyGetWorkersQuery,
+} from '../../store/alfa/alfa.api';
 import { CURRNERT_YEAR, TEAM_ID } from '../../utils/constants';
 import { useAppSelector } from '../../hooks/redux';
+import { WorkersList } from '../../store/alfa/types';
 
 export default function TeamTable() {
-  const [sortKey, setSortKey] = useState(undefined);
-  const [isSortedDesc, setIsSortedDesc] = useState(undefined);
+  const [sortKey, setSortKey] = useState<string | undefined>(undefined);
+  const [isSortedDesc, setIsSortedDesc] = useState<boolean | undefined>(
+    undefined
+  );
+  const [sortBy, setSortBy] = useState('');
+  const [dataForRender, setDataForRender] = useState<WorkersList>([]);
   const navigate = useNavigate();
 
   const navigateToProgress = (id: string) => {
@@ -23,21 +31,43 @@ export default function TeamTable() {
     (state) => state.filteredYear
   );
 
-  const { data } = useGetWorkersQuery({
+  const { data: initialData } = useGetWorkersQuery({
     team_id: TEAM_ID,
     year: filteredYear,
   });
 
-  console.log(setSortKey);
-  console.log(setIsSortedDesc);
+  useEffect(() => {
+    if (initialData) {
+      setDataForRender(initialData);
+    }
+  }, [initialData]);
+
+  const [triggerSort, { data: filteredData }] = useLazyGetWorkersQuery();
+
+  const handleSort = (key: string) => {
+    if (key === sortKey) {
+      setIsSortedDesc((prev) => !prev);
+    } else {
+      setIsSortedDesc(false);
+    }
+    setSortKey(key);
+    setSortBy(key);
+    triggerSort({
+      team_id: TEAM_ID,
+      year: filteredYear,
+      sort_by: sortBy,
+      order: isSortedDesc ? 'desc' : 'asc',
+    });
+    setDataForRender(filteredData || []);
+  };
 
   return (
     <Table wrapper={false}>
       <Table.THead>
         <Table.TSortableHeadCell
           title="Сотрудник"
-          isSortedDesc={sortKey === 'worker' ? isSortedDesc : undefined}
-          onSort={() => {}}
+          isSortedDesc={sortKey === 'family_name' ? isSortedDesc : undefined}
+          onSort={() => handleSort('family_name')}
           className={styles.table__headCell}
         >
           Сотрудник
@@ -45,8 +75,10 @@ export default function TeamTable() {
 
         <Table.TSortableHeadCell
           title="Задачи"
-          isSortedDesc={sortKey === 'tasks' ? isSortedDesc : undefined}
-          onSort={() => {}}
+          isSortedDesc={sortKey === 'task_count' ? isSortedDesc : undefined}
+          onSort={() => {
+            handleSort('task_count');
+          }}
           className={styles.table__headCell}
         >
           Задачи
@@ -54,8 +86,10 @@ export default function TeamTable() {
 
         <Table.TSortableHeadCell
           title="ПРОГРЕСС"
-          isSortedDesc={sortKey === 'progress' ? isSortedDesc : undefined}
-          onSort={() => {}}
+          isSortedDesc={sortKey === 'task_progress' ? isSortedDesc : undefined}
+          onSort={() => {
+            handleSort('task_progress');
+          }}
           width={190}
           className={styles.table__headCell}
         >
@@ -63,7 +97,7 @@ export default function TeamTable() {
         </Table.TSortableHeadCell>
       </Table.THead>
       <Table.TBody>
-        {data?.map((row) => (
+        {dataForRender?.map((row) => (
           <Table.TRow key={row.id} onClick={() => navigateToProgress(row.id)}>
             <Table.TCell>
               <div className={styles.table__workerInfoContainer}>
