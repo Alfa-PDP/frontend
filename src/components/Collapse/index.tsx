@@ -86,7 +86,7 @@ export default function Collapse({
   };
 
   let editButton = null;
-  if (role !== 'employee') {
+  if (role !== 'worker') {
     editButton = null;
   } else if (stateTextarea) {
     editButton = (
