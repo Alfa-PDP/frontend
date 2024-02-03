@@ -33,10 +33,15 @@ export const api = createApi({
 
     // Получить план сотрудника
     getIndividualPlan: build.query<unknown, unknown>({
-      query: ({ user_id, year }: { user_id: number; year: number }) => ({
-        url: `idp`,
+      query: ({
+        year = '2024',
+        user_id,
+      }: {
+        year?: string;
+        user_id: string;
+      }) => ({
+        url: `idp/${user_id}`,
         params: {
-          user_id,
           year,
         },
       }),
