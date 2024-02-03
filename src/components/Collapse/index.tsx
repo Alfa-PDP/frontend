@@ -7,17 +7,22 @@ import editIcon from '../../assets/icons/EditButtonAttributes.svg';
 import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
 import styles from './styles.module.scss';
+import { usePatchUserGoalMutation } from '../../store/alfa/alfa.api';
 
 interface TextAttributesProps {
   textAttributes: string;
   attributeName: string;
   role: string;
+  goalsId: string;
+  queryName: string;
 }
 
 export default function Collapse({
   textAttributes,
   attributeName,
   role,
+  goalsId,
+  queryName,
 }: TextAttributesProps) {
   // Позволяет получить ссылку на textarea
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -33,6 +38,8 @@ export default function Collapse({
   // Позволяет установить значение атрибута maxRows у textarea
   const [stateRows, setStateRows] = useState(4);
   // Имитация доступа
+
+  const [triggerPatchGoal] = usePatchUserGoalMutation();
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
@@ -73,7 +80,25 @@ export default function Collapse({
 
   // Позволяет сохранить изменения value
   const handlerTextareaSave = () => {
-    setStateTextarea(!stateTextarea);
+    const formData = new FormData();
+    formData.append(queryName, textAttributesValue);
+
+    triggerPatchGoal({
+      formData,
+      goal_id: goalsId,
+    })
+      .unwrap()
+      .then(() => {
+        setTextAttributesValue(textAttributesValue);
+      })
+      .catch((e) => {
+        // TODO информация об ошибке нужна
+        setTextAttributesValue(textAttributes);
+        console.log(e);
+      })
+      .finally(() => {
+        setStateTextarea(!stateTextarea);
+      });
   };
 
   // Позволяет отслеживать изменения value textarea
@@ -147,6 +172,7 @@ export default function Collapse({
         showCounter={!stateTextarea}
         maxLength={500}
         getCounterText={getCounterText}
+        name={queryName}
       />
       {lineHeight > 87 && stateTextarea && (
         <Button

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IndividualPlanWorker, WorkersList } from './types';
+import { Goals, IndividualPlanWorker, WorkersList } from './types';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -42,13 +42,7 @@ export const api = createApi({
       IndividualPlanWorker,
       { year?: number; user_id: string }
     >({
-      query: ({
-        year = 2024,
-        user_id,
-      }: {
-        year?: number;
-        user_id: string;
-      }) => ({
+      query: ({ year = 2024, user_id }) => ({
         url: `idp/${user_id}`,
         params: {
           year,
@@ -57,26 +51,23 @@ export const api = createApi({
     }),
 
     // Цели и стороны сотрудника
-    getUserGoal: build.query<unknown, unknown>({
-      query: ({ user_id }: { user_id: number }) => ({
-        url: `goal`,
+    getUserGoal: build.query<Goals, { user_id: string }>({
+      query: ({ user_id }) => ({
+        url: `users/${user_id}/goals`,
         params: {
           user_id,
         },
       }),
     }),
-    postUserGoal: build.mutation<unknown, unknown>({
-      query: (formData) => ({
-        url: `goal`,
-        method: 'POST',
+    patchUserGoal: build.mutation<
+      unknown,
+      { formData: FormData; goal_id: string }
+    >({
+      query: ({ formData, goal_id }) => ({
+        url: `goals/${goal_id}`,
+        method: 'PATCH',
         body: formData,
-      }),
-    }),
-    putUserGoal: build.mutation<unknown, unknown>({
-      query: (formData) => ({
-        url: `goal`,
-        method: 'PUT',
-        body: formData,
+        params: { goal_id },
       }),
     }),
 
@@ -122,8 +113,7 @@ export const {
   useLazyGetWorkersQuery,
   useGetIndividualPlanQuery,
   useGetUserGoalQuery,
-  usePostUserGoalMutation,
-  usePutUserGoalMutation,
+  usePatchUserGoalMutation,
   useGetCommentsQuery,
   usePostCommentMutation,
   useGetTasksQuery,

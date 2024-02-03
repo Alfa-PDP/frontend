@@ -5,7 +5,7 @@ import { Typography } from '@alfalab/core-components/typography';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
-// import cat from '../../assets/icons/cat.png';
+
 import {
   useGetWorkersQuery,
   useLazyGetWorkersQuery,
@@ -19,7 +19,7 @@ export default function TeamTable() {
   const [isSortedDesc, setIsSortedDesc] = useState<boolean | undefined>(
     undefined
   );
-  const [sortBy, setSortBy] = useState('');
+
   const [dataForRender, setDataForRender] = useState<WorkersList>([]);
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ export default function TeamTable() {
     }
   }, [initialData]);
 
-  const [triggerSort, { data: filteredData }] = useLazyGetWorkersQuery();
+  const [triggerSort] = useLazyGetWorkersQuery();
 
   const handleSort = (key: string) => {
     if (key === sortKey) {
@@ -51,14 +51,16 @@ export default function TeamTable() {
       setIsSortedDesc(false);
     }
     setSortKey(key);
-    setSortBy(key);
     triggerSort({
       team_id: TEAM_ID,
       year: filteredYear,
-      sort_by: sortBy,
+      sort_by: key,
       order: isSortedDesc ? 'desc' : 'asc',
+    }).then((res) => {
+      if (res.data) {
+        setDataForRender(res.data);
+      }
     });
-    setDataForRender(filteredData || []);
   };
 
   return (
