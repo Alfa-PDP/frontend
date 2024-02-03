@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { WorkersList } from '../../types/types';
+import { WorkersList } from './types';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -7,7 +7,6 @@ export const api = createApi({
     baseUrl: 'https://alfa-idp.ddns.net/api/v1/',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
-      // If we have a token set in state, let's assume that we should be passing it.
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
@@ -22,6 +21,13 @@ export const api = createApi({
         params: {
           team_id,
         },
+      }),
+    }),
+
+    // Список годов
+    getYears: build.query<string[], unknown>({
+      query: () => ({
+        url: `years`,
       }),
     }),
 
@@ -106,4 +112,5 @@ export const {
   useGetCommentsQuery,
   usePostCommentMutation,
   useGetTasksQuery,
+  useGetYearsQuery,
 } = api;

@@ -48,7 +48,7 @@ export const navItemsWorkerData = [
   {
     icon: Users,
     text: 'Моё развитие',
-    path: `/progress/${localStorage.getItem('user_id')}`,
+    path: `/progress/`,
   },
   {
     icon: Student,
