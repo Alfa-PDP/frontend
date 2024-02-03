@@ -3,11 +3,21 @@ import { Typography } from '@alfalab/core-components/typography';
 import EmployeeCard from '../../components/EmployeeCard';
 import styles from './styles.module.scss';
 import ProfessionalAttributes from '../../components/ProfessionalAttributes';
+
 import TaskList from '../../components/TaskList';
+import TaskTable from '../../components/TaskTable/index';
+import YearFilter from '../../components/YearFilter';
+import MyCard from '../../components/MyCard';
+import { useGetIndividualPlanQuery } from '../../store/alfa/alfa.api';
+
 
 export default function MyProgress() {
-  const { userId } = useParams();
-
+  const { id } = useParams();
+  const role = localStorage.getItem('role');
+  const workerData = useGetIndividualPlanQuery({
+    user_id: id,
+  });
+  console.log(workerData);
   return (
     <div className={styles.progress}>
       <Typography.Title
@@ -16,11 +26,12 @@ export default function MyProgress() {
         view="large"
         className={styles.progress__title}
       >
-        Индивидуальный план развития {userId}
+        {role === 'worker' ? 'Мой прогресс' : `Индивидуальный план развития`}
       </Typography.Title>
-      <EmployeeCard />
-      <ProfessionalAttributes />
-      <TaskList />
+      {role === 'worker' ? <MyCard /> : <EmployeeCard />}
+      <ProfessionalAttributes role={role || ''} />
+      <YearFilter />
+      <TaskTable />
     </div>
   );
 }
