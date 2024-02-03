@@ -33,7 +33,11 @@ export default function AddTaskModal({
   ];
   return (
     <section className={styles.addTask}>
-      <ModalDesktop open={modalAnatomy} onClose={handleModalAnatomy} size="m">
+      <ModalDesktop
+        open={modalAnatomy}
+        onClose={() => handleModalAnatomy(false)}
+        size="m"
+      >
         <ModalDesktop.Header>Новая задача</ModalDesktop.Header>
         <ModalDesktop.Content className={styles.addTask__content}>
           <Input
