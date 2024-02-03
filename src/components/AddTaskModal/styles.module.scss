@@ -1,0 +1,25 @@
+.addTask {
+  &__selectContainer {
+    display: flex;
+    gap: 20px;
+  }
+
+  &__calendarLabel {
+    margin: 0 0 6px 0;
+    display: block;
+  }
+
+  &__content {
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+    margin: 10px 0 0 0;
+  }
+  &__calendarContainer {
+    margin: 16px 0 0 0;
+  }
+  &__saveButton {
+    margin: 36px 0 0 0;
+    width: 160px;
+  }
+}

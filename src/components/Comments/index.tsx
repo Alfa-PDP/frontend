@@ -47,7 +47,7 @@ export default function Comments({ comments }: Props) {
       ))}
       <Textarea
         block
-        className={styles.comments__input}
+        className={styles.comment__input}
         placeholder="Введите ваш комментарий"
         rightAddons={
           <IconButton
