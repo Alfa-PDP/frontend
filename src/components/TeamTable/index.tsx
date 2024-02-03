@@ -7,42 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 // import cat from '../../assets/icons/cat.png';
 import { useGetWorkersQuery } from '../../store/alfa/alfa.api';
-import { TEAM_ID } from '../../utils/constants';
-
-// const data = [
-//   {
-//     id: 1,
-//     name: 'Констанинопольский Константин Константинович',
-//     position: 'Менеджер',
-//     tasks: 3,
-//     progress: 55,
-//     img: cat,
-//   },
-//   {
-//     id: 2,
-//     name: 'Никитина Анастасия Андреевна',
-//     position: 'Начальник отдела',
-//     tasks: 5,
-//     progress: 0,
-//     img: cat,
-//   },
-//   {
-//     id: 3,
-//     name: 'Засланский Аслан Бараевич',
-//     position: 'Начальник отдела разработки',
-//     tasks: 1,
-//     progress: 99,
-//     img: cat,
-//   },
-//   {
-//     id: 4,
-//     name: 'Мандрыкин Павел Эдуардович',
-//     position: 'Журналист',
-//     tasks: 7,
-//     progress: 100,
-//     img: '',
-//   },
-// ];
+import { CURRNERT_YEAR, TEAM_ID } from '../../utils/constants';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function TeamTable() {
   const [sortKey, setSortKey] = useState(undefined);
@@ -53,12 +19,13 @@ export default function TeamTable() {
     navigate(`/progress/${id}/`, { replace: false });
   };
 
-  // const {getList, { data }} = useGetWorkersQuery({
-  //   team_id: TEAM_ID,
-  // });
+  const { filteredYear = CURRNERT_YEAR } = useAppSelector(
+    (state) => state.filteredYear
+  );
 
   const { data } = useGetWorkersQuery({
     team_id: TEAM_ID,
+    year: filteredYear,
   });
 
   console.log(setSortKey);

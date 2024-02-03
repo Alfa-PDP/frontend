@@ -15,11 +15,17 @@ export const api = createApi({
   }),
   endpoints: (build) => ({
     // Список сотрудников команды
-    getWorkers: build.query<WorkersList, { team_id: string }>({
-      query: ({ team_id }) => ({
+    getWorkers: build.query<
+      WorkersList,
+      { team_id: string; sort_by?: string; order?: string; year: string }
+    >({
+      query: ({ team_id, sort_by, order, year }) => ({
         url: `users`,
         params: {
           team_id,
+          sort_by,
+          order,
+          year,
         },
       }),
     }),
@@ -110,6 +116,7 @@ export const api = createApi({
 
 export const {
   useGetWorkersQuery,
+  useLazyGetWorkersQuery,
   useGetIndividualPlanQuery,
   useGetUserGoalQuery,
   usePostUserGoalMutation,

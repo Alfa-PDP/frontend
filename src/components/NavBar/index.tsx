@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/redux';
+
 import {
   navItemsLeaderData,
   navItemsWorkerData,
@@ -8,10 +9,9 @@ import {
 
 import styles from './styles.module.scss';
 import { BackButton } from '../BackButton';
-import { RootState } from '../../store';
 
 export default function NavBar() {
-  const user = useSelector((state: RootState) => state.user);
+  const user = useAppSelector((state) => state.user);
 
   const data = user.role === 'leader' ? navItemsLeaderData : navItemsWorkerData;
 

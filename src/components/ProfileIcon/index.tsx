@@ -5,8 +5,7 @@ import { Popover } from '@alfalab/core-components/popover';
 import { RadioGroupDesktop } from '@alfalab/core-components/radio-group/desktop';
 import { Tag } from '@alfalab/core-components/tag';
 import { AScoresCircleSIcon } from '@alfalab/icons-glyph/AScoresCircleSIcon';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+
 import cat from '../../assets/icons/cat.png';
 import styles from './styles.module.scss';
 import {
@@ -16,6 +15,7 @@ import {
   WORKER_TOKEN,
 } from '../../utils/constants';
 import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function ProfileIcon() {
   const [open, setOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function ProfileIcon() {
   const navigate = useNavigate();
 
   const { setRole } = useActions();
-  const roleSelector = useSelector((state: RootState) => state.user);
+  const roleSelector = useAppSelector((state) => state.user);
 
   const changeToWorker = () => {
     localStorage.setItem('role', 'worker');
