@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { WorkersList } from './types';
+import { IndividualPlanWorker, WorkersList } from './types';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -32,12 +32,15 @@ export const api = createApi({
     }),
 
     // Получить план сотрудника
-    getIndividualPlan: build.query<unknown, unknown>({
+    getIndividualPlan: build.query<
+      IndividualPlanWorker,
+      { year?: number; user_id: string }
+    >({
       query: ({
-        year = '2024',
+        year = 2024,
         user_id,
       }: {
-        year?: string;
+        year?: number;
         user_id: string;
       }) => ({
         url: `idp/${user_id}`,
