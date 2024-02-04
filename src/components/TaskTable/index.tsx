@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function TaskTable({ tasks, role }: Props) {
-  console.log(tasks);
+  console.log(role);
   return (
     <div style={{ width: '100%' }}>
       <Table wrapper={false}>
@@ -153,7 +153,7 @@ export default function TaskTable({ tasks, role }: Props) {
                   color="primary"
                   tag="span"
                 >
-                  {task.task_type}
+                  {task.task_type.name}
                 </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
@@ -162,7 +162,7 @@ export default function TaskTable({ tasks, role }: Props) {
                   color="primary"
                   tag="span"
                 >
-                  {task.importance}
+                  {task.importance.name}
                 </Typography.Text>
               </Table.TCell>
               <Table.TCell>

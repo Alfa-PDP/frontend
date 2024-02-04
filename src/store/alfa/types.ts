@@ -55,8 +55,8 @@ export interface UserTask {
   end_time: string;
   id: string;
   idp_id: string;
-  task_type: string;
-  importance: string;
+  task_type: TaskType;
+  importance: Importance;
   status_id: string;
   comments: Comment[];
   status: Status;
@@ -83,4 +83,25 @@ export interface User {
   name: string;
   family_name: string;
   avatar: string;
+}
+
+export interface TaskData {
+  name: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  idp_id: string;
+  importance: string;
+  task_type: string;
+  status_id: string;
+}
+
+export interface Importance {
+  id: string;
+  name: string;
+}
+
+export interface TaskType {
+  id: string;
+  name: string;
 }

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   CurrentUser,
   IndividualPlanWorker,
+  TaskData,
   UserTask,
   WorkersList,
 } from './types';
@@ -113,6 +114,13 @@ export const api = createApi({
     getTasks: build.query<UserTask[], string>({
       query: (user_id) => `users/${user_id}/tasks`,
     }),
+    postTask: build.mutation<UserTask, TaskData>({
+      query: (data) => ({
+        url: 'tasks',
+        method: 'POST',
+        body: data,
+      }),
+    }),
 
     // Текущий пользователь
     getCurrentUser: build.query<CurrentUser, void>({
@@ -131,6 +139,7 @@ export const {
   useGetCommentsQuery,
   usePostCommentMutation,
   useGetTasksQuery,
+  usePostTaskMutation,
   useGetYearsQuery,
   useGetCurrentUserQuery,
 } = api;
