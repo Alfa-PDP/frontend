@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import editIcon from '../../assets/icons/EditButtonAttributes.svg';
 import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
+import ModalClose from '../ModalClose/index';
 import styles from './styles.module.scss';
 import { usePatchUserGoalMutation } from '../../store/alfa/alfa.api';
 import { useActions } from '../../hooks/actions';
@@ -38,7 +39,8 @@ export default function Collapse({
     useState(textAttributes);
   // Позволяет установить значение атрибута maxRows у textarea
   const [stateRows, setStateRows] = useState(4);
-  // Имитация доступа
+  // Состояние модального окна подтверждения отмены изменений
+  const [stateModalClose, setStateModalClose] = useState(false);
 
   const [triggerPatchGoal] = usePatchUserGoalMutation();
 
@@ -77,8 +79,21 @@ export default function Collapse({
 
   // Позволяет отменить редактирование и вернуть значение value на начальное значение
   const handlerTextareaCancel = () => {
+    if (textAttributes !== textAttributesValue) {
+      setStateModalClose(true);
+    } else {
+      setStateTextarea(!stateTextarea);
+    }
+  };
+  // Позволяет отменить все изменения через модальное окно
+  const handlerAcceptModalClose = () => {
+    setStateModalClose(false);
     setTextAttributesValue(textAttributes);
     setStateTextarea(!stateTextarea);
+  };
+  // Позволяет закрыть модальное окно, оставив изменения
+  const handlerCloseModal = () => {
+    setStateModalClose(false);
   };
 
   // Позволяет сохранить изменения value
@@ -197,6 +212,15 @@ export default function Collapse({
           {!moreButton ? 'Подробнее' : 'Скрыть'}
         </Button>
       )}
+      <ModalClose
+        modalTitle="Закрыть окно?"
+        modalSubtitle="Все несохраненные данные будут утеряны."
+        modalButton="Да, закрыть"
+        modalButtonCancel="Нет, оставить"
+        stateModalClose={stateModalClose}
+        cancelEditButton={handlerAcceptModalClose}
+        closeModalButton={handlerCloseModal}
+      />
     </div>
   );
 }
