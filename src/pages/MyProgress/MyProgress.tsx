@@ -38,7 +38,7 @@ export default function MyProgress() {
           {role === 'worker' ? 'Мой прогресс' : `Индивидуальный план развития`}
         </Typography.Title>
         {role === 'worker' ? (
-          <MyCard />
+          <MyCard data={workerData} />
         ) : (
           workerData && <EmployeeCard data={workerData} />
         )}

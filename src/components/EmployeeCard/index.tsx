@@ -3,19 +3,19 @@ import InitialCard from '../InitialCard';
 import styles from './styles.module.scss';
 import CircularProgressBar from '../CircularProgressBar';
 
-const EmployeeData = {
-  name: 'Анастасия',
-  surname: 'Никитина',
-  patronymic: 'Андреевна',
-  position: 'Системный аналитик',
-  email: 'Anastasiya_mgr@gmail.com',
-  phone: '+7 (921) 212-12-12',
-  telegram: 'Anastasya_nikki',
-  amountTasks: 12,
-  photo:
-    'https://img.freepik.com/free-photo/female-looking-directly-into-camera_273609-12389.jpg',
-  role: 'employee',
-};
+// const EmployeeData = {
+//   name: 'Анастасия',
+//   surname: 'Никитина',
+//   patronymic: 'Андреевна',
+//   position: 'Системный аналитик',
+//   email: 'Anastasiya_mgr@gmail.com',
+//   phone: '+7 (921) 212-12-12',
+//   telegram: 'Anastasya_nikki',
+//   amountTasks: 12,
+//   photo:
+//     'https://img.freepik.com/free-photo/female-looking-directly-into-camera_273609-12389.jpg',
+//   role: 'employee',
+// };
 
 interface EmployeeCardProps {
   avatar: string;
@@ -27,6 +27,7 @@ interface EmployeeCardProps {
   position: string;
   start_date: string;
   task_count: number;
+  task_progress: number;
 }
 
 export default function EmployeeCard({ data }: { data: EmployeeCardProps }) {
@@ -52,9 +53,9 @@ export default function EmployeeCard({ data }: { data: EmployeeCardProps }) {
             {data.position}
           </Typography.Text>
         </div>
-        <InitialCard EmployeeData={EmployeeData} />
+        <InitialCard data={data} />
       </div>
-      <CircularProgressBar percentage={EmployeeData.amountTasks} />
+      <CircularProgressBar percentage={data.task_progress} />
     </section>
   );
 }
