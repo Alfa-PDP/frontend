@@ -2,19 +2,21 @@ import { Button } from '@alfalab/core-components/button';
 import { useEffect, useState } from 'react';
 import { Typography } from '@alfalab/core-components/typography';
 import styles from './styles.module.scss';
-import YearFilter from '../YearFilter';
+
 import TaskTable from '../TaskTable';
 import AddTaskModal from '../AddTaskModal';
 import {
   useGetCurrentUserQuery,
   useGetTasksQuery,
 } from '../../store/alfa/alfa.api';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function TaskList() {
   const { data: currentUser } = useGetCurrentUserQuery();
   const [userId, setUserId] = useState('');
   const { data: tasks } = useGetTasksQuery(userId, { skip: !userId });
   const [modalAnatomy, setModalAnatomy] = useState(false);
+  const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
 
   useEffect(() => {
     if (currentUser && currentUser.user_id) {
@@ -27,9 +29,8 @@ export default function TaskList() {
     <section className={styles.taskList}>
       <div className={styles.taskList__headerContainer}>
         <Typography.Title tag="h2" view="medium" weight="bold">
-          Список задач
+          Список задач на {year} год
         </Typography.Title>
-        <YearFilter />
       </div>
       {currentUser && (
         <>

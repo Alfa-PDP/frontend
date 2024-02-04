@@ -4,9 +4,10 @@ import { Status } from '@alfalab/core-components/status';
 import { Typography } from '@alfalab/core-components/typography';
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop';
 import styles from './styles.module.scss';
-import Comments from '../Comments';
+
 import { formatDate } from '../../utils/formatDate';
 import { UserTask } from '../../store/alfa/types';
+import Comments from '../Comments';
 
 interface Props {
   tasks: UserTask[];
@@ -16,7 +17,7 @@ interface Props {
 export default function TaskTable({ tasks, role }: Props) {
   console.log(role);
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%', borderBottom: '1px solid #E7E8EB' }}>
       <Table wrapper={false}>
         <Table.THead>
           <Table.THeadCell className={styles.table__headCell}>
@@ -26,7 +27,7 @@ export default function TaskTable({ tasks, role }: Props) {
               tag="span"
               weight="bold"
             >
-              Задача (3)
+              Задачи ({tasks.length + 1})
             </Typography.Text>
           </Table.THeadCell>
           <Table.THeadCell className={styles.table__headCell} width={200}>
@@ -122,7 +123,7 @@ export default function TaskTable({ tasks, role }: Props) {
                         >
                           Комментарии к задаче
                         </Typography.Text>
-                        <Comments comments={task.comments} />
+                        <Comments taskId={task.id} />
                       </div>
                     </div>
                   </Collapse>

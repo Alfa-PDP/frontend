@@ -16,9 +16,8 @@ export const infoMessageSlice = createSlice({
   name: 'infoMessage',
   initialState,
   reducers: {
-    setInfoMessage(state, action: PayloadAction<InfoMessageState>) {
+    setInfoMessage(_, action: PayloadAction<InfoMessageState>) {
       return {
-        ...state,
         title: action.payload.title,
         badge: action.payload.badge,
         visible: action.payload.visible,
