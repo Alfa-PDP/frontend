@@ -4,6 +4,7 @@ import {
   Goals,
   CurrentUser,
   IndividualPlanWorker,
+  TaskData,
   UserTask,
   WorkersList,
   Comment,
@@ -112,6 +113,13 @@ export const api = createApi({
     getTasks: build.query<UserTask[], string>({
       query: (user_id) => `users/${user_id}/tasks`,
     }),
+    postTask: build.mutation<UserTask, TaskData>({
+      query: (data) => ({
+        url: 'tasks',
+        method: 'POST',
+        body: data,
+      }),
+    }),
 
     // Текущий пользователь
     getCurrentUser: build.query<CurrentUser, void>({
@@ -129,6 +137,7 @@ export const {
   useGetCommentsQuery,
   usePostCommentMutation,
   useGetTasksQuery,
+  usePostTaskMutation,
   useGetYearsQuery,
   useGetCurrentUserQuery,
 } = api;
