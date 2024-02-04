@@ -44,23 +44,29 @@ export default function TeamTable() {
 
   const [triggerSort] = useLazyGetWorkersQuery();
 
-  const handleSort = (key: string) => {
-    if (key === sortKey) {
-      setIsSortedDesc((prev) => !prev);
-    } else {
-      setIsSortedDesc(false);
-    }
-    setSortKey(key);
+  const handleTrigger = (key: string, order: 'asc' | 'desc') => {
     triggerSort({
       team_id: TEAM_ID,
       year: filteredYear,
       sort_by: key,
-      order: isSortedDesc ? 'desc' : 'asc',
+      order,
     }).then((res) => {
       if (res.data) {
         setDataForRender(res.data);
       }
     });
+  };
+
+  const handleSort = (key: string) => {
+    setSortKey(key);
+
+    if (isSortedDesc !== undefined) {
+      setIsSortedDesc((prev) => !prev);
+      handleTrigger(key, isSortedDesc ? 'asc' : 'desc');
+    } else {
+      setIsSortedDesc(false);
+      handleTrigger(key, 'asc');
+    }
   };
 
   return (
