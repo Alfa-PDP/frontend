@@ -8,6 +8,7 @@ import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
 import styles from './styles.module.scss';
 import { usePatchUserGoalMutation } from '../../store/alfa/alfa.api';
+import { useActions } from '../../hooks/actions';
 
 interface TextAttributesProps {
   textAttributes: string;
@@ -40,6 +41,8 @@ export default function Collapse({
   // Имитация доступа
 
   const [triggerPatchGoal] = usePatchUserGoalMutation();
+
+  const { setInfoMessage } = useActions();
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
@@ -89,11 +92,20 @@ export default function Collapse({
     })
       .unwrap()
       .then(() => {
+        setInfoMessage({
+          title: 'Изменения сохранены',
+          visible: true,
+          badge: 'positive',
+        });
         setTextAttributesValue(textAttributesValue);
       })
       .catch((e) => {
-        // TODO информация об ошибке нужна
         setTextAttributesValue(textAttributes);
+        setInfoMessage({
+          title: 'Изменения не сохранены',
+          visible: true,
+          badge: 'negative',
+        });
         console.log(e);
       })
       .finally(() => {

@@ -4,6 +4,7 @@ import Header from '../Header';
 import Footer from '../Footer';
 import NavBar from '../NavBar';
 import ScrollToTop from '../../utils/ScrollToTop';
+import InfoMessage from '../InfoMessage';
 
 export default function Layout() {
   return (
@@ -13,6 +14,7 @@ export default function Layout() {
         <div className={styles.layout__container}>
           <NavBar />
           <main className={styles.layout__main}>
+            <InfoMessage />
             <Outlet />
           </main>
         </div>

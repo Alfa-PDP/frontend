@@ -54,9 +54,6 @@ export const api = createApi({
     getUserGoal: build.query<Goals, { user_id: string }>({
       query: ({ user_id }) => ({
         url: `users/${user_id}/goals`,
-        params: {
-          user_id,
-        },
       }),
     }),
     patchUserGoal: build.mutation<
@@ -67,7 +64,6 @@ export const api = createApi({
         url: `goals/${goal_id}`,
         method: 'PATCH',
         body: formData,
-        params: { goal_id },
       }),
     }),
 
