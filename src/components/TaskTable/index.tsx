@@ -15,7 +15,6 @@ interface Props {
 }
 
 export default function TaskTable({ tasks, role }: Props) {
-  console.log(tasks);
   return (
     <div style={{ width: '100%', borderBottom: '1px solid #E7E8EB' }}>
       <Table wrapper={false}>
@@ -27,7 +26,7 @@ export default function TaskTable({ tasks, role }: Props) {
               tag="span"
               weight="bold"
             >
-              Задача (3)
+              Задачи ({tasks.length + 1})
             </Typography.Text>
           </Table.THeadCell>
           <Table.THeadCell className={styles.table__headCell} width={200}>

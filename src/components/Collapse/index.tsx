@@ -121,14 +121,13 @@ export default function Collapse({
         setTextAttributesValue(textAttributesValue);
         setGoals({ ...goalsData, [queryName]: textAttributesValue });
       })
-      .catch((e) => {
+      .catch(() => {
         setTextAttributesValue(textAttributes);
         setInfoMessage({
           title: 'Изменения не сохранены',
           visible: true,
           badge: 'negative',
         });
-        console.log(e);
       })
       .finally(() => {
         setStateTextarea(!stateTextarea);
