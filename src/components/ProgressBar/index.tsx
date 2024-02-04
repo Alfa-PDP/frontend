@@ -1,4 +1,4 @@
-import { ProgressBar as ProgressBarAlpha } from '@alfalab/core-components/progress-bar';
+import { ProgressBar as ProgressBarAlfa } from '@alfalab/core-components/progress-bar';
 import { Typography } from '@alfalab/core-components/typography';
 import styles from './styles.module.scss';
 
@@ -15,6 +15,9 @@ export default function ProgressBar({
 }) {
   // Плюрализация количества задач
   function pluralizeTask(totalTask: number, completedTask: number) {
+    if (totalTask === 0) {
+      return '0 задач';
+    }
     if (completedTask % 10 === 1 && completedTask % 100 !== 11) {
       return `${completedTask} задача из ${totalTask}`;
     }
@@ -44,7 +47,7 @@ export default function ProgressBar({
           {pluralizeTask(totalTasks, completedTasks)}
         </Typography.Text>
       </div>
-      <ProgressBarAlpha value={value} />
+      <ProgressBarAlfa value={totalTasks !== 0 ? value : 0} />
     </div>
   );
 }

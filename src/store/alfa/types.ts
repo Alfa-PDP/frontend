@@ -105,3 +105,11 @@ export interface TaskType {
   id: string;
   name: string;
 }
+
+export interface Goals {
+  id: string;
+  user_id: string;
+  goal_name: string;
+  employee_side_plus: string;
+  employee_side_minus: string;
+}
