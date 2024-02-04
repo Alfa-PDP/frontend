@@ -84,3 +84,11 @@ export interface User {
   family_name: string;
   avatar: string;
 }
+
+export interface Goals {
+  id: string;
+  user_id: string;
+  goal_name: string;
+  employee_side_plus: string;
+  employee_side_minus: string;
+}

@@ -1,10 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
 import {
+  Goals,
   CurrentUser,
   IndividualPlanWorker,
   UserTask,
   WorkersList,
 } from './types';
+
+import { CURRENT_YEAR } from '../../utils/constants';
+
 
 export const api = createApi({
   reducerPath: 'api',
@@ -13,7 +18,7 @@ export const api = createApi({
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', token);
       }
       return headers;
     },
@@ -22,7 +27,7 @@ export const api = createApi({
     // Список сотрудников команды
     getWorkers: build.query<
       WorkersList,
-      { team_id: string; sort_by?: string; order?: string; year: string }
+      { team_id: string; sort_by?: string; order?: string; year: number }
     >({
       query: ({ team_id, sort_by, order, year }) => ({
         url: `users`,
@@ -47,13 +52,7 @@ export const api = createApi({
       IndividualPlanWorker,
       { year?: number; user_id: string }
     >({
-      query: ({
-        year = 2024,
-        user_id,
-      }: {
-        year?: number;
-        user_id: string;
-      }) => ({
+      query: ({ year = CURRENT_YEAR, user_id }) => ({
         url: `idp/${user_id}`,
         params: {
           year,
@@ -62,26 +61,19 @@ export const api = createApi({
     }),
 
     // Цели и стороны сотрудника
-    getUserGoal: build.query<unknown, unknown>({
-      query: ({ user_id }: { user_id: number }) => ({
-        url: `goal`,
-        params: {
-          user_id,
-        },
+    getUserGoal: build.query<Goals, { user_id: string }>({
+      query: ({ user_id }) => ({
+        url: `users/${user_id}/goals`,
       }),
     }),
-    postUserGoal: build.mutation<unknown, unknown>({
-      query: (formData) => ({
-        url: `goal`,
-        method: 'POST',
-        body: formData,
-      }),
-    }),
-    putUserGoal: build.mutation<unknown, unknown>({
-      query: (formData) => ({
-        url: `goal`,
-        method: 'PUT',
-        body: formData,
+    patchUserGoal: build.mutation<
+      unknown,
+      { dataToSend: { [key: string]: string }; goal_id: string }
+    >({
+      query: ({ dataToSend, goal_id }) => ({
+        url: `goals/${goal_id}`,
+        method: 'PATCH',
+        body: dataToSend,
       }),
     }),
 
@@ -126,8 +118,7 @@ export const {
   useLazyGetWorkersQuery,
   useGetIndividualPlanQuery,
   useGetUserGoalQuery,
-  usePostUserGoalMutation,
-  usePutUserGoalMutation,
+  usePatchUserGoalMutation,
   useGetCommentsQuery,
   usePostCommentMutation,
   useGetTasksQuery,
