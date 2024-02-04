@@ -4,9 +4,10 @@ import { IconButton } from '@alfalab/core-components/icon-button';
 import { PaperAirplaneMIcon } from '@alfalab/icons-glyph/PaperAirplaneMIcon';
 import styles from './styles.module.scss';
 import { formatDate } from '../../utils/formatDate';
+import { Comment } from '../../store/alfa/types';
 
 interface Props {
-  comments: TaskComment[];
+  comments: Comment[];
 }
 
 export default function Comments({ comments }: Props) {
