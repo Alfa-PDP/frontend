@@ -3,7 +3,6 @@ import { IconButton } from '@alfalab/core-components/icon-button';
 import { Textarea } from '@alfalab/core-components/textarea';
 import { Button } from '@alfalab/core-components/button';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import editIcon from '../../assets/icons/EditButtonAttributes.svg';
 import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
@@ -11,8 +10,7 @@ import ModalClose from '../ModalClose/index';
 import styles from './styles.module.scss';
 import { usePatchUserGoalMutation } from '../../store/alfa/alfa.api';
 import { useActions } from '../../hooks/actions';
-import { goalsActions } from '../../store/alfa/goals.slice';
-import { RootState } from '../../store';
+import { useAppSelector } from '../../hooks/redux';
 
 interface TextAttributesProps {
   textAttributes: string;
@@ -44,11 +42,9 @@ export default function Collapse({
   const [stateRows, setStateRows] = useState(4);
   // Состояние модального окна подтверждения отмены изменений
   const [stateModalClose, setStateModalClose] = useState(false);
-  const dispatch = useDispatch();
-  const goalsData = useSelector((state: RootState) => state.goals);
+  const goalsData = useAppSelector((state) => state.goals);
   const [triggerPatchGoal] = usePatchUserGoalMutation();
-
-  const { setInfoMessage } = useActions();
+  const { setInfoMessage, setGoals } = useActions();
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
@@ -117,12 +113,7 @@ export default function Collapse({
           badge: 'positive',
         });
         setTextAttributesValue(textAttributesValue);
-        dispatch(
-          goalsActions.setGoals({
-            ...goalsData,
-            [queryName]: textAttributesValue,
-          })
-        );
+        setGoals({ ...goalsData, [queryName]: textAttributesValue });
       })
       .catch((e) => {
         setTextAttributesValue(textAttributes);
