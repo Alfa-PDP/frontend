@@ -41,3 +41,46 @@ export interface IndividualPlan {
   task_progress: number;
   tasks: Task[];
 }
+
+export interface CurrentUser {
+  is_leader: boolean;
+  team_id: string;
+  user_id: string;
+}
+
+export interface UserTask {
+  name: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  id: string;
+  idp_id: string;
+  task_type: string;
+  importance: string;
+  status_id: string;
+  comments: Comment[];
+  status: Status;
+}
+
+export interface Status {
+  id: string;
+  slug: string;
+  description: string;
+  weight: number;
+}
+
+export interface Comment {
+  id: string;
+  task_id: string;
+  text: string;
+  created_at: string;
+  updated_at: string;
+  user: User;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  family_name: string;
+  avatar: string;
+}

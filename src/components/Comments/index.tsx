@@ -3,7 +3,7 @@ import { Textarea } from '@alfalab/core-components/textarea';
 import { IconButton } from '@alfalab/core-components/icon-button';
 import { PaperAirplaneMIcon } from '@alfalab/icons-glyph/PaperAirplaneMIcon';
 import styles from './styles.module.scss';
-import { TaskComment } from '../../types/TaskComment';
+import { formatDate } from '../../utils/formatDate';
 
 interface Props {
   comments: TaskComment[];
@@ -15,7 +15,11 @@ export default function Comments({ comments }: Props) {
       {comments.map((comment) => (
         <div key={comment.id} className={styles.comment}>
           <div className={styles.comment__container}>
-            <img className={styles.comment__avatar} src="" alt="" />
+            <img
+              className={styles.comment__avatar}
+              src={comment.user.avatar}
+              alt=""
+            />
             <div>
               <Typography.Text
                 view="primary-small"
@@ -23,7 +27,7 @@ export default function Comments({ comments }: Props) {
                 tag="p"
                 className={styles.comment__author}
               >
-                {comment.author}
+                {`${comment.user.name} ${comment.user.family_name}`}
               </Typography.Text>
               <Typography.Text
                 view="primary-small"
@@ -31,7 +35,7 @@ export default function Comments({ comments }: Props) {
                 tag="p"
                 className={styles.comment__time}
               >
-                {comment.time}
+                {`${formatDate(comment.created_at)}`}
               </Typography.Text>
               <Typography.Text
                 view="primary-medium"
