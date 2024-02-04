@@ -1,6 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Goals, IndividualPlanWorker, WorkersList } from './types';
+
+import {
+  Goals,
+  CurrentUser,
+  IndividualPlanWorker,
+  UserTask,
+  WorkersList,
+} from './types';
+
 import { CURRENT_YEAR } from '../../utils/constants';
+
 
 export const api = createApi({
   reducerPath: 'api',
@@ -93,14 +102,13 @@ export const api = createApi({
     }),
 
     // Задачи
-    getTasks: build.query<unknown, unknown>({
-      query: ({ user_id, idp_id }: { user_id: number; idp_id: number }) => ({
-        url: `tasks`,
-        params: {
-          user_id,
-          idp_id,
-        },
-      }),
+    getTasks: build.query<UserTask[], string>({
+      query: (user_id) => `users/${user_id}/tasks`,
+    }),
+
+    // Текущий пользователь
+    getCurrentUser: build.query<CurrentUser, void>({
+      query: () => `users/me`,
     }),
   }),
 });
@@ -115,4 +123,5 @@ export const {
   usePostCommentMutation,
   useGetTasksQuery,
   useGetYearsQuery,
+  useGetCurrentUserQuery,
 } = api;

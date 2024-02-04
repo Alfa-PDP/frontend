@@ -5,101 +5,16 @@ import { Typography } from '@alfalab/core-components/typography';
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop';
 import styles from './styles.module.scss';
 import Comments from '../Comments';
-import { TaskData } from '../../types/Task';
-import { StatusMap } from '../../types/Status';
+import { formatDate } from '../../utils/formatDate';
+import { UserTask } from '../../store/alfa/types';
 
-const data: TaskData[] = [
-  {
-    id: 1,
-    task: 'Принять участие в проекте в роли тимлида',
-    date: '01.02.2024 - 12.04.2024',
-    type: 'Hard skills',
-    significance: 'Низкая',
-    status: 'inWork',
-    description:
-      'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
-    comments: [
-      {
-        id: 1,
-        author: 'Алабамов Сергей Викторович',
-        time: '25 янв, 11:13',
-        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
-      },
-      {
-        id: 2,
-        author: 'Алабамов Сергей Викторович',
-        time: '25 янв, 11:14',
-        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
-      },
-    ],
-  },
-  {
-    id: 2,
-    task: 'Принять участие в проекте в роли тимлида',
-    date: '01.02.2024 - 12.04.2024',
-    type: 'Hard skills',
-    significance: 'Низкая',
-    status: 'completed',
-    description:
-      'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
-    comments: [
-      {
-        id: 1,
-        author: 'Алабамов Сергей Викторович',
-        time: '25 янв, 11:13',
-        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
-      },
-    ],
-  },
-  {
-    id: 3,
-    task: 'Принять участие в проекте в роли тимлида',
-    date: '01.02.2024 - 12.04.2024',
-    type: 'Hard skills',
-    significance: 'Низкая',
-    status: 'new',
-    description:
-      'Прокачать навык публичного выступления выступив спикером на любом публичном мероприятии по своему выбору (конференция, семинар, митап и т.д.). Не менее 3 мероприятий. По завершению задачи пришли записи своих выступлений, чтобы я мог дать тебе фидбэк. ',
-    comments: [
-      {
-        id: 1,
-        author: 'Алабамов Сергей Викторович',
-        time: '25 янв, 11:13',
-        text: 'Принято. Отчет об успешном обучении на курсе в мом мент анализа целей позволит отметить задачу выполненной.',
-      },
-      {
-        id: 2,
-        author: 'Вы',
-        time: '24 янв, 11:13',
-        text: 'Прохожу обучение на платформе Стратоплан. Обучение выходит за рамки оговороенного срока, поскольку начинается во втором квартале 2024 г.',
-      },
-    ],
-  },
-];
+interface Props {
+  tasks: UserTask[];
+  role: boolean;
+}
 
-const statusMap: StatusMap = {
-  inWork: {
-    text: 'В работе',
-    className: styles.status_type_inWork,
-  },
-  completed: {
-    text: 'Выполнена',
-    className: styles.status_type_completed,
-  },
-  new: {
-    text: 'Новая',
-    className: styles.status_type_new,
-  },
-  notComplited: {
-    text: 'Не выполнена',
-    className: styles.status_type_notComplited,
-  },
-  canceled: {
-    text: 'Отменена',
-    className: styles.status_type_canceled,
-  },
-};
-export default function TaskTable() {
+export default function TaskTable({ tasks, role }: Props) {
+  console.log(tasks);
   return (
     <div style={{ width: '100%' }}>
       <Table wrapper={false}>
@@ -156,9 +71,9 @@ export default function TaskTable() {
           </Table.THeadCell>
         </Table.THead>
         <Table.TBody>
-          {data.map((row) => (
+          {tasks.map((task) => (
             <Table.TExpandableRow
-              key={row.id}
+              key={task.id}
               renderContent={(expanded) => (
                 <Table.TCell colSpan={5}>
                   <Collapse expanded={expanded}>
@@ -178,16 +93,26 @@ export default function TaskTable() {
                           tag="p"
                           className={styles.table__descriptionText}
                         >
-                          {row.description}
+                          {task.description}
                         </Typography.Text>
                       </div>
-                      <ButtonDesktop
-                        size="xxs"
-                        view="primary"
-                        className={styles.table__taskButton}
-                      >
-                        Взять в работу
-                      </ButtonDesktop>
+                      {role ? (
+                        <ButtonDesktop
+                          size="xxs"
+                          view="tertiary"
+                          className={styles.table__taskButton}
+                        >
+                          Редактировать задачу
+                        </ButtonDesktop>
+                      ) : (
+                        <ButtonDesktop
+                          size="xxs"
+                          view="primary"
+                          className={styles.table__taskButton}
+                        >
+                          Взять в работу
+                        </ButtonDesktop>
+                      )}
                       <div className={styles.table__taskComments}>
                         <Typography.Text
                           view="primary-large"
@@ -197,7 +122,7 @@ export default function TaskTable() {
                         >
                           Комментарии к задаче
                         </Typography.Text>
-                        <Comments comments={row.comments} />
+                        <Comments comments={task.comments} />
                       </div>
                     </div>
                   </Collapse>
@@ -210,7 +135,7 @@ export default function TaskTable() {
                   color="primary"
                   tag="span"
                 >
-                  {row.task}
+                  {task.name}
                 </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
@@ -219,7 +144,7 @@ export default function TaskTable() {
                   color="primary"
                   tag="span"
                 >
-                  {row.date}
+                  {`${formatDate(task.start_time)} - ${formatDate(task.end_time)}`}
                 </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
@@ -228,7 +153,7 @@ export default function TaskTable() {
                   color="primary"
                   tag="span"
                 >
-                  {row.type}
+                  {task.task_type}
                 </Typography.Text>
               </Table.TCell>
               <Table.TCell className={styles.table__row}>
@@ -237,17 +162,15 @@ export default function TaskTable() {
                   color="primary"
                   tag="span"
                 >
-                  {row.significance}
+                  {task.importance}
                 </Typography.Text>
               </Table.TCell>
               <Table.TCell>
-                {statusMap[row.status] && (
-                  <Status
-                    className={`${styles.status} ${statusMap[row.status].className}`}
-                  >
-                    {statusMap[row.status].text}
-                  </Status>
-                )}
+                <Status
+                  className={`${styles.status} ${styles[`status_type_${task.status.slug}`]}`}
+                >
+                  {task.status.description}
+                </Status>
               </Table.TCell>
             </Table.TExpandableRow>
           ))}
