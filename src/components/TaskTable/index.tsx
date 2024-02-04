@@ -4,9 +4,10 @@ import { Status } from '@alfalab/core-components/status';
 import { Typography } from '@alfalab/core-components/typography';
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop';
 import styles from './styles.module.scss';
-import Comments from '../Comments';
+
 import { formatDate } from '../../utils/formatDate';
 import { UserTask } from '../../store/alfa/types';
+import Comments from '../Comments';
 
 interface Props {
   tasks: UserTask[];
@@ -122,7 +123,7 @@ export default function TaskTable({ tasks, role }: Props) {
                         >
                           Комментарии к задаче
                         </Typography.Text>
-                        <Comments comments={task.comments} />
+                        <Comments comments={task.comments} taskId={task.id} />
                       </div>
                     </div>
                   </Collapse>

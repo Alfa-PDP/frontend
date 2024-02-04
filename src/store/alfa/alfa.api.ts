@@ -10,7 +10,6 @@ import {
 
 import { CURRENT_YEAR } from '../../utils/constants';
 
-
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
@@ -79,25 +78,26 @@ export const api = createApi({
 
     // Комментарии
     getComments: build.query<unknown, unknown>({
-      query: ({ task_id }: { task_id: number }) => ({
-        url: `comment`,
-        params: {
-          task_id,
-        },
+      query: ({ task_id }: { task_id: string }) => ({
+        url: `${task_id}/comments`,
       }),
     }),
     postComment: build.mutation<
       unknown,
-      { task_id: number; user_id: number; formData: FormData }
+      {
+        task_id: string;
+        data: {
+          user_id: string;
+          text: string;
+          created_at: string;
+          updated_at: string;
+        };
+      }
     >({
-      query: ({ task_id, user_id, formData }) => ({
-        url: `comment`,
+      query: ({ task_id, data }) => ({
+        url: `${task_id}/comments`,
         method: 'POST',
-        body: formData,
-        params: {
-          task_id,
-          user_id,
-        },
+        body: data,
       }),
     }),
 
