@@ -44,14 +44,14 @@ export default function AddTaskModal({
             block
             placeholder="Можно в двух словах"
             label="Название задачи"
-            size="m"
+            size="s"
             labelView="outer"
           />
           <Input
             block
             placeholder="Опишите критерии выполнения задачи подробнее, это поможет вашему сотруднику"
             label="Описание задачи"
-            size="m"
+            size="s"
             labelView="outer"
           />
           <div className={styles.addTask__calendarContainer}>
@@ -67,7 +67,7 @@ export default function AddTaskModal({
           <div className={styles.addTask__selectContainer}>
             <SelectDesktop
               allowUnselect
-              size="m"
+              size="s"
               options={TYPES}
               placeholder="Выберите"
               label="Выберите тип"
@@ -76,7 +76,7 @@ export default function AddTaskModal({
             />
             <SelectDesktop
               allowUnselect
-              size="m"
+              size="s"
               options={LEVELS}
               placeholder="Выберите"
               label="Выберите значимость"
@@ -85,7 +85,7 @@ export default function AddTaskModal({
             />
             <SelectDesktop
               allowUnselect
-              size="m"
+              size="s"
               options={STATUSES}
               placeholder="Выберите"
               label="Статус"
@@ -97,7 +97,7 @@ export default function AddTaskModal({
             disabled
             view="primary"
             type="button"
-            size="s"
+            size="m"
             className={styles.addTask__saveButton}
           >
             Сохранить

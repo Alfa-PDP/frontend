@@ -2,7 +2,7 @@ import { Typography } from '@alfalab/core-components/typography';
 import { IconButton } from '@alfalab/core-components/icon-button';
 import { Textarea } from '@alfalab/core-components/textarea';
 import { Button } from '@alfalab/core-components/button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import editIcon from '../../assets/icons/EditButtonAttributes.svg';
 import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
@@ -45,13 +45,10 @@ export default function Collapse({
   const goalsData = useAppSelector((state) => state.goals);
   const [triggerPatchGoal] = usePatchUserGoalMutation();
   const { setInfoMessage, setGoals } = useActions();
-  const [stateLoading, setStateLoading] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTextAttributesValue(textAttributes);
-    setTimeout(() => {
-      setStateLoading(true);
-    }, 100);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [textAttributes]);
 
@@ -179,60 +176,58 @@ export default function Collapse({
   }
 
   return (
-    stateLoading && (
-      <div
-        className={styles.professionalAttributes}
-        style={
-          !moreButton
-            ? { maxHeight: `158px` }
-            : { maxHeight: `${lineHeight + 104}px` }
-        }
+    <div
+      className={styles.professionalAttributes}
+      style={
+        !moreButton
+          ? { maxHeight: `158px` }
+          : { maxHeight: `${lineHeight + 104}px` }
+      }
+    >
+      {editButton}
+      <Typography.Text
+        weight="bold"
+        className={styles.professionalAttributes__title}
       >
-        {editButton}
-        <Typography.Text
-          weight="bold"
-          className={styles.professionalAttributes__title}
+        {attributeName}
+      </Typography.Text>
+      <Textarea
+        className={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
+        fieldClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeFieldClassName}`}
+        textareaClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeTextareaClassName}`}
+        ref={textareaRef}
+        value={textAttributesValue}
+        onChange={handleChange}
+        placeholder="Не заполнено"
+        autosize
+        maxRows={stateRows}
+        minRows={1}
+        readOnly={stateTextarea}
+        showCounter={!stateTextarea}
+        maxLength={500}
+        getCounterText={getCounterText}
+        name={queryName}
+      />
+      {lineHeight > 87 && stateTextarea && (
+        <Button
+          className={styles.professionalAttributes__button}
+          type="button"
+          view="ghost"
+          size="s"
+          onClick={handlerToggleMoreButton}
         >
-          {attributeName}
-        </Typography.Text>
-        <Textarea
-          className={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
-          fieldClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeFieldClassName}`}
-          textareaClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeTextareaClassName}`}
-          ref={textareaRef}
-          value={textAttributesValue}
-          onChange={handleChange}
-          placeholder="Не заполнено"
-          autosize
-          maxRows={stateRows}
-          minRows={1}
-          readOnly={stateTextarea}
-          showCounter={!stateTextarea}
-          maxLength={500}
-          getCounterText={getCounterText}
-          name={queryName}
-        />
-        {lineHeight > 87 && stateTextarea && (
-          <Button
-            className={styles.professionalAttributes__button}
-            type="button"
-            view="ghost"
-            size="s"
-            onClick={handlerToggleMoreButton}
-          >
-            {!moreButton ? 'Подробнее' : 'Скрыть'}
-          </Button>
-        )}
-        <ModalClose
-          modalTitle="Закрыть окно?"
-          modalSubtitle="Все несохраненные данные будут утеряны."
-          modalButton="Да, закрыть"
-          modalButtonCancel="Нет, оставить"
-          stateModalClose={stateModalClose}
-          cancelEditButton={handlerAcceptModalClose}
-          closeModalButton={handlerCloseModal}
-        />
-      </div>
-    )
+          {!moreButton ? 'Подробнее' : 'Скрыть'}
+        </Button>
+      )}
+      <ModalClose
+        modalTitle="Закрыть окно?"
+        modalSubtitle="Все несохраненные данные будут утеряны."
+        modalButton="Да, закрыть"
+        modalButtonCancel="Нет, оставить"
+        stateModalClose={stateModalClose}
+        cancelEditButton={handlerAcceptModalClose}
+        closeModalButton={handlerCloseModal}
+      />
+    </div>
   );
 }

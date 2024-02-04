@@ -17,7 +17,7 @@ interface Props {
 export default function TaskTable({ tasks, role }: Props) {
   console.log(tasks);
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%', borderBottom: '1px solid #E7E8EB' }}>
       <Table wrapper={false}>
         <Table.THead>
           <Table.THeadCell className={styles.table__headCell}>
@@ -123,7 +123,7 @@ export default function TaskTable({ tasks, role }: Props) {
                         >
                           Комментарии к задаче
                         </Typography.Text>
-                        <Comments comments={task.comments} taskId={task.id} />
+                        <Comments taskId={task.id} />
                       </div>
                     </div>
                   </Collapse>
