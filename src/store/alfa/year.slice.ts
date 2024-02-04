@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const currentYear = new Date().getFullYear();
 interface YearState {
-  filteredYear: string | undefined;
+  filteredYear: number | undefined;
 }
 
 const initialState: YearState = {
-  filteredYear: currentYear.toString(),
+  filteredYear: currentYear,
 };
 
 export const yearSlice = createSlice({

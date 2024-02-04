@@ -12,8 +12,8 @@ export default function YearFilter() {
   const { setYear } = useActions();
 
   // Устанавливаем год для фильтрации
-  const handleYearChange = (filteredYear: string) => {
-    setYear({ filteredYear });
+  const handleYearChange = (year: string) => {
+    setYear({ filteredYear: Number(year) });
   };
 
   return (

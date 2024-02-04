@@ -22,8 +22,7 @@ export default function MyProgress() {
   // Запрос на получение плана
   const { data: workerData } = useGetIndividualPlanQuery({
     user_id: id || '',
-    // Сервер принимает только number, поэтому приводим к number
-    year: Number(yearIdp.filteredYear),
+    year: yearIdp.filteredYear,
   });
 
   return (

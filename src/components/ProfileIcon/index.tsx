@@ -11,6 +11,7 @@ import leader from '../../assets/icons/leader.png';
 
 import styles from './styles.module.scss';
 import {
+  CURRENT_YEAR,
   LEADER_ID,
   LEADER_TOKEN,
   WORKER_ID,
@@ -25,13 +26,14 @@ export default function ProfileIcon() {
   const [value, setValue] = useState('');
   const navigate = useNavigate();
 
-  const { setRole } = useActions();
+  const { setRole, setYear } = useActions();
   const roleSelector = useAppSelector((state) => state.user);
 
   const changeToWorker = () => {
     localStorage.setItem('role', 'worker');
     localStorage.setItem('token', WORKER_TOKEN);
     localStorage.setItem('user_id', WORKER_ID);
+    setYear({ filteredYear: CURRENT_YEAR });
   };
 
   const changeToLeader = () => {

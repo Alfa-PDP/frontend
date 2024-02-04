@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Goals, IndividualPlanWorker, WorkersList } from './types';
+import { CURRENT_YEAR } from '../../utils/constants';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -8,7 +9,7 @@ export const api = createApi({
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        headers.set('authorization', token);
       }
       return headers;
     },
@@ -17,7 +18,7 @@ export const api = createApi({
     // Список сотрудников команды
     getWorkers: build.query<
       WorkersList,
-      { team_id: string; sort_by?: string; order?: string; year: string }
+      { team_id: string; sort_by?: string; order?: string; year: number }
     >({
       query: ({ team_id, sort_by, order, year }) => ({
         url: `users`,
@@ -42,7 +43,7 @@ export const api = createApi({
       IndividualPlanWorker,
       { year?: number; user_id: string }
     >({
-      query: ({ year = 2024, user_id }) => ({
+      query: ({ year = CURRENT_YEAR, user_id }) => ({
         url: `idp/${user_id}`,
         params: {
           year,
