@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-interface GoalsState {
+export interface GoalsState {
   id: string;
   user_id: string;
   goal_name: string;

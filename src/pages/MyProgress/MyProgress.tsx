@@ -1,13 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
-import { useSelector } from 'react-redux';
 import EmployeeCard from '../../components/EmployeeCard';
 import styles from './styles.module.scss';
 import ProfessionalAttributes from '../../components/ProfessionalAttributes';
 import TaskList from '../../components/TaskList';
 import MyCard from '../../components/MyCard';
 import { useGetIndividualPlanQuery } from '../../store/alfa/alfa.api';
-import { RootState } from '../../store';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function MyProgress() {
   // Получаем id через useParams
@@ -17,7 +16,7 @@ export default function MyProgress() {
   const role = localStorage.getItem('role');
 
   // Получаем год из стора
-  const yearIdp = useSelector((state: RootState) => state.filteredYear);
+  const yearIdp = useAppSelector((state) => state.filteredYear);
 
   // Запрос на получение плана
   const { data: workerData } = useGetIndividualPlanQuery({

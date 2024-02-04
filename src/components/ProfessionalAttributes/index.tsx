@@ -1,11 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 import Collapse from '../Collapse';
 import { useGetUserGoalQuery } from '../../store/alfa/alfa.api';
-import { goalsActions } from '../../store/alfa/goals.slice';
-import { RootState } from '../../store';
+import { useAppSelector } from '../../hooks/redux';
+import { useActions } from '../../hooks/actions';
 
 // interface TextAttributesProps {
 //   developmentGoal?: string;
@@ -33,15 +32,15 @@ import { RootState } from '../../store';
 export default function ProfessionalAttributes({ role }: { role: string }) {
   const { id } = useParams();
   const { data: goals } = useGetUserGoalQuery({ user_id: id || '' });
-  const dispatch = useDispatch();
+  const { setGoals } = useActions();
+  const goalsText = useAppSelector((state) => state.goals);
 
   useEffect(() => {
     if (goals) {
-      dispatch(goalsActions.setGoals(goals));
+      setGoals(goals);
     }
-  }, [goals, dispatch]);
-
-  const goalsText = useSelector((state: RootState) => state.goals);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [goals]);
 
   return (
     <section className={styles.professionalAttributes}>
