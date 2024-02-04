@@ -1,0 +1,6 @@
+@import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
+
+.modalClose {
+  --modal-s-header-desktop-content-paddings: 0 var(--gap-s);
+}
