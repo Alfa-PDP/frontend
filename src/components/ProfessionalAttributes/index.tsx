@@ -1,8 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 import Collapse from '../Collapse';
 import { useGetUserGoalQuery } from '../../store/alfa/alfa.api';
+import { goalsActions } from '../../store/alfa/goals.slice';
+import { RootState } from '../../store';
 
 // interface TextAttributesProps {
 //   developmentGoal?: string;
@@ -29,39 +32,40 @@ import { useGetUserGoalQuery } from '../../store/alfa/alfa.api';
 
 export default function ProfessionalAttributes({ role }: { role: string }) {
   const { id } = useParams();
-  const [goalsId, setGoalsId] = useState('');
   const { data: goals } = useGetUserGoalQuery({ user_id: id || '' });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (goals) {
-      setGoalsId(goals.id);
-      console.log(goals);
+      dispatch(goalsActions.setGoals(goals));
     }
-  }, [goals]);
+  }, [goals, dispatch]);
+
+  const goalsText = useSelector((state: RootState) => state.goals);
 
   return (
     <section className={styles.professionalAttributes}>
-      {goals && (
+      {goalsText.id && (
         <>
           <Collapse
-            textAttributes={goals.goal_name || ''}
+            textAttributes={goalsText.goal_name || ''}
             attributeName="Цели развития"
             role={role}
-            goalsId={goalsId}
+            goalsId={goalsText.id}
             queryName="goal_name"
           />
           <Collapse
-            textAttributes={goals.employee_side_plus || ''}
+            textAttributes={goalsText.employee_side_plus || ''}
             attributeName="Сильные стороны"
             role={role}
-            goalsId={goalsId}
+            goalsId={goalsText.id}
             queryName="employee_side_plus"
           />
           <Collapse
-            textAttributes={goals.employee_side_minus || ''}
+            textAttributes={goalsText.employee_side_minus || ''}
             attributeName="Зоны развития"
             role={role}
-            goalsId={goalsId}
+            goalsId={goalsText.id}
             queryName="employee_side_minus"
           />
         </>

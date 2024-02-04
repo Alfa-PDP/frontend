@@ -18,6 +18,7 @@ export interface DataProps {
 }
 
 export default function InitialCard({ data }: { data: DataProps }) {
+  console.log(data);
   return (
     <ul className={styles.employeeInitials}>
       <li className={styles.employeeInitials__contacts}>
@@ -31,7 +32,7 @@ export default function InitialCard({ data }: { data: DataProps }) {
           view="primary-small"
           style={{ fontSize: '12px' }}
         >
-          {data.email || 'alfa-employee@gmail.com'}
+          {/* data.email || */ 'alfa-employee@gmail.com'}
         </Typography.Text>
       </li>
       <li className={styles.employeeInitials__contacts}>
@@ -45,7 +46,7 @@ export default function InitialCard({ data }: { data: DataProps }) {
           view="primary-small"
           style={{ fontSize: '12px' }}
         >
-          {data.phone || '+7 (921) 212-12-12'}
+          {/* data.phone || */ '+7 (921) 212-12-12'}
         </Typography.Text>
       </li>
       <li className={styles.employeeInitials__contacts}>
@@ -59,7 +60,7 @@ export default function InitialCard({ data }: { data: DataProps }) {
           view="primary-small"
           style={{ fontSize: '12px' }}
         >
-          {data.telegram || '@alfa-employee'}
+          {/* data.telegram || */ '@alfa-employee'}
         </Typography.Text>
       </li>
     </ul>
