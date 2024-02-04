@@ -5,31 +5,32 @@ import { PaperAirplaneMIcon } from '@alfalab/icons-glyph/PaperAirplaneMIcon';
 import { useState } from 'react';
 import styles from './styles.module.scss';
 import { formatDate } from '../../utils/formatDate';
-import { Comment } from '../../store/alfa/types';
-import { usePostCommentMutation } from '../../store/alfa/alfa.api';
+
+import {
+  useGetCommentsQuery,
+  usePostCommentMutation,
+} from '../../store/alfa/alfa.api';
 import { useActions } from '../../hooks/actions';
+import { Comment } from '../../store/alfa/types';
 
-interface Props {
-  comments: Comment[];
-  taskId: string;
-}
-
-export default function Comments({ comments, taskId }: Props) {
+export default function Comments({ taskId }: { taskId: string }) {
   const [loading, setLoading] = useState(false);
   const [textValue, setTextValue] = useState('');
 
   const { setInfoMessage } = useActions();
 
   const [postComment] = usePostCommentMutation();
+  const { data: comments } = useGetCommentsQuery({ task_id: taskId });
+  const currentUser = localStorage.getItem('user_id');
 
   const handleClick = () => {
     setLoading(true);
     const time = new Date(Date.now()).toISOString();
     const data = {
-      user_id: localStorage.getItem('user_id')!,
-      text: textValue,
       created_at: time,
       updated_at: time,
+      user_id: currentUser!,
+      text: textValue,
     };
 
     postComment({ task_id: taskId, data })
@@ -47,9 +48,17 @@ export default function Comments({ comments, taskId }: Props) {
       .finally(() => setLoading(false));
   };
 
+  const handleCommentUserName = ({ data }: { data: Comment }) => {
+    if (currentUser && currentUser === data.user.id) {
+      return 'Вы';
+    }
+
+    return `${data.user.name} ${data.user.family_name}`;
+  };
+
   return (
     <section className={styles.comments}>
-      {comments.map((comment) => (
+      {comments?.map((comment) => (
         <div key={comment.id} className={styles.comment}>
           <div className={styles.comment__container}>
             <img
@@ -57,23 +66,26 @@ export default function Comments({ comments, taskId }: Props) {
               src={comment.user.avatar}
               alt=""
             />
-            <div>
-              <Typography.Text
-                view="primary-small"
-                color="primary"
-                tag="p"
-                className={styles.comment__author}
-              >
-                {`${comment.user.name} ${comment.user.family_name}`}
-              </Typography.Text>
-              <Typography.Text
-                view="primary-small"
-                color="secondary"
-                tag="p"
-                className={styles.comment__time}
-              >
-                {`${formatDate(comment.created_at)}`}
-              </Typography.Text>
+            <span className={styles.comment__divider} />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography.Text
+                  view="primary-small"
+                  color="primary"
+                  tag="p"
+                  className={styles.comment__author}
+                >
+                  {handleCommentUserName({ data: comment })}
+                </Typography.Text>
+                <Typography.Text
+                  view="primary-small"
+                  color="secondary"
+                  tag="p"
+                  className={styles.comment__time}
+                >
+                  {`${formatDate(comment.created_at)}`}
+                </Typography.Text>
+              </div>
               <Typography.Text
                 view="primary-medium"
                 color="primary"
@@ -88,14 +100,18 @@ export default function Comments({ comments, taskId }: Props) {
       ))}
       <Textarea
         block
+        value={textValue}
         className={styles.comment__input}
         placeholder="Введите ваш комментарий"
         onChange={(e) => setTextValue(e.target.value)}
         rightAddons={
           <IconButton
             disabled={textValue.length === 0}
-            view="primary"
-            icon={PaperAirplaneMIcon}
+            icon={
+              <PaperAirplaneMIcon
+                color={textValue.length === 0 ? '#BFBFBF' : '#096AD9'}
+              />
+            }
             size="xs"
             alignIcon="right"
             loading={loading}

@@ -6,6 +6,7 @@ import {
   IndividualPlanWorker,
   UserTask,
   WorkersList,
+  Comment,
 } from './types';
 
 import { CURRENT_YEAR } from '../../utils/constants';
@@ -22,6 +23,7 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Comments', 'Goals'],
   endpoints: (build) => ({
     // Список сотрудников команды
     getWorkers: build.query<
@@ -64,7 +66,9 @@ export const api = createApi({
       query: ({ user_id }) => ({
         url: `users/${user_id}/goals`,
       }),
+      providesTags: ['Goals'],
     }),
+
     patchUserGoal: build.mutation<
       unknown,
       { dataToSend: { [key: string]: string }; goal_id: string }
@@ -74,13 +78,15 @@ export const api = createApi({
         method: 'PATCH',
         body: dataToSend,
       }),
+      invalidatesTags: ['Goals'],
     }),
 
     // Комментарии
-    getComments: build.query<unknown, unknown>({
+    getComments: build.query<Comment[], unknown>({
       query: ({ task_id }: { task_id: string }) => ({
-        url: `${task_id}/comments`,
+        url: `tasks/${task_id}/comments`,
       }),
+      providesTags: ['Comments'],
     }),
     postComment: build.mutation<
       unknown,
@@ -95,10 +101,11 @@ export const api = createApi({
       }
     >({
       query: ({ task_id, data }) => ({
-        url: `${task_id}/comments`,
+        url: `tasks/${task_id}/comments`,
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['Comments'],
     }),
 
     // Задачи
