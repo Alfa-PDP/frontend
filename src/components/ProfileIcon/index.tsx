@@ -6,7 +6,9 @@ import { RadioGroupDesktop } from '@alfalab/core-components/radio-group/desktop'
 import { Tag } from '@alfalab/core-components/tag';
 import { AScoresCircleSIcon } from '@alfalab/icons-glyph/AScoresCircleSIcon';
 
-import cat from '../../assets/icons/cat.png';
+import worker from '../../assets/icons/worker.png';
+import leader from '../../assets/icons/leader.png';
+
 import styles from './styles.module.scss';
 import {
   LEADER_ID,
@@ -87,7 +89,7 @@ export default function ProfileIcon() {
       >
         <Circle
           size={48}
-          imageUrl={cat}
+          imageUrl={roleSelector.role === 'leader' ? leader : worker}
           bottomAddons={
             <AScoresCircleSIcon
               color={roleSelector.role === 'leader' ? '#ef3124' : '#0CC44D'}

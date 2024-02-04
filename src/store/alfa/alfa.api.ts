@@ -58,12 +58,12 @@ export const api = createApi({
     }),
     patchUserGoal: build.mutation<
       unknown,
-      { formData: FormData; goal_id: string }
+      { dataToSend: { [key: string]: string }; goal_id: string }
     >({
-      query: ({ formData, goal_id }) => ({
+      query: ({ dataToSend, goal_id }) => ({
         url: `goals/${goal_id}`,
         method: 'PATCH',
-        body: formData,
+        body: dataToSend,
       }),
     }),
 

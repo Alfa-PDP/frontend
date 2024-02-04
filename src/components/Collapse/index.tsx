@@ -83,11 +83,11 @@ export default function Collapse({
 
   // Позволяет сохранить изменения value
   const handlerTextareaSave = () => {
-    const formData = new FormData();
-    formData.append(queryName, textAttributesValue);
-
+    const dataToSend = {
+      [queryName]: textAttributesValue,
+    };
     triggerPatchGoal({
-      formData,
+      dataToSend,
       goal_id: goalsId,
     })
       .unwrap()
