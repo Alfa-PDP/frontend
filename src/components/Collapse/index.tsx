@@ -45,6 +45,15 @@ export default function Collapse({
   const goalsData = useAppSelector((state) => state.goals);
   const [triggerPatchGoal] = usePatchUserGoalMutation();
   const { setInfoMessage, setGoals } = useActions();
+  const [stateLoading, setStateLoading] = useState(false);
+
+  useEffect(() => {
+    setTextAttributesValue(textAttributes);
+    setTimeout(() => {
+      setStateLoading(true);
+    }, 100);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textAttributes]);
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
@@ -170,58 +179,60 @@ export default function Collapse({
   }
 
   return (
-    <div
-      className={styles.professionalAttributes}
-      style={
-        !moreButton
-          ? { maxHeight: `158px` }
-          : { maxHeight: `${lineHeight + 104}px` }
-      }
-    >
-      {editButton}
-      <Typography.Text
-        weight="bold"
-        className={styles.professionalAttributes__title}
+    stateLoading && (
+      <div
+        className={styles.professionalAttributes}
+        style={
+          !moreButton
+            ? { maxHeight: `158px` }
+            : { maxHeight: `${lineHeight + 104}px` }
+        }
       >
-        {attributeName}
-      </Typography.Text>
-      <Textarea
-        className={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
-        fieldClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeFieldClassName}`}
-        textareaClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeTextareaClassName}`}
-        ref={textareaRef}
-        value={textAttributesValue}
-        onChange={handleChange}
-        placeholder="Не заполнено"
-        autosize
-        maxRows={stateRows}
-        minRows={1}
-        readOnly={stateTextarea}
-        showCounter={!stateTextarea}
-        maxLength={500}
-        getCounterText={getCounterText}
-        name={queryName}
-      />
-      {lineHeight > 87 && stateTextarea && (
-        <Button
-          className={styles.professionalAttributes__button}
-          type="button"
-          view="ghost"
-          size="s"
-          onClick={handlerToggleMoreButton}
+        {editButton}
+        <Typography.Text
+          weight="bold"
+          className={styles.professionalAttributes__title}
         >
-          {!moreButton ? 'Подробнее' : 'Скрыть'}
-        </Button>
-      )}
-      <ModalClose
-        modalTitle="Закрыть окно?"
-        modalSubtitle="Все несохраненные данные будут утеряны."
-        modalButton="Да, закрыть"
-        modalButtonCancel="Нет, оставить"
-        stateModalClose={stateModalClose}
-        cancelEditButton={handlerAcceptModalClose}
-        closeModalButton={handlerCloseModal}
-      />
-    </div>
+          {attributeName}
+        </Typography.Text>
+        <Textarea
+          className={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_active}`}
+          fieldClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeFieldClassName}`}
+          textareaClassName={`${styles.professionalAttributes__textarea} ${!stateTextarea && styles.professionalAttributes__textarea_activeTextareaClassName}`}
+          ref={textareaRef}
+          value={textAttributesValue}
+          onChange={handleChange}
+          placeholder="Не заполнено"
+          autosize
+          maxRows={stateRows}
+          minRows={1}
+          readOnly={stateTextarea}
+          showCounter={!stateTextarea}
+          maxLength={500}
+          getCounterText={getCounterText}
+          name={queryName}
+        />
+        {lineHeight > 87 && stateTextarea && (
+          <Button
+            className={styles.professionalAttributes__button}
+            type="button"
+            view="ghost"
+            size="s"
+            onClick={handlerToggleMoreButton}
+          >
+            {!moreButton ? 'Подробнее' : 'Скрыть'}
+          </Button>
+        )}
+        <ModalClose
+          modalTitle="Закрыть окно?"
+          modalSubtitle="Все несохраненные данные будут утеряны."
+          modalButton="Да, закрыть"
+          modalButtonCancel="Нет, оставить"
+          stateModalClose={stateModalClose}
+          cancelEditButton={handlerAcceptModalClose}
+          closeModalButton={handlerCloseModal}
+        />
+      </div>
+    )
   );
 }
