@@ -10,7 +10,7 @@ import {
   useGetWorkersQuery,
   useLazyGetWorkersQuery,
 } from '../../store/alfa/alfa.api';
-import { CURRNERT_YEAR, TEAM_ID } from '../../utils/constants';
+import { CURRENT_YEAR, TEAM_ID } from '../../utils/constants';
 import { useAppSelector } from '../../hooks/redux';
 import { WorkersList } from '../../store/alfa/types';
 
@@ -27,7 +27,7 @@ export default function TeamTable() {
     navigate(`/progress/${id}/`, { replace: false });
   };
 
-  const { filteredYear = CURRNERT_YEAR } = useAppSelector(
+  const { filteredYear = CURRENT_YEAR } = useAppSelector(
     (state) => state.filteredYear
   );
 
