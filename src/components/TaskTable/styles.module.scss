@@ -11,7 +11,7 @@
   line-height: 16px;
   text-transform: inherit;
   justify-content: left;
-  &_type_inWork.status_type_inWork {
+  &_type_in_progress.status_type_in_progress {
     background: $Orange-light;
     color: $Orange;
   }
