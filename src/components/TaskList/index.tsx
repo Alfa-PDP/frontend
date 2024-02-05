@@ -11,15 +11,19 @@ import {
   useGetTasksQuery,
 } from '../../store/alfa/alfa.api';
 import { useAppSelector } from '../../hooks/redux';
+import { CURRENT_YEAR } from '../../utils/constants';
 
 export default function TaskList() {
   const { id } = useParams<{ id: string }>();
 
-  const { data: currentUser } = useGetCurrentUserQuery();
-
-  const { data: tasks } = useGetTasksQuery({ user_id: id || '' });
   const [modalAnatomy, setModalAnatomy] = useState(false);
   const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
+
+  const { data: currentUser } = useGetCurrentUserQuery();
+  const { data: tasks } = useGetTasksQuery({
+    user_id: id || '',
+    year: year || CURRENT_YEAR,
+  });
 
   const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
 
