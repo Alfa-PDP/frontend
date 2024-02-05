@@ -10,12 +10,15 @@ import {
   useGetTasksQuery,
 } from '../../store/alfa/alfa.api';
 
-export default function TaskList() {
+interface Props {
+  idpId: string;
+}
+
+export default function TaskList({ idpId }: Props) {
   const { data: currentUser } = useGetCurrentUserQuery();
   const [userId, setUserId] = useState('');
   const { data: tasks } = useGetTasksQuery(userId, { skip: !userId });
   const [modalAnatomy, setModalAnatomy] = useState(false);
-
   useEffect(() => {
     if (currentUser && currentUser.user_id) {
       setUserId(currentUser.user_id);
@@ -60,6 +63,7 @@ export default function TaskList() {
           <AddTaskModal
             modalAnatomy={modalAnatomy}
             handleModalAnatomy={handleModalAnatomy}
+            idpId={idpId}
           />
         </>
       )}

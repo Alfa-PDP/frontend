@@ -1,5 +1,3 @@
-// import * as yup from 'yup';
-
 import { ModalDesktop } from '@alfalab/core-components/modal/desktop';
 import { Input } from '@alfalab/core-components/input';
 import { CalendarRange } from '@alfalab/core-components/calendar-range';
@@ -7,57 +5,74 @@ import { Typography } from '@alfalab/core-components/typography';
 import { SelectDesktop } from '@alfalab/core-components/select/desktop';
 import { Button } from '@alfalab/core-components/button';
 import { Textarea } from '@alfalab/core-components/textarea';
-
+import { useState } from 'react';
 import styles from './styles.module.scss';
-import { usePostTaskMutation } from '../../store/alfa/alfa.api';
+import {
+  useGetTaskStatusesQuery,
+  usePostTaskMutation,
+  useGetTaskImportanceQuery,
+  useGetTaskTypesQuery,
+} from '../../store/alfa/alfa.api';
 
 interface Props {
   modalAnatomy: boolean;
   handleModalAnatomy: React.Dispatch<React.SetStateAction<boolean>>;
+  idpId: string;
 }
 
 export default function AddTaskModal({
   modalAnatomy,
   handleModalAnatomy,
+  idpId,
 }: Props) {
   const [postTask] = usePostTaskMutation();
-  console.log(postTask);
+  const { data: taskStatuses } = useGetTaskStatusesQuery();
+  const { data: taskImportance } = useGetTaskImportanceQuery();
+  const { data: taskTypes } = useGetTaskTypesQuery();
 
-  // const schema = yup.object().shape({
-  //   taskName: yup.string().required('Название задачи обязательно'),
-  //   description: yup.string().required('Описание обязательно'),
-  //   startTime: yup.date().required('Необходимо указать дату начала'),
-  //   endTime: yup.date().required('Необходимо указать дату окончания'),
-  //   taskType: yup.string().required('Тип задачи обязателен'),
-  //   importance: yup.string().required('Уровень важности обязателен'),
-  //   statusId: yup.string().required('Статус задачи обязателен'),
-  // });
+  const [taskName, setTaskName] = useState('');
+  const [description, setDescription] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [taskType, setTaskType] = useState('');
+  const [importance, setImportance] = useState('');
+  const [statusId, setStatusId] = useState('');
 
-  // const [taskName, setTaskName] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [startTime, setStartTime] = useState('');
-  // const [endTime, setEndTime] = useState('');
-  // const [taskType, setTaskType] = useState('');
-  // const [importance, setImportance] = useState('');
-  // const [statusId, setStatusId] = useState('');
+  const TYPES = taskTypes?.map((item) => ({
+    key: item.id,
+    content: item.name,
+  }));
 
-  const TYPES = [
-    { key: '1', content: 'Hard skills' },
-    { key: '2', content: 'Soft skills' },
-    { key: '3', content: 'Обучение' },
-  ];
-  const LEVELS = [
-    { key: '1', content: 'Низкая' },
-    { key: '2', content: 'Средняя' },
-    { key: '3', content: 'Высокая' },
-  ];
-  const STATUSES = [
-    { key: '1', content: 'Новая' },
-    { key: '2', content: 'В работе' },
-    { key: '3', content: 'Выполнена' },
-    { key: '4', content: 'Не выполнена' },
-    { key: '5', content: 'Отменена' },
-  ];
+  const LEVELS = taskImportance?.map((item) => ({
+    key: item.id,
+    content: item.name,
+  }));
+
+  const STATUSES = taskStatuses?.map((item) => ({
+    key: item.id,
+    content: item.description,
+    slug: item.slug,
+    weight: item.weight,
+  }));
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const partsStart = startTime.split('.');
+    const formattedStart = `${partsStart[2]}-${partsStart[1]}-${partsStart[0]}`;
+    const partsEnd = endTime.split('.');
+    const formattedEnd = `${partsEnd[2]}-${partsEnd[1]}-${partsEnd[0]}`;
+    const taskData = {
+      name: taskName,
+      description,
+      start_time: formattedStart,
+      end_time: formattedEnd,
+      task_type_id: taskType,
+      importance_id: importance,
+      status_id: statusId,
+      idp_id: idpId,
+    };
+    postTask(taskData);
+  }
 
   return (
     <section className={styles.addTask}>
@@ -65,18 +80,27 @@ export default function AddTaskModal({
         open={modalAnatomy}
         onClose={() => {
           handleModalAnatomy(false);
+          setTaskName('');
+          setDescription('');
+          setStartTime('');
+          setEndTime('');
+          setTaskType('');
+          setImportance('');
+          setStatusId('');
         }}
         size="m"
       >
         <ModalDesktop.Header>Новая задача</ModalDesktop.Header>
         <ModalDesktop.Content className={styles.addTask__content}>
-          <form className={styles.addTask__form}>
+          <form onSubmit={handleSubmit} className={styles.addTask__form}>
             <Input
               block
               placeholder="Можно в двух словах"
               label="Название задачи"
               size="m"
               labelView="outer"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
             />
             <Textarea
               block
@@ -84,6 +108,8 @@ export default function AddTaskModal({
               minRows={3}
               placeholder="Опишите критерии выполнения задачи подробнее, это поможет вашему сотруднику"
               label="Описание задачи"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <div className={styles.addTask__calendarContainer}>
               <Typography.Text
@@ -95,50 +121,58 @@ export default function AddTaskModal({
               </Typography.Text>
               <CalendarRange
                 calendarPosition="popover"
-                // onDateFromChange={(payload) => setStartTime(payload.value)}
-                // onDateToChange={(payload) => setEndTime(payload.value)}
+                onDateFromChange={(payload) => setStartTime(payload.value)}
+                onDateToChange={(payload) => setEndTime(payload.value)}
               />
             </div>
             <div className={styles.addTask__selectContainer}>
               <SelectDesktop
                 allowUnselect
                 size="m"
-                options={TYPES}
+                options={TYPES || []}
                 placeholder="Выберите"
                 label="Выберите тип"
                 labelView="outer"
-                // onChange={async (payload) => {
-                //   await setValue('taskType', payload.selected.key);
-                //   trigger('taskType');
-                // }}
                 block
+                onChange={(payload) => {
+                  if (payload.selected) {
+                    setTaskType(payload.selected.key);
+                  } else {
+                    setTaskType('');
+                  }
+                }}
               />
               <SelectDesktop
                 allowUnselect
                 size="m"
-                options={LEVELS}
+                options={LEVELS || []}
                 placeholder="Выберите"
                 label="Выберите значимость"
                 labelView="outer"
-                // onChange={async (payload) => {
-                //   await setValue('importance', payload.selected.key);
-                //   trigger('importance');
-                // }}
                 block
+                onChange={(payload) => {
+                  if (payload.selected) {
+                    setImportance(payload.selected.key);
+                  } else {
+                    setImportance('');
+                  }
+                }}
               />
               <SelectDesktop
                 allowUnselect
                 size="m"
-                options={STATUSES}
+                options={STATUSES || []}
                 placeholder="Выберите"
                 label="Статус"
                 labelView="outer"
-                // onChange={async (payload) => {
-                //   console.log(payload);
-                //   await setValue('statusId', payload.selected?.key);
-                //   trigger('statusId');
-                // }}
                 block
+                onChange={(payload) => {
+                  if (payload.selected) {
+                    setStatusId(payload.selected.key);
+                  } else {
+                    setStatusId('');
+                  }
+                }}
               />
             </div>
             <Button

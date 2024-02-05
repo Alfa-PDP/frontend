@@ -14,7 +14,6 @@ interface Props {
 }
 
 export default function TaskTable({ tasks, role }: Props) {
-  console.log(role);
   return (
     <div style={{ width: '100%' }}>
       <Table wrapper={false}>

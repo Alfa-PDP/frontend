@@ -91,8 +91,8 @@ export interface TaskData {
   start_time: string;
   end_time: string;
   idp_id: string;
-  importance: string;
-  task_type: string;
+  importance_id: string;
+  task_type_id: string;
   status_id: string;
 }
 
