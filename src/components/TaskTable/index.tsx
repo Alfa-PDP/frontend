@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Collapse } from '@alfalab/core-components/collapse';
 import { Status } from '@alfalab/core-components/status';
@@ -10,16 +11,22 @@ import { formatDate } from '../../utils/formatDate';
 import { UserTask } from '../../store/alfa/types';
 import Comments from '../Comments';
 import { useActions } from '../../hooks/actions';
+import AddTaskModal from '../AddTaskModal';
 
 interface Props {
   tasks: UserTask[];
   role: string | unknown;
+  idpId: string | unknown;
 }
 
-export default function TaskTable({ tasks, role }: Props) {
+export default function TaskTable({ tasks, role, idpId }: Props) {
   const [patchTaskStatus] = usePatchTaskStatusMutation();
   const { setInfoMessage } = useActions();
 
+  const [modalAnatomy, setModalAnatomy] = useState(false);
+  const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
+
+  // Отправка данных с кнопки на сервер
   const handleChangeWorkerStatus = (id: string) => {
     const status = { description: 'В работе' };
     patchTaskStatus({ task_id: id, status })
@@ -40,6 +47,7 @@ export default function TaskTable({ tasks, role }: Props) {
       });
   };
 
+  // Рендерить ли кнопку "Взять в работу"
   const renderStatusButton = (task: UserTask) => {
     return (
       task.status.slug === 'new' && (
@@ -141,6 +149,7 @@ export default function TaskTable({ tasks, role }: Props) {
                           size="xxs"
                           view="tertiary"
                           className={styles.table__taskButton}
+                          onClick={handleModalAnatomy}
                         >
                           Редактировать задачу
                         </ButtonDesktop>
@@ -210,6 +219,12 @@ export default function TaskTable({ tasks, role }: Props) {
           ))}
         </Table.TBody>
       </Table>
+      <AddTaskModal
+        modalAnatomy={modalAnatomy}
+        handleModalAnatomy={handleModalAnatomy}
+        idpId={idpId}
+        edit
+      />
     </div>
   );
 }

@@ -43,7 +43,7 @@ export default function TaskList({ idpId }: Props) {
       {currentUser && (
         <>
           {tasks && tasks.length > 0 ? (
-            <TaskTable tasks={tasks} role={role} />
+            <TaskTable tasks={tasks} role={role} idpId={idpId} />
           ) : (
             <Typography.Text
               view="primary-medium"
@@ -70,6 +70,7 @@ export default function TaskList({ idpId }: Props) {
             modalAnatomy={modalAnatomy}
             handleModalAnatomy={handleModalAnatomy}
             idpId={idpId}
+            edit={false}
           />
         </>
       )}
