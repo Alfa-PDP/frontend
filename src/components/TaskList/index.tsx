@@ -1,6 +1,7 @@
 import { Button } from '@alfalab/core-components/button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Typography } from '@alfalab/core-components/typography';
+import { useParams } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 import TaskTable from '../TaskTable';
@@ -12,17 +13,14 @@ import {
 import { useAppSelector } from '../../hooks/redux';
 
 export default function TaskList() {
+  const { id } = useParams<{ id: string }>();
+
   const { data: currentUser } = useGetCurrentUserQuery();
-  const [userId, setUserId] = useState('');
-  const { data: tasks } = useGetTasksQuery(userId, { skip: !userId });
+
+  const { data: tasks } = useGetTasksQuery({ user_id: id || '' });
   const [modalAnatomy, setModalAnatomy] = useState(false);
   const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
 
-  useEffect(() => {
-    if (currentUser && currentUser.user_id) {
-      setUserId(currentUser.user_id);
-    }
-  }, [currentUser]);
   const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
 
   return (

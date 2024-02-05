@@ -110,8 +110,8 @@ export const api = createApi({
     }),
 
     // Задачи
-    getTasks: build.query<UserTask[], string>({
-      query: (user_id) => `users/${user_id}/tasks`,
+    getTasks: build.query<UserTask[], { user_id: string }>({
+      query: ({ user_id }) => `users/${user_id}/tasks`,
     }),
     postTask: build.mutation<UserTask, TaskData>({
       query: (data) => ({
