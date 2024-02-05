@@ -18,12 +18,14 @@ interface Props {
   modalAnatomy: boolean;
   handleModalAnatomy: React.Dispatch<React.SetStateAction<boolean>>;
   idpId: string | unknown;
+  edit: boolean;
 }
 
 export default function AddTaskModal({
   modalAnatomy,
   handleModalAnatomy,
   idpId,
+  edit,
 }: Props) {
   const [postTask] = usePostTaskMutation();
   const { data: taskStatuses } = useGetTaskStatusesQuery();
@@ -71,7 +73,8 @@ export default function AddTaskModal({
       status_id: statusId,
       idp_id: idpId,
     };
-    postTask(taskData);
+    if (!edit) postTask(taskData);
+    // else putTask(taskData);
     handleModalAnatomy(false);
   }
 
@@ -91,7 +94,9 @@ export default function AddTaskModal({
         }}
         size="m"
       >
-        <ModalDesktop.Header>Новая задача</ModalDesktop.Header>
+        <ModalDesktop.Header>
+          {edit ? 'Редактировать задачу' : 'Новая задача'}
+        </ModalDesktop.Header>
         <ModalDesktop.Content className={styles.addTask__content}>
           <form onSubmit={handleSubmit} className={styles.addTask__form}>
             <Input
