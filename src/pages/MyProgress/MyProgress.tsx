@@ -24,6 +24,8 @@ export default function MyProgress() {
     year: yearIdp.filteredYear,
   });
 
+  const idpId = workerData?.id;
+
   return (
     workerData && (
       <div className={styles.progress}>
@@ -41,7 +43,7 @@ export default function MyProgress() {
           workerData && <EmployeeCard data={workerData} />
         )}
         <ProfessionalAttributes role={role || ''} />
-        <TaskList />
+        <TaskList idpId={idpId} />
       </div>
     )
   );

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Collapse } from '@alfalab/core-components/collapse';
 import { Status } from '@alfalab/core-components/status';
@@ -5,17 +6,63 @@ import { Typography } from '@alfalab/core-components/typography';
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop';
 import styles from './styles.module.scss';
 
+import { usePatchTaskStatusMutation } from '../../store/alfa/alfa.api';
 import { formatDate } from '../../utils/formatDate';
 import { UserTask } from '../../store/alfa/types';
 import Comments from '../Comments';
+import { useActions } from '../../hooks/actions';
+import AddTaskModal from '../AddTaskModal';
 
 interface Props {
   tasks: UserTask[];
-  role: boolean;
+  role: string | unknown;
+  idpId: string | unknown;
 }
 
-export default function TaskTable({ tasks, role }: Props) {
-  console.log(role);
+export default function TaskTable({ tasks, role, idpId }: Props) {
+  const [patchTaskStatus] = usePatchTaskStatusMutation();
+  const { setInfoMessage } = useActions();
+
+  const [modalAnatomy, setModalAnatomy] = useState(false);
+  const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
+
+  // Отправка данных с кнопки на сервер
+  const handleChangeWorkerStatus = (id: string) => {
+    const status = { description: 'В работе' };
+    patchTaskStatus({ task_id: id, status })
+      .unwrap()
+      .then(() => {
+        setInfoMessage({
+          title: 'Статус изменен',
+          visible: true,
+          badge: 'positive',
+        });
+      })
+      .catch(() => {
+        setInfoMessage({
+          title: 'Статус не изменен',
+          visible: true,
+          badge: 'negative',
+        });
+      });
+  };
+
+  // Рендерить ли кнопку "Взять в работу"
+  const renderStatusButton = (task: UserTask) => {
+    return (
+      task.status.slug === 'new' && (
+        <ButtonDesktop
+          size="xxs"
+          view="primary"
+          className={styles.table__taskButton}
+          onClick={() => handleChangeWorkerStatus(task.id)}
+        >
+          Взять в работу
+        </ButtonDesktop>
+      )
+    );
+  };
+
   return (
     <div style={{ width: '100%', borderBottom: '1px solid #E7E8EB' }}>
       <Table wrapper={false}>
@@ -97,22 +144,17 @@ export default function TaskTable({ tasks, role }: Props) {
                           {task.description}
                         </Typography.Text>
                       </div>
-                      {role ? (
+                      {role !== 'worker' ? (
                         <ButtonDesktop
                           size="xxs"
                           view="tertiary"
                           className={styles.table__taskButton}
+                          onClick={handleModalAnatomy}
                         >
                           Редактировать задачу
                         </ButtonDesktop>
                       ) : (
-                        <ButtonDesktop
-                          size="xxs"
-                          view="primary"
-                          className={styles.table__taskButton}
-                        >
-                          Взять в работу
-                        </ButtonDesktop>
+                        renderStatusButton(task)
                       )}
                       <div className={styles.table__taskComments}>
                         <Typography.Text
@@ -177,6 +219,12 @@ export default function TaskTable({ tasks, role }: Props) {
           ))}
         </Table.TBody>
       </Table>
+      <AddTaskModal
+        modalAnatomy={modalAnatomy}
+        handleModalAnatomy={handleModalAnatomy}
+        idpId={idpId}
+        edit
+      />
     </div>
   );
 }

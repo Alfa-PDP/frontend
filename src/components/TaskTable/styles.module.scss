@@ -11,6 +11,7 @@
   line-height: 16px;
   text-transform: inherit;
   justify-content: left;
+  letter-spacing: normal;
   &_type_in_progress.status_type_in_progress {
     background: $Orange-light;
     color: $Orange;
@@ -23,7 +24,7 @@
     background: $Purple-light;
     color: $Purple-text;
   }
-  &_type_notСompleted.status_type_notСompleted {
+  &_type_not_completed.status_type_not_completed {
     background: $Red-light;
     color: $Red-text;
   }

@@ -9,11 +9,12 @@
   &__container {
     display: flex;
     position: relative;
+    align-items: center;
   }
 
   &__divider {
     position: absolute;
-    top: 80%;
+    top: 95%;
     left: 18px;
     height: 30px;
     border: 1px solid #b3b3b3;
@@ -44,5 +45,16 @@
   }
   &__input > div {
     border-radius: 50px !important;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+
+    &Container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: nowrap;
+    }
   }
 }

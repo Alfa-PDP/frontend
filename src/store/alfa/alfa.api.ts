@@ -7,6 +7,9 @@ import {
   TaskData,
   UserTask,
   WorkersList,
+  Status,
+  TaskType,
+  Importance,
   Comment,
 } from './types';
 
@@ -24,7 +27,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Comments', 'Goals'],
+  tagTypes: ['Comments', 'Goals', 'Tasks'],
   endpoints: (build) => ({
     // Список сотрудников команды
     getWorkers: build.query<
@@ -110,8 +113,14 @@ export const api = createApi({
     }),
 
     // Задачи
-    getTasks: build.query<UserTask[], string>({
-      query: (user_id) => `users/${user_id}/tasks`,
+    getTasks: build.query<UserTask[], { user_id: string; year: number }>({
+      query: ({ user_id, year }) => ({
+        url: `users/${user_id}/tasks`,
+        params: {
+          year,
+        },
+      }),
+      providesTags: ['Tasks'],
     }),
     postTask: build.mutation<UserTask, TaskData>({
       query: (data) => ({
@@ -119,11 +128,37 @@ export const api = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['Tasks'],
     }),
-
+    patchTaskStatus: build.mutation<
+      unknown,
+      { task_id: string; status: unknown }
+    >({
+      query: ({ task_id, status }) => ({
+        url: `tasks/${task_id}/status`,
+        method: 'PATCH',
+        body: status,
+      }),
+      invalidatesTags: ['Tasks'],
+    }),
     // Текущий пользователь
     getCurrentUser: build.query<CurrentUser, void>({
       query: () => `users/me`,
+    }),
+
+    // Список статусов
+    getTaskStatuses: build.query<Status[], void>({
+      query: () => `/tasks/status`,
+    }),
+
+    // Список типов задач
+    getTaskTypes: build.query<TaskType[], void>({
+      query: () => `/tasks/task_types`,
+    }),
+
+    // Список важности задач
+    getTaskImportance: build.query<Importance[], void>({
+      query: () => `/tasks/task_importance`,
     }),
   }),
 });
@@ -140,4 +175,8 @@ export const {
   usePostTaskMutation,
   useGetYearsQuery,
   useGetCurrentUserQuery,
+  useGetTaskStatusesQuery,
+  useGetTaskImportanceQuery,
+  useGetTaskTypesQuery,
+  usePatchTaskStatusMutation,
 } = api;
