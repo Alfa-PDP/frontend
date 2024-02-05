@@ -72,6 +72,7 @@ export default function AddTaskModal({
       idp_id: idpId,
     };
     postTask(taskData);
+    handleModalAnatomy(false);
   }
 
   return (

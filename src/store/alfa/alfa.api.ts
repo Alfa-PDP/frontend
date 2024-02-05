@@ -10,6 +10,7 @@ import {
   Status,
   TaskType,
   Importance,
+  Comment,
 } from './types';
 
 import { CURRENT_YEAR } from '../../utils/constants';
