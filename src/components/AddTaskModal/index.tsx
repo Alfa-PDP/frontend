@@ -12,8 +12,10 @@ import {
   usePostTaskMutation,
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
+  // useDeleteTaskMutation,
 } from '../../store/alfa/alfa.api';
 import { STATUS_NEW } from '../../utils/constants';
+// import { useActions } from '../../hooks/actions';
 
 interface Props {
   modalAnatomy: boolean;
@@ -21,6 +23,8 @@ interface Props {
   idpId: string | unknown;
   edit: boolean;
 }
+
+// В комментах функционал для удаления и редактирования задач
 
 export default function AddTaskModal({
   modalAnatomy,
@@ -32,6 +36,7 @@ export default function AddTaskModal({
   const { data: taskStatuses } = useGetTaskStatusesQuery();
   const { data: taskImportance } = useGetTaskImportanceQuery();
   const { data: taskTypes } = useGetTaskTypesQuery();
+  // const [deleteTask] = useDeleteTaskMutation();
 
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
@@ -40,6 +45,8 @@ export default function AddTaskModal({
   const [taskType, setTaskType] = useState('');
   const [importance, setImportance] = useState('');
   const [statusId, setStatusId] = useState('');
+
+  // const { setInfoMessage } = useActions();
 
   const TYPES = taskTypes?.map((item) => ({
     key: item.id,
@@ -83,6 +90,28 @@ export default function AddTaskModal({
     handleModalAnatomy(false);
   }
 
+  // function handleDelete(taskId: string) {
+  //   deleteTask({ task_id: taskId })
+  //     .unwrap()
+  //     .then(() => {
+  //       setInfoMessage({
+  //         title: 'Задача удалена',
+  //         visible: true,
+  //         badge: 'positive',
+  //       });
+  //     })
+  //     .catch(() => {
+  //       setInfoMessage({
+  //         title: 'Задача не удалена',
+  //         visible: true,
+  //         badge: 'negative',
+  //       });
+  //     })
+  //     .finally(() => {
+  //       handleModalAnatomy(false);
+  //     });
+  // }
+
   return (
     <section className={styles.addTask}>
       <ModalDesktop
@@ -108,7 +137,7 @@ export default function AddTaskModal({
               block
               placeholder="Можно в двух словах"
               label="Название задачи"
-              size="m"
+              size="s"
               labelView="outer"
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
@@ -139,7 +168,7 @@ export default function AddTaskModal({
             <div className={styles.addTask__selectContainer}>
               <SelectDesktop
                 allowUnselect
-                size="m"
+                size="s"
                 options={TYPES || []}
                 placeholder="Выберите"
                 label="Выберите тип"
@@ -155,7 +184,7 @@ export default function AddTaskModal({
               />
               <SelectDesktop
                 allowUnselect
-                size="m"
+                size="s"
                 options={LEVELS || []}
                 placeholder="Выберите"
                 label="Выберите значимость"
@@ -172,7 +201,7 @@ export default function AddTaskModal({
               {edit && (
                 <SelectDesktop
                   allowUnselect
-                  size="m"
+                  size="s"
                   options={STATUSES || []}
                   placeholder="Выберите"
                   label="Статус"
@@ -188,14 +217,22 @@ export default function AddTaskModal({
                 />
               )}
             </div>
-            <Button
-              view="primary"
-              type="submit"
-              size="s"
-              className={styles.addTask__saveButton}
-            >
-              Сохранить
-            </Button>
+            <div style={{ display: 'flex', gap: 20, marginTop: 36 }}>
+              <Button view="primary" type="submit" size="m">
+                Сохранить
+              </Button>
+
+              {edit && (
+                <Button
+                  view="tertiary"
+                  type="button"
+                  size="m"
+                  // onClick={() => handleDelete(taskId)})}
+                >
+                  Удалить задачу
+                </Button>
+              )}
+            </div>
           </form>
         </ModalDesktop.Content>
       </ModalDesktop>

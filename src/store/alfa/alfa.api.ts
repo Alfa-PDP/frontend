@@ -141,6 +141,14 @@ export const api = createApi({
       }),
       invalidatesTags: ['Tasks'],
     }),
+
+    deleteTask: build.mutation<unknown, { task_id: string }>({
+      query: (task_id) => ({
+        url: `tasks/${task_id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Tasks'],
+    }),
     // Текущий пользователь
     getCurrentUser: build.query<CurrentUser, void>({
       query: () => `users/me`,
@@ -179,4 +187,5 @@ export const {
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
   usePatchTaskStatusMutation,
+  useDeleteTaskMutation,
 } = api;
