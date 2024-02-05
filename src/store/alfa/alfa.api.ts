@@ -24,7 +24,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Comments', 'Goals'],
+  tagTypes: ['Comments', 'Goals', 'Tasks'],
   endpoints: (build) => ({
     // Список сотрудников команды
     getWorkers: build.query<
@@ -117,6 +117,7 @@ export const api = createApi({
           year,
         },
       }),
+      providesTags: ['Tasks'],
     }),
     postTask: build.mutation<UserTask, TaskData>({
       query: (data) => ({
@@ -124,6 +125,7 @@ export const api = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['Tasks'],
     }),
 
     // Текущий пользователь
