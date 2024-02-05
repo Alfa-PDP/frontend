@@ -1,7 +1,10 @@
 import { Button } from '@alfalab/core-components/button';
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { Typography } from '@alfalab/core-components/typography';
+import { useParams } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 import TaskTable from '../TaskTable';
@@ -11,6 +14,8 @@ import {
   useGetTasksQuery,
 } from '../../store/alfa/alfa.api';
 import { useAppSelector } from '../../hooks/redux';
+import { CURRENT_YEAR } from '../../utils/constants';
+
 
 interface Props {
   idpId: string | unknown;
@@ -21,7 +26,10 @@ export default function TaskList({ idpId }: Props) {
   const [userId, setUserId] = useState('');
   const { id } = useParams<{ id: string }>();
   const role = localStorage.getItem('role');
-  const { data: tasks } = useGetTasksQuery(userId, { skip: !userId });
+  const { data: tasks } = useGetTasksQuery({
+    user_id: id || '',
+    year: year || CURRENT_YEAR,
+  });
   const [modalAnatomy, setModalAnatomy] = useState(false);
   const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
 
@@ -30,6 +38,7 @@ export default function TaskList({ idpId }: Props) {
       setUserId(id);
     }
   }, [id]);
+
   const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
 
   return (

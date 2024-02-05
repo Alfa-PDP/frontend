@@ -26,7 +26,7 @@ export default function TaskTable({ tasks, role }: Props) {
               tag="span"
               weight="bold"
             >
-              Задачи ({tasks.length + 1})
+              Задачи ({tasks.length})
             </Typography.Text>
           </Table.THeadCell>
           <Table.THeadCell className={styles.table__headCell} width={200}>
