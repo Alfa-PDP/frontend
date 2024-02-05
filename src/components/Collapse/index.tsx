@@ -2,7 +2,7 @@ import { Typography } from '@alfalab/core-components/typography';
 import { IconButton } from '@alfalab/core-components/icon-button';
 import { Textarea } from '@alfalab/core-components/textarea';
 import { Button } from '@alfalab/core-components/button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import editIcon from '../../assets/icons/EditButtonAttributes.svg';
 import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
@@ -45,6 +45,12 @@ export default function Collapse({
   const goalsData = useAppSelector((state) => state.goals);
   const [triggerPatchGoal] = usePatchUserGoalMutation();
   const { setInfoMessage, setGoals } = useActions();
+
+  useLayoutEffect(() => {
+    setTextAttributesValue(textAttributes);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textAttributes]);
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
@@ -115,14 +121,13 @@ export default function Collapse({
         setTextAttributesValue(textAttributesValue);
         setGoals({ ...goalsData, [queryName]: textAttributesValue });
       })
-      .catch((e) => {
+      .catch(() => {
         setTextAttributesValue(textAttributes);
         setInfoMessage({
           title: 'Изменения не сохранены',
           visible: true,
           badge: 'negative',
         });
-        console.log(e);
       })
       .finally(() => {
         setStateTextarea(!stateTextarea);

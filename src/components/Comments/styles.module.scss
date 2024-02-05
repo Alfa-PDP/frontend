@@ -8,6 +8,16 @@
 .comment {
   &__container {
     display: flex;
+    position: relative;
+  }
+
+  &__divider {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    content: '';
+    height: 25px;
+    border: 1px solid grey;
   }
   &__avatar {
     width: 40px;

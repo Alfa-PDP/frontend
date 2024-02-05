@@ -3,20 +3,6 @@ import InitialCard from '../InitialCard';
 import styles from './styles.module.scss';
 import CircularProgressBar from '../CircularProgressBar';
 
-// const EmployeeData = {
-//   name: 'Анастасия',
-//   surname: 'Никитина',
-//   patronymic: 'Андреевна',
-//   position: 'Системный аналитик',
-//   email: 'Anastasiya_mgr@gmail.com',
-//   phone: '+7 (921) 212-12-12',
-//   telegram: 'Anastasya_nikki',
-//   amountTasks: 12,
-//   photo:
-//     'https://img.freepik.com/free-photo/female-looking-directly-into-camera_273609-12389.jpg',
-//   role: 'employee',
-// };
-
 interface EmployeeCardProps {
   avatar: string;
   end_date: string;

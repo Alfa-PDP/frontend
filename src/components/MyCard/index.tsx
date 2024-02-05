@@ -40,20 +40,6 @@ export interface IndividualPlanWorker extends Worker {
   tasks: Task[];
 }
 
-// const EmployeeData = {
-//   name: 'Анастасия',
-//   surname: 'Никитина',
-//   patronymic: 'Андреевна',
-//   position: 'Системный аналитик',
-//   email: 'Anastasiya_mgr@gmail.com',
-//   phone: '+7 (921) 212-12-12',
-//   telegram: 'Anastasya_nikki',
-//   amountTasks: 12,
-//   photo:
-//     'https://img.freepik.com/free-photo/female-looking-directly-into-camera_273609-12389.jpg',
-//   role: 'employee',
-// };
-
 const titleProgressBar = [
   { title: 'Hard skills', totalTasks: 0, completedTasks: 0 },
   { title: 'Soft skills', totalTasks: 0, completedTasks: 0 },

@@ -26,6 +26,7 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Comments', 'Goals'],
   endpoints: (build) => ({
     // Список сотрудников команды
     getWorkers: build.query<
@@ -68,7 +69,9 @@ export const api = createApi({
       query: ({ user_id }) => ({
         url: `users/${user_id}/goals`,
       }),
+      providesTags: ['Goals'],
     }),
+
     patchUserGoal: build.mutation<
       unknown,
       { dataToSend: { [key: string]: string }; goal_id: string }
@@ -78,30 +81,34 @@ export const api = createApi({
         method: 'PATCH',
         body: dataToSend,
       }),
+      invalidatesTags: ['Goals'],
     }),
 
     // Комментарии
-    getComments: build.query<unknown, unknown>({
-      query: ({ task_id }: { task_id: number }) => ({
-        url: `comment`,
-        params: {
-          task_id,
-        },
+    getComments: build.query<Comment[], unknown>({
+      query: ({ task_id }: { task_id: string }) => ({
+        url: `tasks/${task_id}/comments`,
       }),
+      providesTags: ['Comments'],
     }),
     postComment: build.mutation<
       unknown,
-      { task_id: number; user_id: number; formData: FormData }
+      {
+        task_id: string;
+        data: {
+          user_id: string;
+          text: string;
+          created_at: string;
+          updated_at: string;
+        };
+      }
     >({
-      query: ({ task_id, user_id, formData }) => ({
-        url: `comment`,
+      query: ({ task_id, data }) => ({
+        url: `tasks/${task_id}/comments`,
         method: 'POST',
-        body: formData,
-        params: {
-          task_id,
-          user_id,
-        },
+        body: data,
       }),
+      invalidatesTags: ['Comments'],
     }),
 
     // Задачи
