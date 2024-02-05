@@ -17,7 +17,7 @@ import {
 interface Props {
   modalAnatomy: boolean;
   handleModalAnatomy: React.Dispatch<React.SetStateAction<boolean>>;
-  idpId: string;
+  idpId: string | unknown;
 }
 
 export default function AddTaskModal({

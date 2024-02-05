@@ -1,5 +1,6 @@
 import { Button } from '@alfalab/core-components/button';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
 import styles from './styles.module.scss';
 
@@ -12,21 +13,23 @@ import {
 import { useAppSelector } from '../../hooks/redux';
 
 interface Props {
-  idpId: string;
+  idpId: string | unknown;
 }
 
 export default function TaskList({ idpId }: Props) {
   const { data: currentUser } = useGetCurrentUserQuery();
   const [userId, setUserId] = useState('');
+  const { id } = useParams<{ id: string }>();
+  const role = localStorage.getItem('role');
   const { data: tasks } = useGetTasksQuery(userId, { skip: !userId });
   const [modalAnatomy, setModalAnatomy] = useState(false);
   const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
 
   useEffect(() => {
-    if (currentUser && currentUser.user_id) {
-      setUserId(currentUser.user_id);
+    if (id) {
+      setUserId(id);
     }
-  }, [currentUser]);
+  }, [id]);
   const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
 
   return (
@@ -39,7 +42,7 @@ export default function TaskList({ idpId }: Props) {
       {currentUser && (
         <>
           {tasks && tasks.length > 0 ? (
-            <TaskTable tasks={tasks} role={currentUser.is_leader} />
+            <TaskTable tasks={tasks} role={role} />
           ) : (
             <Typography.Text
               view="primary-medium"
@@ -51,7 +54,7 @@ export default function TaskList({ idpId }: Props) {
               сотрудника помогут вам сформировать правильные задачи.
             </Typography.Text>
           )}
-          {currentUser.is_leader && (
+          {role !== 'worker' && (
             <Button
               view="primary"
               type="button"
