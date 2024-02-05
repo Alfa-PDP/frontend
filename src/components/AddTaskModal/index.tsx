@@ -13,6 +13,7 @@ import {
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
 } from '../../store/alfa/alfa.api';
+import { STATUS_NEW } from '../../utils/constants';
 
 interface Props {
   modalAnatomy: boolean;
@@ -56,6 +57,10 @@ export default function AddTaskModal({
     slug: item.slug,
     weight: item.weight,
   }));
+
+  const statusHandler = (editable: boolean) =>
+    editable ? statusId : STATUS_NEW;
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -70,7 +75,7 @@ export default function AddTaskModal({
       end_time: formattedEnd,
       task_type_id: taskType,
       importance_id: importance,
-      status_id: statusId,
+      status_id: statusHandler(edit),
       idp_id: idpId,
     };
     if (!edit) postTask(taskData);
@@ -164,22 +169,24 @@ export default function AddTaskModal({
                   }
                 }}
               />
-              <SelectDesktop
-                allowUnselect
-                size="m"
-                options={STATUSES || []}
-                placeholder="Выберите"
-                label="Статус"
-                labelView="outer"
-                block
-                onChange={(payload) => {
-                  if (payload.selected) {
-                    setStatusId(payload.selected.key);
-                  } else {
-                    setStatusId('');
-                  }
-                }}
-              />
+              {edit && (
+                <SelectDesktop
+                  allowUnselect
+                  size="m"
+                  options={STATUSES || []}
+                  placeholder="Выберите"
+                  label="Статус"
+                  labelView="outer"
+                  block
+                  onChange={(payload) => {
+                    if (payload.selected) {
+                      setStatusId(payload.selected.key);
+                    } else {
+                      setStatusId('');
+                    }
+                  }}
+                />
+              )}
             </div>
             <Button
               view="primary"

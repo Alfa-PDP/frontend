@@ -14,6 +14,9 @@ interface EmployeeCardProps {
   start_date: string;
   task_count: number;
   task_progress: number;
+  telegram: string;
+  phone_number: string;
+  email: string;
 }
 
 export default function EmployeeCard({ data }: { data: EmployeeCardProps }) {
