@@ -40,6 +40,9 @@ export interface IndividualPlan {
   task_count: number;
   task_progress: number;
   tasks: Task[];
+  telegram: string;
+  phone_number: string;
+  email: string;
 }
 
 export interface CurrentUser {
