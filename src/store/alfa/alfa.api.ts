@@ -143,7 +143,7 @@ export const api = createApi({
     }),
 
     deleteTask: build.mutation<unknown, { task_id: string }>({
-      query: (task_id) => ({
+      query: ({ task_id }) => ({
         url: `tasks/${task_id}`,
         method: 'DELETE',
       }),

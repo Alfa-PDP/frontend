@@ -12,16 +12,19 @@ import {
   usePostTaskMutation,
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
-  // useDeleteTaskMutation,
+  useDeleteTaskMutation,
 } from '../../store/alfa/alfa.api';
 import { STATUS_NEW } from '../../utils/constants';
-// import { useActions } from '../../hooks/actions';
+import { UserTask } from '../../store/alfa/types';
+import { useActions } from '../../hooks/actions';
 
 interface Props {
   modalAnatomy: boolean;
   handleModalAnatomy: React.Dispatch<React.SetStateAction<boolean>>;
   idpId: string | unknown;
   edit: boolean;
+  // eslint-disable-next-line react/require-default-props
+  taskData?: UserTask | undefined;
 }
 
 // В комментах функционал для удаления и редактирования задач
@@ -31,12 +34,13 @@ export default function AddTaskModal({
   handleModalAnatomy,
   idpId,
   edit,
+  taskData,
 }: Props) {
   const [postTask] = usePostTaskMutation();
   const { data: taskStatuses } = useGetTaskStatusesQuery();
   const { data: taskImportance } = useGetTaskImportanceQuery();
   const { data: taskTypes } = useGetTaskTypesQuery();
-  // const [deleteTask] = useDeleteTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
 
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
@@ -46,7 +50,7 @@ export default function AddTaskModal({
   const [importance, setImportance] = useState('');
   const [statusId, setStatusId] = useState('');
 
-  // const { setInfoMessage } = useActions();
+  const { setInfoMessage } = useActions();
 
   const TYPES = taskTypes?.map((item) => ({
     key: item.id,
@@ -75,7 +79,7 @@ export default function AddTaskModal({
     const formattedStart = `${partsStart[2]}-${partsStart[1]}-${partsStart[0]}`;
     const partsEnd = endTime.split('.');
     const formattedEnd = `${partsEnd[2]}-${partsEnd[1]}-${partsEnd[0]}`;
-    const taskData = {
+    const formData = {
       name: taskName,
       description,
       start_time: formattedStart,
@@ -85,32 +89,32 @@ export default function AddTaskModal({
       status_id: statusHandler(edit),
       idp_id: idpId,
     };
-    if (!edit) postTask(taskData);
+    if (!edit) postTask(formData);
     // else putTask(taskData);
     handleModalAnatomy(false);
   }
 
-  // function handleDelete(taskId: string) {
-  //   deleteTask({ task_id: taskId })
-  //     .unwrap()
-  //     .then(() => {
-  //       setInfoMessage({
-  //         title: 'Задача удалена',
-  //         visible: true,
-  //         badge: 'positive',
-  //       });
-  //     })
-  //     .catch(() => {
-  //       setInfoMessage({
-  //         title: 'Задача не удалена',
-  //         visible: true,
-  //         badge: 'negative',
-  //       });
-  //     })
-  //     .finally(() => {
-  //       handleModalAnatomy(false);
-  //     });
-  // }
+  function handleDelete(taskId: string) {
+    deleteTask({ task_id: taskId })
+      .unwrap()
+      .then(() => {
+        setInfoMessage({
+          title: 'Задача удалена',
+          visible: true,
+          badge: 'positive',
+        });
+      })
+      .catch(() => {
+        setInfoMessage({
+          title: 'Задача не удалена',
+          visible: true,
+          badge: 'negative',
+        });
+      })
+      .finally(() => {
+        handleModalAnatomy(false);
+      });
+  }
 
   return (
     <section className={styles.addTask}>
@@ -227,7 +231,7 @@ export default function AddTaskModal({
                   view="tertiary"
                   type="button"
                   size="m"
-                  // onClick={() => handleDelete(taskId)})}
+                  onClick={() => handleDelete(taskData?.id || '')}
                 >
                   Удалить задачу
                 </Button>

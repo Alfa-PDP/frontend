@@ -13,7 +13,7 @@ export interface Worker {
   task_progress: number;
 }
 
-interface Task {
+export interface Task {
   name: string;
   description: string;
   start_time: string;
