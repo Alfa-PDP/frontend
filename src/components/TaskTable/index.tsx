@@ -5,9 +5,11 @@ import { Typography } from '@alfalab/core-components/typography';
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop';
 import styles from './styles.module.scss';
 
+import { usePatchTaskStatusMutation } from '../../store/alfa/alfa.api';
 import { formatDate } from '../../utils/formatDate';
 import { UserTask } from '../../store/alfa/types';
 import Comments from '../Comments';
+import { useActions } from '../../hooks/actions';
 
 interface Props {
   tasks: UserTask[];
@@ -15,6 +17,44 @@ interface Props {
 }
 
 export default function TaskTable({ tasks, role }: Props) {
+  const [patchTaskStatus] = usePatchTaskStatusMutation();
+  const { setInfoMessage } = useActions();
+
+  const handleChangeWorkerStatus = (id: string) => {
+    const status = { description: 'В работе' };
+    patchTaskStatus({ task_id: id, status })
+      .unwrap()
+      .then(() => {
+        setInfoMessage({
+          title: 'Статус изменен',
+          visible: true,
+          badge: 'positive',
+        });
+      })
+      .catch(() => {
+        setInfoMessage({
+          title: 'Статус не изменен',
+          visible: true,
+          badge: 'negative',
+        });
+      });
+  };
+
+  const renderStatusButton = (task: UserTask) => {
+    return (
+      task.status.slug === 'new' && (
+        <ButtonDesktop
+          size="xxs"
+          view="primary"
+          className={styles.table__taskButton}
+          onClick={() => handleChangeWorkerStatus(task.id)}
+        >
+          Взять в работу
+        </ButtonDesktop>
+      )
+    );
+  };
+
   return (
     <div style={{ width: '100%', borderBottom: '1px solid #E7E8EB' }}>
       <Table wrapper={false}>
@@ -105,13 +145,7 @@ export default function TaskTable({ tasks, role }: Props) {
                           Редактировать задачу
                         </ButtonDesktop>
                       ) : (
-                        <ButtonDesktop
-                          size="xxs"
-                          view="primary"
-                          className={styles.table__taskButton}
-                        >
-                          Взять в работу
-                        </ButtonDesktop>
+                        renderStatusButton(task)
                       )}
                       <div className={styles.table__taskComments}>
                         <Typography.Text

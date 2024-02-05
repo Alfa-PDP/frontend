@@ -130,7 +130,17 @@ export const api = createApi({
       }),
       invalidatesTags: ['Tasks'],
     }),
-
+    patchTaskStatus: build.mutation<
+      unknown,
+      { task_id: string; status: unknown }
+    >({
+      query: ({ task_id, status }) => ({
+        url: `tasks/${task_id}/status`,
+        method: 'PATCH',
+        body: status,
+      }),
+      invalidatesTags: ['Tasks'],
+    }),
     // Текущий пользователь
     getCurrentUser: build.query<CurrentUser, void>({
       query: () => `users/me`,
@@ -168,4 +178,5 @@ export const {
   useGetTaskStatusesQuery,
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
+  usePatchTaskStatusMutation,
 } = api;
