@@ -208,7 +208,7 @@ export default function TaskTable({ tasks, role, idpId }: Props) {
                   {task.importance.name}
                 </Typography.Text>
               </Table.TCell>
-              <Table.TCell>
+              <Table.TCell className={styles.table__row}>
                 <Status
                   className={`${styles.status} ${styles[`status_type_${task.status.slug}`]}`}
                 >

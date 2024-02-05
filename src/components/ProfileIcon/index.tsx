@@ -105,6 +105,7 @@ export default function ProfileIcon() {
         transition={{ timeout: 150 }}
         withTransition
         position="bottom"
+        fallbackPlacements={['left', 'left-start']}
         popperClassName={styles.profileButton__popover}
       >
         <RadioGroupDesktop
