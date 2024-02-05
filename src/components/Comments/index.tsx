@@ -67,8 +67,8 @@ export default function Comments({ taskId }: { taskId: string }) {
               alt=""
             />
             <span className={styles.comment__divider} />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className={styles.comment__header}>
+              <div className={styles.comment__headerContainer}>
                 <Typography.Text
                   view="primary-small"
                   color="primary"

@@ -45,4 +45,14 @@
   &__input > div {
     border-radius: 50px !important;
   }
+
+  &__header {
+    display: 'flex';
+    flex-direction: 'column';
+
+    &Container {
+      display: 'flex';
+      gap: '20px';
+    }
+  }
 }
