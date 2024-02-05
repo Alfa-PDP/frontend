@@ -4,21 +4,21 @@ import EmailIcon from '../../assets/icons/IconMail.svg';
 import PhoneIcon from '../../assets/icons/IconPhone.svg';
 import styles from './styles.module.scss';
 
-interface EmployeeDataProps {
+export interface DataProps {
+  avatar: string;
+  end_date: string;
+  family_name: string;
+  id: string;
+  middle_name: string;
   name: string;
-  surname: string;
-  patronymic: string;
   position: string;
-  email: string;
-  phone: string;
-  telegram: string;
+  start_date: string;
+  task_count: number;
+  task_progress: number;
 }
 
-export default function InitialCard({
-  EmployeeData,
-}: {
-  EmployeeData: EmployeeDataProps;
-}) {
+export default function InitialCard({ data }: { data: DataProps }) {
+  console.log(data);
   return (
     <ul className={styles.employeeInitials}>
       <li className={styles.employeeInitials__contacts}>
@@ -32,7 +32,7 @@ export default function InitialCard({
           view="primary-small"
           style={{ fontSize: '12px' }}
         >
-          {EmployeeData.email}
+          {/* data.email || */ 'alfa-employee@gmail.com'}
         </Typography.Text>
       </li>
       <li className={styles.employeeInitials__contacts}>
@@ -46,7 +46,7 @@ export default function InitialCard({
           view="primary-small"
           style={{ fontSize: '12px' }}
         >
-          {EmployeeData.phone}
+          {/* data.phone || */ '+7 (921) 212-12-12'}
         </Typography.Text>
       </li>
       <li className={styles.employeeInitials__contacts}>
@@ -60,7 +60,7 @@ export default function InitialCard({
           view="primary-small"
           style={{ fontSize: '12px' }}
         >
-          {EmployeeData.telegram}
+          {/* data.telegram || */ '@alfa-employee'}
         </Typography.Text>
       </li>
     </ul>

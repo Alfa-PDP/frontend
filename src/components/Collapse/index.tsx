@@ -2,22 +2,30 @@ import { Typography } from '@alfalab/core-components/typography';
 import { IconButton } from '@alfalab/core-components/icon-button';
 import { Textarea } from '@alfalab/core-components/textarea';
 import { Button } from '@alfalab/core-components/button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import editIcon from '../../assets/icons/EditButtonAttributes.svg';
 import saveAttributions from '../../assets/icons/SaveAttributes.svg';
 import cancelAttribution from '../../assets/icons/CancelAttributes.svg';
+import ModalClose from '../ModalClose/index';
 import styles from './styles.module.scss';
+import { usePatchUserGoalMutation } from '../../store/alfa/alfa.api';
+import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 interface TextAttributesProps {
   textAttributes: string;
   attributeName: string;
   role: string;
+  goalsId: string;
+  queryName: string;
 }
 
 export default function Collapse({
   textAttributes,
   attributeName,
   role,
+  goalsId,
+  queryName,
 }: TextAttributesProps) {
   // Позволяет получить ссылку на textarea
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -32,7 +40,17 @@ export default function Collapse({
     useState(textAttributes);
   // Позволяет установить значение атрибута maxRows у textarea
   const [stateRows, setStateRows] = useState(4);
-  // Имитация доступа
+  // Состояние модального окна подтверждения отмены изменений
+  const [stateModalClose, setStateModalClose] = useState(false);
+  const goalsData = useAppSelector((state) => state.goals);
+  const [triggerPatchGoal] = usePatchUserGoalMutation();
+  const { setInfoMessage, setGoals } = useActions();
+
+  useLayoutEffect(() => {
+    setTextAttributesValue(textAttributes);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textAttributes]);
 
   // Позволяет установить актуальное значение maxRows для textarea. setTimeout нужен для того, чтобы свойство transition завершилось без визуальных артефактов
   function handlerStateRows() {
@@ -67,13 +85,53 @@ export default function Collapse({
 
   // Позволяет отменить редактирование и вернуть значение value на начальное значение
   const handlerTextareaCancel = () => {
+    if (textAttributes !== textAttributesValue) {
+      setStateModalClose(true);
+    } else {
+      setStateTextarea(!stateTextarea);
+    }
+  };
+  // Позволяет отменить все изменения через модальное окно
+  const handlerAcceptModalClose = () => {
+    setStateModalClose(false);
     setTextAttributesValue(textAttributes);
     setStateTextarea(!stateTextarea);
+  };
+  // Позволяет закрыть модальное окно, оставив изменения
+  const handlerCloseModal = () => {
+    setStateModalClose(false);
   };
 
   // Позволяет сохранить изменения value
   const handlerTextareaSave = () => {
-    setStateTextarea(!stateTextarea);
+    const dataToSend = {
+      [queryName]: textAttributesValue,
+    };
+    triggerPatchGoal({
+      dataToSend,
+      goal_id: goalsId,
+    })
+      .unwrap()
+      .then(() => {
+        setInfoMessage({
+          title: 'Изменения сохранены',
+          visible: true,
+          badge: 'positive',
+        });
+        setTextAttributesValue(textAttributesValue);
+        setGoals({ ...goalsData, [queryName]: textAttributesValue });
+      })
+      .catch(() => {
+        setTextAttributesValue(textAttributes);
+        setInfoMessage({
+          title: 'Изменения не сохранены',
+          visible: true,
+          badge: 'negative',
+        });
+      })
+      .finally(() => {
+        setStateTextarea(!stateTextarea);
+      });
   };
 
   // Позволяет отслеживать изменения value textarea
@@ -147,6 +205,7 @@ export default function Collapse({
         showCounter={!stateTextarea}
         maxLength={500}
         getCounterText={getCounterText}
+        name={queryName}
       />
       {lineHeight > 87 && stateTextarea && (
         <Button
@@ -159,6 +218,15 @@ export default function Collapse({
           {!moreButton ? 'Подробнее' : 'Скрыть'}
         </Button>
       )}
+      <ModalClose
+        modalTitle="Закрыть окно?"
+        modalSubtitle="Все несохраненные данные будут утеряны."
+        modalButton="Да, закрыть"
+        modalButtonCancel="Нет, оставить"
+        stateModalClose={stateModalClose}
+        cancelEditButton={handlerAcceptModalClose}
+        closeModalButton={handlerCloseModal}
+      />
     </div>
   );
 }

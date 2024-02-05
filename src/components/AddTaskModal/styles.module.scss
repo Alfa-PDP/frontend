@@ -1,9 +1,16 @@
+@import '../TaskTable/styles.module';
+
 .addTask {
   &__selectContainer {
     display: flex;
     gap: 20px;
   }
-
+  &__form {
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+    margin: 10px 0 0 0;
+  }
   &__calendarLabel {
     margin: 0 0 6px 0;
     display: block;

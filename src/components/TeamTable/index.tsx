@@ -1,76 +1,81 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Typography } from '@alfalab/core-components/typography';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
-// import cat from '../../assets/icons/cat.png';
-import { useGetWorkersQuery } from '../../store/alfa/alfa.api';
-import { TEAM_ID } from '../../utils/constants';
 
-// const data = [
-//   {
-//     id: 1,
-//     name: 'Констанинопольский Константин Константинович',
-//     position: 'Менеджер',
-//     tasks: 3,
-//     progress: 55,
-//     img: cat,
-//   },
-//   {
-//     id: 2,
-//     name: 'Никитина Анастасия Андреевна',
-//     position: 'Начальник отдела',
-//     tasks: 5,
-//     progress: 0,
-//     img: cat,
-//   },
-//   {
-//     id: 3,
-//     name: 'Засланский Аслан Бараевич',
-//     position: 'Начальник отдела разработки',
-//     tasks: 1,
-//     progress: 99,
-//     img: cat,
-//   },
-//   {
-//     id: 4,
-//     name: 'Мандрыкин Павел Эдуардович',
-//     position: 'Журналист',
-//     tasks: 7,
-//     progress: 100,
-//     img: '',
-//   },
-// ];
+import {
+  useGetWorkersQuery,
+  useLazyGetWorkersQuery,
+} from '../../store/alfa/alfa.api';
+import { CURRENT_YEAR, TEAM_ID } from '../../utils/constants';
+import { useAppSelector } from '../../hooks/redux';
+import { WorkersList } from '../../store/alfa/types';
 
 export default function TeamTable() {
-  const [sortKey, setSortKey] = useState(undefined);
-  const [isSortedDesc, setIsSortedDesc] = useState(undefined);
+  const [sortKey, setSortKey] = useState<string | undefined>(undefined);
+  const [isSortedDesc, setIsSortedDesc] = useState<boolean | undefined>(
+    undefined
+  );
+
+  const [dataForRender, setDataForRender] = useState<WorkersList>([]);
   const navigate = useNavigate();
 
   const navigateToProgress = (id: string) => {
     navigate(`/progress/${id}/`, { replace: false });
   };
 
-  // const {getList, { data }} = useGetWorkersQuery({
-  //   team_id: TEAM_ID,
-  // });
+  const { filteredYear = CURRENT_YEAR } = useAppSelector(
+    (state) => state.filteredYear
+  );
 
-  const { data } = useGetWorkersQuery({
+  const { data: initialData } = useGetWorkersQuery({
     team_id: TEAM_ID,
+    year: filteredYear,
   });
 
-  console.log(setSortKey);
-  console.log(setIsSortedDesc);
+  useEffect(() => {
+    if (initialData) {
+      setDataForRender(initialData);
+    }
+  }, [initialData]);
+
+  const [triggerSort] = useLazyGetWorkersQuery();
+
+  const handleTrigger = (key: string, order: 'asc' | 'desc') => {
+    triggerSort({
+      team_id: TEAM_ID,
+      year: filteredYear,
+      sort_by: key,
+      order,
+    }).then((res) => {
+      if (res.data) {
+        setDataForRender(res.data);
+      }
+    });
+  };
+
+  const handleSort = (key: string) => {
+    setSortKey(key);
+
+    if (isSortedDesc !== undefined) {
+      setIsSortedDesc((prev) => !prev);
+      handleTrigger(key, isSortedDesc ? 'asc' : 'desc');
+    } else {
+      setIsSortedDesc(false);
+      handleTrigger(key, 'asc');
+    }
+  };
 
   return (
     <Table wrapper={false}>
       <Table.THead>
         <Table.TSortableHeadCell
           title="Сотрудник"
-          isSortedDesc={sortKey === 'worker' ? isSortedDesc : undefined}
-          onSort={() => {}}
+          isSortedDesc={sortKey === 'family_name' ? isSortedDesc : undefined}
+          onSort={() => handleSort('family_name')}
           className={styles.table__headCell}
         >
           Сотрудник
@@ -78,8 +83,10 @@ export default function TeamTable() {
 
         <Table.TSortableHeadCell
           title="Задачи"
-          isSortedDesc={sortKey === 'tasks' ? isSortedDesc : undefined}
-          onSort={() => {}}
+          isSortedDesc={sortKey === 'task_count' ? isSortedDesc : undefined}
+          onSort={() => {
+            handleSort('task_count');
+          }}
           className={styles.table__headCell}
         >
           Задачи
@@ -87,8 +94,10 @@ export default function TeamTable() {
 
         <Table.TSortableHeadCell
           title="ПРОГРЕСС"
-          isSortedDesc={sortKey === 'progress' ? isSortedDesc : undefined}
-          onSort={() => {}}
+          isSortedDesc={sortKey === 'task_progress' ? isSortedDesc : undefined}
+          onSort={() => {
+            handleSort('task_progress');
+          }}
           width={190}
           className={styles.table__headCell}
         >
@@ -96,7 +105,7 @@ export default function TeamTable() {
         </Table.TSortableHeadCell>
       </Table.THead>
       <Table.TBody>
-        {data?.map((row) => (
+        {dataForRender?.map((row) => (
           <Table.TRow key={row.id} onClick={() => navigateToProgress(row.id)}>
             <Table.TCell>
               <div className={styles.table__workerInfoContainer}>

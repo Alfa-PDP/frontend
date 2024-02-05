@@ -1,5 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { WorkersList } from './types';
+
+import {
+  Goals,
+  CurrentUser,
+  IndividualPlanWorker,
+  TaskData,
+  UserTask,
+  WorkersList,
+  Comment,
+} from './types';
+
+import { CURRENT_YEAR } from '../../utils/constants';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -8,18 +19,25 @@ export const api = createApi({
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        headers.set('authorization', token);
       }
       return headers;
     },
   }),
+  tagTypes: ['Comments', 'Goals'],
   endpoints: (build) => ({
     // Список сотрудников команды
-    getWorkers: build.query<WorkersList, { team_id: string }>({
-      query: ({ team_id }) => ({
+    getWorkers: build.query<
+      WorkersList,
+      { team_id: string; sort_by?: string; order?: string; year: number }
+    >({
+      query: ({ team_id, sort_by, order, year }) => ({
         url: `users`,
         params: {
           team_id,
+          sort_by,
+          order,
+          year,
         },
       }),
     }),
@@ -32,14 +50,11 @@ export const api = createApi({
     }),
 
     // Получить план сотрудника
-    getIndividualPlan: build.query<unknown, unknown>({
-      query: ({
-        year = '2024',
-        user_id,
-      }: {
-        year?: string;
-        user_id: string;
-      }) => ({
+    getIndividualPlan: build.query<
+      IndividualPlanWorker,
+      { year?: number; user_id: string }
+    >({
+      query: ({ year = CURRENT_YEAR, user_id }) => ({
         url: `idp/${user_id}`,
         params: {
           year,
@@ -48,74 +63,81 @@ export const api = createApi({
     }),
 
     // Цели и стороны сотрудника
-    getUserGoal: build.query<unknown, unknown>({
-      query: ({ user_id }: { user_id: number }) => ({
-        url: `goal`,
-        params: {
-          user_id,
-        },
+    getUserGoal: build.query<Goals, { user_id: string }>({
+      query: ({ user_id }) => ({
+        url: `users/${user_id}/goals`,
       }),
+      providesTags: ['Goals'],
     }),
-    postUserGoal: build.mutation<unknown, unknown>({
-      query: (formData) => ({
-        url: `goal`,
-        method: 'POST',
-        body: formData,
+
+    patchUserGoal: build.mutation<
+      unknown,
+      { dataToSend: { [key: string]: string }; goal_id: string }
+    >({
+      query: ({ dataToSend, goal_id }) => ({
+        url: `goals/${goal_id}`,
+        method: 'PATCH',
+        body: dataToSend,
       }),
-    }),
-    putUserGoal: build.mutation<unknown, unknown>({
-      query: (formData) => ({
-        url: `goal`,
-        method: 'PUT',
-        body: formData,
-      }),
+      invalidatesTags: ['Goals'],
     }),
 
     // Комментарии
-    getComments: build.query<unknown, unknown>({
-      query: ({ task_id }: { task_id: number }) => ({
-        url: `comment`,
-        params: {
-          task_id,
-        },
+    getComments: build.query<Comment[], unknown>({
+      query: ({ task_id }: { task_id: string }) => ({
+        url: `tasks/${task_id}/comments`,
       }),
+      providesTags: ['Comments'],
     }),
     postComment: build.mutation<
       unknown,
-      { task_id: number; user_id: number; formData: FormData }
+      {
+        task_id: string;
+        data: {
+          user_id: string;
+          text: string;
+          created_at: string;
+          updated_at: string;
+        };
+      }
     >({
-      query: ({ task_id, user_id, formData }) => ({
-        url: `comment`,
+      query: ({ task_id, data }) => ({
+        url: `tasks/${task_id}/comments`,
         method: 'POST',
-        body: formData,
-        params: {
-          task_id,
-          user_id,
-        },
+        body: data,
       }),
+      invalidatesTags: ['Comments'],
     }),
 
     // Задачи
-    getTasks: build.query<unknown, unknown>({
-      query: ({ user_id, idp_id }: { user_id: number; idp_id: number }) => ({
-        url: `tasks`,
-        params: {
-          user_id,
-          idp_id,
-        },
+    getTasks: build.query<UserTask[], string>({
+      query: (user_id) => `users/${user_id}/tasks`,
+    }),
+    postTask: build.mutation<UserTask, TaskData>({
+      query: (data) => ({
+        url: 'tasks',
+        method: 'POST',
+        body: data,
       }),
+    }),
+
+    // Текущий пользователь
+    getCurrentUser: build.query<CurrentUser, void>({
+      query: () => `users/me`,
     }),
   }),
 });
 
 export const {
   useGetWorkersQuery,
+  useLazyGetWorkersQuery,
   useGetIndividualPlanQuery,
   useGetUserGoalQuery,
-  usePostUserGoalMutation,
-  usePutUserGoalMutation,
+  usePatchUserGoalMutation,
   useGetCommentsQuery,
   usePostCommentMutation,
   useGetTasksQuery,
+  usePostTaskMutation,
   useGetYearsQuery,
+  useGetCurrentUserQuery,
 } = api;
