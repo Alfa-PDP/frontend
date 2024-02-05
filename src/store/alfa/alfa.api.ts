@@ -7,6 +7,9 @@ import {
   TaskData,
   UserTask,
   WorkersList,
+  Status,
+  TaskType,
+  Importance,
   Comment,
 } from './types';
 
@@ -132,6 +135,21 @@ export const api = createApi({
     getCurrentUser: build.query<CurrentUser, void>({
       query: () => `users/me`,
     }),
+
+    // Список статусов
+    getTaskStatuses: build.query<Status[], void>({
+      query: () => `/tasks/status`,
+    }),
+
+    // Список типов задач
+    getTaskTypes: build.query<TaskType[], void>({
+      query: () => `/tasks/task_types`,
+    }),
+
+    // Список важности задач
+    getTaskImportance: build.query<Importance[], void>({
+      query: () => `/tasks/task_importance`,
+    }),
   }),
 });
 
@@ -147,4 +165,7 @@ export const {
   usePostTaskMutation,
   useGetYearsQuery,
   useGetCurrentUserQuery,
+  useGetTaskStatusesQuery,
+  useGetTaskImportanceQuery,
+  useGetTaskTypesQuery,
 } = api;

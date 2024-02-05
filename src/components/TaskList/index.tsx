@@ -1,5 +1,8 @@
 import { Button } from '@alfalab/core-components/button';
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { Typography } from '@alfalab/core-components/typography';
 import { useParams } from 'react-router-dom';
 import styles from './styles.module.scss';
@@ -13,17 +16,28 @@ import {
 import { useAppSelector } from '../../hooks/redux';
 import { CURRENT_YEAR } from '../../utils/constants';
 
-export default function TaskList() {
-  const { id } = useParams<{ id: string }>();
 
-  const [modalAnatomy, setModalAnatomy] = useState(false);
-  const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
+interface Props {
+  idpId: string | unknown;
+}
 
+export default function TaskList({ idpId }: Props) {
   const { data: currentUser } = useGetCurrentUserQuery();
+  const [userId, setUserId] = useState('');
+  const { id } = useParams<{ id: string }>();
+  const role = localStorage.getItem('role');
   const { data: tasks } = useGetTasksQuery({
     user_id: id || '',
     year: year || CURRENT_YEAR,
   });
+  const [modalAnatomy, setModalAnatomy] = useState(false);
+  const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
+
+  useEffect(() => {
+    if (id) {
+      setUserId(id);
+    }
+  }, [id]);
 
   const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
 
@@ -37,7 +51,7 @@ export default function TaskList() {
       {currentUser && (
         <>
           {tasks && tasks.length > 0 ? (
-            <TaskTable tasks={tasks} role={currentUser.is_leader} />
+            <TaskTable tasks={tasks} role={role} />
           ) : (
             <Typography.Text
               view="primary-medium"
@@ -49,7 +63,7 @@ export default function TaskList() {
               сотрудника помогут вам сформировать правильные задачи.
             </Typography.Text>
           )}
-          {currentUser.is_leader && (
+          {role !== 'worker' && (
             <Button
               view="primary"
               type="button"
@@ -63,6 +77,7 @@ export default function TaskList() {
           <AddTaskModal
             modalAnatomy={modalAnatomy}
             handleModalAnatomy={handleModalAnatomy}
+            idpId={idpId}
           />
         </>
       )}

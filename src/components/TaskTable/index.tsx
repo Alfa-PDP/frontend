@@ -11,11 +11,10 @@ import Comments from '../Comments';
 
 interface Props {
   tasks: UserTask[];
-  role: boolean;
+  role: string | unknown;
 }
 
 export default function TaskTable({ tasks, role }: Props) {
-  console.log(role);
   return (
     <div style={{ width: '100%', borderBottom: '1px solid #E7E8EB' }}>
       <Table wrapper={false}>
@@ -97,7 +96,7 @@ export default function TaskTable({ tasks, role }: Props) {
                           {task.description}
                         </Typography.Text>
                       </div>
-                      {role ? (
+                      {role !== 'worker' ? (
                         <ButtonDesktop
                           size="xxs"
                           view="tertiary"
