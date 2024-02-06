@@ -99,6 +99,8 @@ export interface TaskData {
   status_id: string;
 }
 
+export type PatchedTaskData = Omit<TaskData, 'idp_id'>;
+
 export interface Importance {
   id: string;
   name: string;

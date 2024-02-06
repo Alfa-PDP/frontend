@@ -8,7 +8,7 @@ import { useGetYearsQuery } from '../../store/alfa/alfa.api';
 import { useActions } from '../../hooks/actions';
 
 export default function YearFilter() {
-  const { data } = useGetYearsQuery({});
+  const { data } = useGetYearsQuery();
   const { setYear } = useActions();
 
   // Устанавливаем год для фильтрации

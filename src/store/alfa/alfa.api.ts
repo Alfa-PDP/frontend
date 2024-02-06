@@ -11,6 +11,7 @@ import {
   TaskType,
   Importance,
   Comment,
+  PatchedTaskData,
 } from './types';
 
 import { CURRENT_YEAR } from '../../utils/constants';
@@ -46,7 +47,7 @@ export const api = createApi({
     }),
 
     // Список годов
-    getYears: build.query<string[], unknown>({
+    getYears: build.query<string[], void>({
       query: () => ({
         url: `years`,
       }),
@@ -86,8 +87,8 @@ export const api = createApi({
     }),
 
     // Комментарии
-    getComments: build.query<Comment[], unknown>({
-      query: ({ task_id }: { task_id: string }) => ({
+    getComments: build.query<Comment[], { task_id: string }>({
+      query: ({ task_id }) => ({
         url: `tasks/${task_id}/comments`,
       }),
       providesTags: ['Comments'],
@@ -130,9 +131,21 @@ export const api = createApi({
       }),
       invalidatesTags: ['Tasks'],
     }),
+    patchTask: build.mutation<
+      unknown,
+      { task_id: string; data: PatchedTaskData }
+    >({
+      query: ({ task_id, data }) => ({
+        url: `tasks/${task_id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Tasks'],
+    }),
+    // Ручка для обновления статуса задачи сотрудником
     patchTaskStatus: build.mutation<
       unknown,
-      { task_id: string; status: unknown }
+      { task_id: string; status: { description: string } }
     >({
       query: ({ task_id, status }) => ({
         url: `tasks/${task_id}/status`,
@@ -187,5 +200,6 @@ export const {
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
   usePatchTaskStatusMutation,
+  usePatchTaskMutation,
   useDeleteTaskMutation,
 } = api;
