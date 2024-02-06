@@ -74,9 +74,7 @@ export default function TaskList({ idpId }: Props) {
           />
         </>
       ) : (
-        <div className={styles.taskList__loader}>
-          <Loader />
-        </div>
+        <Loader className={styles.taskList__loader} />
       )}
     </section>
   );
