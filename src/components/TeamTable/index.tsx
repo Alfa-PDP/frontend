@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Typography } from '@alfalab/core-components/typography';
+import { Loader } from '@alfalab/core-components/loader';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
@@ -31,7 +32,7 @@ export default function TeamTable() {
     (state) => state.filteredYear
   );
 
-  const { data: initialData } = useGetWorkersQuery({
+  const { data: initialData, isLoading } = useGetWorkersQuery({
     team_id: TEAM_ID,
     year: filteredYear,
   });
@@ -105,35 +106,41 @@ export default function TeamTable() {
         </Table.TSortableHeadCell>
       </Table.THead>
       <Table.TBody>
-        {dataForRender?.map((row) => (
-          <Table.TRow key={row.id} onClick={() => navigateToProgress(row.id)}>
-            <Table.TCell>
-              <div className={styles.table__workerInfoContainer}>
-                <Circle imageUrl={row.avatar} size={48} border />
-                <div>
-                  <Typography.Text view="primary-medium" tag="div">
-                    {row.name} {row.middle_name} {row.family_name}
-                  </Typography.Text>
-                  <Typography.Text view="secondary-medium" color="secondary">
-                    {row.position}
-                  </Typography.Text>
+        {isLoading ? (
+          <div className={styles.table__loader}>
+            <Loader />
+          </div>
+        ) : (
+          dataForRender.map((row) => (
+            <Table.TRow key={row.id} onClick={() => navigateToProgress(row.id)}>
+              <Table.TCell>
+                <div className={styles.table__workerInfoContainer}>
+                  <Circle imageUrl={row.avatar} size={48} border />
+                  <div>
+                    <Typography.Text view="primary-medium" tag="div">
+                      {row.name} {row.middle_name} {row.family_name}
+                    </Typography.Text>
+                    <Typography.Text view="secondary-medium" color="secondary">
+                      {row.position}
+                    </Typography.Text>
+                  </div>
                 </div>
-              </div>
-            </Table.TCell>
+              </Table.TCell>
 
-            <Table.TCell className={styles.table__row}>
-              <Typography.Text view="primary-medium" tag="div">
-                {row.task_count}
-              </Typography.Text>
-            </Table.TCell>
+              <Table.TCell className={styles.table__row}>
+                <Typography.Text view="primary-medium" tag="div">
+                  {row.task_count}
+                </Typography.Text>
+              </Table.TCell>
 
-            <Table.TCell className={styles.table__row}>
-              <Typography.Text view="primary-medium" tag="div">
-                {row.task_progress}%
-              </Typography.Text>
-            </Table.TCell>
-          </Table.TRow>
-        ))}
+              <Table.TCell className={styles.table__row}>
+                <Typography.Text view="primary-medium" tag="div">
+                  {row.task_progress}%
+                </Typography.Text>
+              </Table.TCell>
+            </Table.TRow>
+          ))
+        )}
       </Table.TBody>
     </Table>
   );
