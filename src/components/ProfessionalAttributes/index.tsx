@@ -1,3 +1,4 @@
+import { Loader } from '@alfalab/core-components/loader';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import styles from './styles.module.scss';
@@ -31,7 +32,7 @@ import { useActions } from '../../hooks/actions';
 
 export default function ProfessionalAttributes({ role }: { role: string }) {
   const { id } = useParams();
-  const { data: goals } = useGetUserGoalQuery({ user_id: id || '' });
+  const { data: goals, isLoading } = useGetUserGoalQuery({ user_id: id || '' });
   const { setGoals } = useActions();
   const goalsText = useAppSelector((state) => state.goals);
 
@@ -44,7 +45,7 @@ export default function ProfessionalAttributes({ role }: { role: string }) {
 
   return (
     <section className={styles.professionalAttributes}>
-      {goalsText.id && (
+      {goalsText.id && !isLoading ? (
         <>
           <Collapse
             textAttributes={goalsText.goal_name || ''}
@@ -68,6 +69,10 @@ export default function ProfessionalAttributes({ role }: { role: string }) {
             queryName="employee_side_minus"
           />
         </>
+      ) : (
+        <div className={styles.professionalAttributes__loader}>
+          <Loader />
+        </div>
       )}
     </section>
   );
