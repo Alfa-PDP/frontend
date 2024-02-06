@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-
+import { Loader } from '@alfalab/core-components/loader';
 import { Button } from '@alfalab/core-components/button';
 import { Typography } from '@alfalab/core-components/typography';
 import styles from './styles.module.scss';
@@ -25,7 +25,7 @@ export default function TaskList({ idpId }: Props) {
   const [modalAnatomy, setModalAnatomy] = useState(false);
   const { filteredYear: year } = useAppSelector((state) => state.filteredYear);
 
-  const { data: tasks } = useGetTasksQuery({
+  const { data: tasks, isLoading } = useGetTasksQuery({
     user_id: id || '',
     year: year || CURRENT_YEAR,
   });
@@ -40,7 +40,7 @@ export default function TaskList({ idpId }: Props) {
           Список задач на {year} год
         </Typography.Title>
       </div>
-      {currentUser && (
+      {currentUser && !isLoading ? (
         <>
           {tasks && tasks.length > 0 ? (
             <TaskTable tasks={tasks} role={role} idpId={idpId} />
@@ -73,6 +73,8 @@ export default function TaskList({ idpId }: Props) {
             edit={false}
           />
         </>
+      ) : (
+        <Loader className={styles.taskList__loader} />
       )}
     </section>
   );
