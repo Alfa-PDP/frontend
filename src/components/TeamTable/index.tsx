@@ -113,7 +113,7 @@ export default function TeamTable() {
                 <Circle imageUrl={row.avatar} size={48} border />
                 <div>
                   <Typography.Text view="primary-medium" tag="div">
-                    {row.name} {row.middle_name} {row.family_name}
+                    {row.family_name} {row.name} {row.middle_name}
                   </Typography.Text>
                   <Typography.Text view="secondary-medium" color="secondary">
                     {row.position}
