@@ -2,7 +2,7 @@ import { ModalDesktop } from '@alfalab/core-components/modal/desktop';
 import { Input } from '@alfalab/core-components/input';
 import { CalendarRange } from '@alfalab/core-components/calendar-range';
 import { Typography } from '@alfalab/core-components/typography';
-import { SelectDesktop } from '@alfalab/core-components/select/desktop';
+import { Select } from '@alfalab/core-components/select';
 import { Button } from '@alfalab/core-components/button';
 import { Textarea } from '@alfalab/core-components/textarea';
 import { useEffect, useState } from 'react';
@@ -72,7 +72,7 @@ export default function AddTaskModal({
       setStartTime(formatTimeForInput(taskData.start_time));
       setEndTime(formatTimeForInput(taskData.end_time));
     }
-  }, [taskData]);
+  }, [taskData, modalAnatomy]);
 
   const TYPES = taskTypes?.map((item) => ({
     key: item.id,
@@ -229,7 +229,7 @@ export default function AddTaskModal({
               />
             </div>
             <div className={styles.addTask__selectContainer}>
-              <SelectDesktop
+              <Select
                 allowUnselect
                 selected={TYPES?.find((type) => type.key === taskType)}
                 size="s"
@@ -246,7 +246,7 @@ export default function AddTaskModal({
                   }
                 }}
               />
-              <SelectDesktop
+              <Select
                 allowUnselect
                 selected={LEVELS?.find((level) => level.key === importance)}
                 size="s"
@@ -264,7 +264,7 @@ export default function AddTaskModal({
                 }}
               />
               {edit && (
-                <SelectDesktop
+                <Select
                   allowUnselect
                   selected={STATUSES?.find((status) => status.key === statusId)}
                   size="s"
