@@ -19,4 +19,10 @@
     gap: 16px;
     align-items: center;
   }
+  &__loader {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

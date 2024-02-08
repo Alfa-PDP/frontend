@@ -7,4 +7,11 @@
   &__title {
     margin-bottom: 40px;
   }
+
+  &__loader {
+    position: absolute;
+    top: 50%;
+    left: 56%;
+    transform: translate(-50%, -50%);
+  }
 }

@@ -13,7 +13,7 @@ export interface Worker {
   task_progress: number;
 }
 
-interface Task {
+export interface Task {
   name: string;
   description: string;
   start_time: string;
@@ -98,6 +98,8 @@ export interface TaskData {
   task_type_id: string;
   status_id: string;
 }
+
+export type PatchedTaskData = Omit<TaskData, 'idp_id'>;
 
 export interface Importance {
   id: string;

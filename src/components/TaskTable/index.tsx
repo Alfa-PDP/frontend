@@ -20,11 +20,18 @@ interface Props {
 }
 
 export default function TaskTable({ tasks, role, idpId }: Props) {
+  const [taskData, setTaskData] = useState<UserTask | undefined>();
   const [patchTaskStatus] = usePatchTaskStatusMutation();
   const { setInfoMessage } = useActions();
 
   const [modalAnatomy, setModalAnatomy] = useState(false);
+
   const handleModalAnatomy = () => setModalAnatomy(!modalAnatomy);
+
+  const handleEditClick = (task: UserTask) => {
+    setTaskData(task);
+    handleModalAnatomy();
+  };
 
   // Отправка данных с кнопки на сервер
   const handleChangeWorkerStatus = (id: string) => {
@@ -149,7 +156,7 @@ export default function TaskTable({ tasks, role, idpId }: Props) {
                           size="xxs"
                           view="tertiary"
                           className={styles.table__taskButton}
-                          onClick={handleModalAnatomy}
+                          onClick={() => handleEditClick(task)}
                         >
                           Редактировать задачу
                         </ButtonDesktop>
@@ -223,6 +230,7 @@ export default function TaskTable({ tasks, role, idpId }: Props) {
         modalAnatomy={modalAnatomy}
         handleModalAnatomy={handleModalAnatomy}
         idpId={idpId}
+        taskData={taskData}
         edit
       />
     </div>

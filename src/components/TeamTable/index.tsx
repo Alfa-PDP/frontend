@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Table } from '@alfalab/core-components/table';
 import { Typography } from '@alfalab/core-components/typography';
 import { Circle } from '@alfalab/core-components/icon-view/circle';
+import { Loader } from '@alfalab/core-components/loader';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 
@@ -31,7 +32,7 @@ export default function TeamTable() {
     (state) => state.filteredYear
   );
 
-  const { data: initialData } = useGetWorkersQuery({
+  const { data: initialData, isLoading } = useGetWorkersQuery({
     team_id: TEAM_ID,
     year: filteredYear,
   });
@@ -69,7 +70,7 @@ export default function TeamTable() {
     }
   };
 
-  return (
+  return !isLoading ? (
     <Table wrapper={false}>
       <Table.THead>
         <Table.TSortableHeadCell
@@ -112,7 +113,7 @@ export default function TeamTable() {
                 <Circle imageUrl={row.avatar} size={48} border />
                 <div>
                   <Typography.Text view="primary-medium" tag="div">
-                    {row.name} {row.middle_name} {row.family_name}
+                    {row.family_name} {row.name} {row.middle_name}
                   </Typography.Text>
                   <Typography.Text view="secondary-medium" color="secondary">
                     {row.position}
@@ -136,5 +137,7 @@ export default function TeamTable() {
         ))}
       </Table.TBody>
     </Table>
+  ) : (
+    <Loader className={styles.table__loader} />
   );
 }

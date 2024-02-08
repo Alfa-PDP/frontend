@@ -2,24 +2,30 @@ import { ModalDesktop } from '@alfalab/core-components/modal/desktop';
 import { Input } from '@alfalab/core-components/input';
 import { CalendarRange } from '@alfalab/core-components/calendar-range';
 import { Typography } from '@alfalab/core-components/typography';
-import { SelectDesktop } from '@alfalab/core-components/select/desktop';
+import { Select } from '@alfalab/core-components/select';
 import { Button } from '@alfalab/core-components/button';
 import { Textarea } from '@alfalab/core-components/textarea';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import {
   useGetTaskStatusesQuery,
   usePostTaskMutation,
   useGetTaskImportanceQuery,
   useGetTaskTypesQuery,
+  useDeleteTaskMutation,
+  usePatchTaskMutation,
 } from '../../store/alfa/alfa.api';
 import { STATUS_NEW } from '../../utils/constants';
+import { UserTask } from '../../store/alfa/types';
+import { useActions } from '../../hooks/actions';
 
 interface Props {
   modalAnatomy: boolean;
   handleModalAnatomy: React.Dispatch<React.SetStateAction<boolean>>;
   idpId: string | unknown;
   edit: boolean;
+  // eslint-disable-next-line react/require-default-props
+  taskData?: UserTask | undefined;
 }
 
 export default function AddTaskModal({
@@ -27,11 +33,14 @@ export default function AddTaskModal({
   handleModalAnatomy,
   idpId,
   edit,
+  taskData,
 }: Props) {
   const [postTask] = usePostTaskMutation();
+  const [patchTask] = usePatchTaskMutation();
   const { data: taskStatuses } = useGetTaskStatusesQuery();
   const { data: taskImportance } = useGetTaskImportanceQuery();
   const { data: taskTypes } = useGetTaskTypesQuery();
+  const [deleteTask] = useDeleteTaskMutation();
 
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
@@ -40,6 +49,30 @@ export default function AddTaskModal({
   const [taskType, setTaskType] = useState('');
   const [importance, setImportance] = useState('');
   const [statusId, setStatusId] = useState('');
+
+  const { setInfoMessage } = useActions();
+
+  function formatTimeForServer(dateString: string) {
+    const [day, month, year] = dateString.split('.');
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatTimeForInput(dateString: string) {
+    const [year, month, day] = dateString.split('-');
+    return `${day}.${month}.${year}`;
+  }
+
+  useEffect(() => {
+    if (taskData) {
+      setTaskName(taskData.name);
+      setDescription(taskData.description);
+      setTaskType(taskData.task_type.id);
+      setImportance(taskData.importance.id);
+      setStatusId(taskData.status.id);
+      setStartTime(formatTimeForInput(taskData.start_time));
+      setEndTime(formatTimeForInput(taskData.end_time));
+    }
+  }, [taskData, modalAnatomy]);
 
   const TYPES = taskTypes?.map((item) => ({
     key: item.id,
@@ -58,29 +91,82 @@ export default function AddTaskModal({
     weight: item.weight,
   }));
 
-  const statusHandler = (editable: boolean) =>
-    editable ? statusId : STATUS_NEW;
+  function statusHandler(editable: boolean) {
+    return editable ? statusId : STATUS_NEW;
+  }
+
+  const formData = {
+    name: taskName,
+    description,
+    start_time: formatTimeForServer(startTime),
+    end_time: formatTimeForServer(endTime),
+    task_type_id: taskType,
+    importance_id: importance,
+    status_id: statusHandler(edit),
+    idp_id: idpId,
+  };
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const partsStart = startTime.split('.');
-    const formattedStart = `${partsStart[2]}-${partsStart[1]}-${partsStart[0]}`;
-    const partsEnd = endTime.split('.');
-    const formattedEnd = `${partsEnd[2]}-${partsEnd[1]}-${partsEnd[0]}`;
-    const taskData = {
-      name: taskName,
-      description,
-      start_time: formattedStart,
-      end_time: formattedEnd,
-      task_type_id: taskType,
-      importance_id: importance,
-      status_id: statusHandler(edit),
-      idp_id: idpId,
-    };
-    if (!edit) postTask(taskData);
-    // else putTask(taskData);
+    if (!edit)
+      postTask(formData)
+        .unwrap()
+        .then(() => {
+          setInfoMessage({
+            title: 'Задача добавлена',
+            visible: true,
+            badge: 'positive',
+          });
+        })
+        .catch(() => {
+          setInfoMessage({
+            title: `Задача не добавлена `,
+            visible: true,
+            badge: 'negative',
+          });
+        });
+    else {
+      patchTask({ task_id: taskData?.id ?? '', data: formData })
+        .unwrap()
+        .then(() => {
+          setInfoMessage({
+            title: 'Задача обновлена',
+            visible: true,
+            badge: 'positive',
+          });
+        })
+        .catch(() => {
+          setInfoMessage({
+            title: `Задача не обновлена `,
+            visible: true,
+            badge: 'negative',
+          });
+        });
+    }
     handleModalAnatomy(false);
+  }
+
+  function handleDelete(taskId: string) {
+    deleteTask({ task_id: taskId })
+      .unwrap()
+      .then(() => {
+        setInfoMessage({
+          title: 'Задача удалена',
+          visible: true,
+          badge: 'positive',
+        });
+      })
+      .catch(() => {
+        setInfoMessage({
+          title: 'Задача не удалена',
+          visible: true,
+          badge: 'negative',
+        });
+      })
+      .finally(() => {
+        handleModalAnatomy(false);
+      });
   }
 
   return (
@@ -108,9 +194,10 @@ export default function AddTaskModal({
               block
               placeholder="Можно в двух словах"
               label="Название задачи"
-              size="m"
+              size="s"
               labelView="outer"
               value={taskName}
+              minLength={2}
               onChange={(e) => setTaskName(e.target.value)}
             />
             <Textarea
@@ -119,6 +206,7 @@ export default function AddTaskModal({
               minRows={3}
               placeholder="Опишите критерии выполнения задачи подробнее, это поможет вашему сотруднику"
               label="Описание задачи"
+              minLength={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -131,15 +219,20 @@ export default function AddTaskModal({
                 Даты выполнения
               </Typography.Text>
               <CalendarRange
+                valueFrom={startTime}
+                valueTo={endTime}
                 calendarPosition="popover"
-                onDateFromChange={(payload) => setStartTime(payload.value)}
+                onDateFromChange={(payload) => {
+                  setStartTime(payload.value);
+                }}
                 onDateToChange={(payload) => setEndTime(payload.value)}
               />
             </div>
             <div className={styles.addTask__selectContainer}>
-              <SelectDesktop
+              <Select
                 allowUnselect
-                size="m"
+                selected={TYPES?.find((type) => type.key === taskType)}
+                size="s"
                 options={TYPES || []}
                 placeholder="Выберите"
                 label="Выберите тип"
@@ -153,9 +246,10 @@ export default function AddTaskModal({
                   }
                 }}
               />
-              <SelectDesktop
+              <Select
                 allowUnselect
-                size="m"
+                selected={LEVELS?.find((level) => level.key === importance)}
+                size="s"
                 options={LEVELS || []}
                 placeholder="Выберите"
                 label="Выберите значимость"
@@ -170,32 +264,40 @@ export default function AddTaskModal({
                 }}
               />
               {edit && (
-                <SelectDesktop
+                <Select
                   allowUnselect
-                  size="m"
+                  selected={STATUSES?.find((status) => status.key === statusId)}
+                  size="s"
                   options={STATUSES || []}
                   placeholder="Выберите"
                   label="Статус"
                   labelView="outer"
                   block
                   onChange={(payload) => {
-                    if (payload.selected) {
-                      setStatusId(payload.selected.key);
-                    } else {
-                      setStatusId('');
-                    }
+                    const newStatusId = payload.selected
+                      ? payload.selected.key
+                      : '';
+                    setStatusId(newStatusId);
                   }}
                 />
               )}
             </div>
-            <Button
-              view="primary"
-              type="submit"
-              size="s"
-              className={styles.addTask__saveButton}
-            >
-              Сохранить
-            </Button>
+            <div style={{ display: 'flex', gap: 20, marginTop: 36 }}>
+              <Button view="primary" type="submit" size="m">
+                Сохранить
+              </Button>
+
+              {edit && (
+                <Button
+                  view="tertiary"
+                  type="button"
+                  size="m"
+                  onClick={() => handleDelete(taskData?.id || '')}
+                >
+                  Удалить задачу
+                </Button>
+              )}
+            </div>
           </form>
         </ModalDesktop.Content>
       </ModalDesktop>
