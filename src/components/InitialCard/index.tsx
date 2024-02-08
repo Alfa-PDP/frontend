@@ -21,7 +21,6 @@ export interface DataProps {
 }
 
 export default function InitialCard({ data }: { data: DataProps }) {
-  console.log(data);
   return (
     <ul className={styles.employeeInitials}>
       <li className={styles.employeeInitials__contacts}>

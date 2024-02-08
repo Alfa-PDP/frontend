@@ -52,7 +52,12 @@ export default function AddTaskModal({
 
   const { setInfoMessage } = useActions();
 
-  function convertDateFormat(dateString: string) {
+  function formatTimeForServer(dateString: string) {
+    const [day, month, year] = dateString.split('.');
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatTimeForInput(dateString: string) {
     const [year, month, day] = dateString.split('-');
     return `${day}.${month}.${year}`;
   }
@@ -61,11 +66,11 @@ export default function AddTaskModal({
     if (taskData) {
       setTaskName(taskData.name);
       setDescription(taskData.description);
-      setStartTime(convertDateFormat(taskData.start_time));
-      setEndTime(convertDateFormat(taskData.end_time));
-      setTaskType(taskData.task_type.name);
-      setImportance(taskData.importance.name);
-      setStatusId(taskData.status.description);
+      setTaskType(taskData.task_type.id);
+      setImportance(taskData.importance.id);
+      setStatusId(taskData.status.id);
+      setStartTime(formatTimeForInput(taskData.start_time));
+      setEndTime(formatTimeForInput(taskData.end_time));
     }
   }, [taskData]);
 
@@ -86,11 +91,6 @@ export default function AddTaskModal({
     weight: item.weight,
   }));
 
-  const partsStart = startTime.split('.');
-  const formattedStart = `${partsStart[2]}-${partsStart[1]}-${partsStart[0]}`;
-  const partsEnd = endTime.split('.');
-  const formattedEnd = `${partsEnd[2]}-${partsEnd[1]}-${partsEnd[0]}`;
-
   function statusHandler(editable: boolean) {
     return editable ? statusId : STATUS_NEW;
   }
@@ -98,8 +98,8 @@ export default function AddTaskModal({
   const formData = {
     name: taskName,
     description,
-    start_time: formattedStart,
-    end_time: formattedEnd,
+    start_time: formatTimeForServer(startTime),
+    end_time: formatTimeForServer(endTime),
     task_type_id: taskType,
     importance_id: importance,
     status_id: statusHandler(edit),
@@ -144,8 +144,6 @@ export default function AddTaskModal({
           });
         });
     }
-
-    // else putTask(taskData);
     handleModalAnatomy(false);
   }
 
@@ -233,7 +231,7 @@ export default function AddTaskModal({
             <div className={styles.addTask__selectContainer}>
               <SelectDesktop
                 allowUnselect
-                selected={TYPES?.find((type) => type.content === taskType)}
+                selected={TYPES?.find((type) => type.key === taskType)}
                 size="s"
                 options={TYPES || []}
                 placeholder="Выберите"
@@ -250,7 +248,7 @@ export default function AddTaskModal({
               />
               <SelectDesktop
                 allowUnselect
-                selected={LEVELS?.find((level) => level.content === importance)}
+                selected={LEVELS?.find((level) => level.key === importance)}
                 size="s"
                 options={LEVELS || []}
                 placeholder="Выберите"
@@ -268,9 +266,7 @@ export default function AddTaskModal({
               {edit && (
                 <SelectDesktop
                   allowUnselect
-                  selected={STATUSES?.find(
-                    (status) => status.content === statusId
-                  )}
+                  selected={STATUSES?.find((status) => status.key === statusId)}
                   size="s"
                   options={STATUSES || []}
                   placeholder="Выберите"

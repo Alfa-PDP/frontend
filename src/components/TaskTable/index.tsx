@@ -30,7 +30,6 @@ export default function TaskTable({ tasks, role, idpId }: Props) {
 
   const handleEditClick = (task: UserTask) => {
     setTaskData(task);
-    console.log(task);
     handleModalAnatomy();
   };
 
